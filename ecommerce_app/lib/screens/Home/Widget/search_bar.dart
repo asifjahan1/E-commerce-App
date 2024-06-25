@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/constants.dart';
 
-class MySearchBAR extends StatelessWidget {
+class MySearchBAR extends StatefulWidget {
   const MySearchBAR({super.key});
 
+  @override
+  State<MySearchBAR> createState() => _MySearchBARState();
+}
+
+class _MySearchBARState extends State<MySearchBAR> {
   @override
   Widget build(BuildContext context) {
     return Padding(

@@ -1,6 +1,7 @@
 import 'package:ecommerce_app/models/product_model.dart';
 import 'package:ecommerce_app/screens/Home/Widget/product_cart.dart';
 import 'package:ecommerce_app/screens/Home/Widget/search_bar.dart';
+import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/category.dart';
@@ -28,6 +29,14 @@ class _HomeScreenState extends State<HomeScreen> {
     menFashion
   ];
 
+  // Callback method to handle avatar tap
+  void _onAvatarTap() {
+    // Navigate to the profile screen, which is index 4
+    setState(() {
+      BottomNavBar.of(context).updateIndex(4);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               const SizedBox(height: 35),
               // for custom appbar
-              const CustomAppBar(),
+              CustomAppBar(
+                  onAvatarTap: _onAvatarTap), // Provide the callback here
               const SizedBox(height: 20),
               // for search bar
               const MySearchBAR(),
@@ -56,7 +66,6 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 20),
               // for category selection
               categoryItems(),
-
               const SizedBox(height: 20),
               if (selectedIndex == 0)
                 const Row(
@@ -119,9 +128,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 // Prevent out of bounds error
                 if (index < selectcategories.length) {
                   selectedIndex = index;
-                  print("Selected index: $selectedIndex"); // Debug print
-                } else {
-                  print("Invalid index: $index"); // Debug print
                 }
               });
             },

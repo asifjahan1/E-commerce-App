@@ -27,7 +27,7 @@ class Profile extends StatelessWidget {
                   height: size.height * 0.4,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
-                  child: Column(
+                  child: ListView(
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -39,10 +39,13 @@ class Profile extends StatelessWidget {
                               children: [
                                 Stack(
                                   children: [
-                                    const CircleAvatar(
-                                      radius: 42,
-                                      backgroundImage:
-                                          AssetImage("images/profile3.png"),
+                                    Hero(
+                                      tag: 'avatarHero',
+                                      child: const CircleAvatar(
+                                        radius: 42,
+                                        backgroundImage:
+                                            AssetImage("images/profile3.png"),
+                                      ),
                                     ),
                                     Positioned(
                                       bottom: 0,
@@ -61,24 +64,25 @@ class Profile extends StatelessWidget {
                                           size: 20,
                                         ),
                                       ),
-                                    )
+                                    ),
                                   ],
                                 ),
                                 Row(
                                   children: [
                                     Container(
                                       decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          border: Border.all(
-                                              color: Colors.black54)),
+                                        borderRadius: BorderRadius.circular(20),
+                                        border:
+                                            Border.all(color: Colors.black54),
+                                      ),
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 9, horizontal: 12),
                                       child: const Text(
                                         "ADD FRIEND",
                                         style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15,
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(width: 8),
@@ -97,9 +101,9 @@ class Profile extends StatelessWidget {
                                           color: Colors.white,
                                         ),
                                       ),
-                                    )
+                                    ),
                                   ],
-                                )
+                                ),
                               ],
                             ),
                             const SizedBox(height: 10),
@@ -113,13 +117,12 @@ class Profile extends StatelessWidget {
                             const Text(
                               "Flutter Developer",
                               style: TextStyle(
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 16,
-                                  color: Colors.black45),
+                                fontWeight: FontWeight.w800,
+                                fontSize: 16,
+                                color: Colors.black45,
+                              ),
                             ),
-                            const SizedBox(
-                              height: 15,
-                            ),
+                            const SizedBox(height: 15),
                             const Text(
                               "A Flutter developer is a software engineer who has proficiency with the Flutter framework to develop mobile, web,",
                               style: TextStyle(
@@ -129,7 +132,6 @@ class Profile extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const Spacer(),
                       const Divider(
                         color: Colors.black12,
                       ),
@@ -155,7 +157,7 @@ class Profile extends StatelessWidget {
     );
   }
 
-  SizedBox friendAndMore(title, number) {
+  SizedBox friendAndMore(String title, String number) {
     return SizedBox(
       width: 110,
       child: Column(
@@ -163,9 +165,10 @@ class Profile extends StatelessWidget {
           Text(
             title,
             style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
-                color: Colors.black26),
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+              color: Colors.black26,
+            ),
           ),
           Text(
             number,
@@ -174,7 +177,7 @@ class Profile extends StatelessWidget {
               fontSize: 25,
               color: Colors.black,
             ),
-          )
+          ),
         ],
       ),
     );
