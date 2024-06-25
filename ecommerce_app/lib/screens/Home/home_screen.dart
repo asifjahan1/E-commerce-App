@@ -18,6 +18,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int currentSlider = 0;
   int selectedIndex = 0;
+  List<Product> _filteredProducts = all; // Initial product list is all products
 
   // Define selectcategories at the class level so it is accessible throughout the class
   List<List<Product>> selectcategories = [
@@ -37,6 +38,20 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  // Method to handle search
+  void _filterProducts(String query) {
+    setState(() {
+      if (query.isEmpty) {
+        _filteredProducts = selectcategories[selectedIndex];
+      } else {
+        _filteredProducts = selectcategories[selectedIndex]
+            .where((product) =>
+                product.title.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +68,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   onAvatarTap: _onAvatarTap), // Provide the callback here
               const SizedBox(height: 20),
               // for search bar
-              const MySearchBAR(),
+              MySearchBAR(
+                  onSearch: _filterProducts), // Pass the onSearch callback
               const SizedBox(height: 20),
               ImageSlider(
                 currentSlide: currentSlider,
@@ -100,10 +116,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisSpacing: 20,
                   mainAxisSpacing: 20,
                 ),
-                itemCount: selectcategories[selectedIndex].length,
+                itemCount: _filteredProducts.length,
                 itemBuilder: (context, index) {
                   return ProductCard(
-                    product: selectcategories[selectedIndex][index],
+                    product: _filteredProducts[index],
                   );
                 },
               )
@@ -128,6 +144,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 // Prevent out of bounds error
                 if (index < selectcategories.length) {
                   selectedIndex = index;
+                  _filteredProducts = selectcategories[
+                      selectedIndex]; // Update products based on selected category
                 }
               });
             },

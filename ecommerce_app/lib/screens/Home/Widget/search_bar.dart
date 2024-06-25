@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:ecommerce_app/constants.dart';
 
 class MySearchBAR extends StatefulWidget {
-  const MySearchBAR({super.key});
+  final Function(String) onSearch;
+
+  const MySearchBAR({super.key, required this.onSearch});
 
   @override
   State<MySearchBAR> createState() => _MySearchBARState();
@@ -28,9 +30,10 @@ class _MySearchBARState extends State<MySearchBAR> {
               size: 30,
             ),
             const SizedBox(width: 10),
-            const Expanded(
+            Expanded(
               child: TextField(
-                decoration: InputDecoration(
+                onChanged: widget.onSearch,
+                decoration: const InputDecoration(
                   hintText: "Search...",
                   border: InputBorder.none,
                 ),

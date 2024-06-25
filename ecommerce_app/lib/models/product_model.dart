@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Product {
-  // final String id;
+  final String id;
   final String title;
   final String description;
   final String image;
@@ -14,7 +14,7 @@ class Product {
   int quantity;
 
   Product({
-    // required this.id,
+    required this.id,
     required this.title,
     required this.review,
     required this.description,
@@ -46,7 +46,7 @@ final List<Product> all = [
     review: "(320 Reviews)",
     rate: 4.8,
     quantity: 1,
-    // id: '1',
+    id: '1',
   ),
   Product(
     title: "Woman Sweter",
@@ -64,7 +64,7 @@ final List<Product> all = [
     review: "(32 Reviews)",
     rate: 4.5,
     quantity: 1,
-    // id: '2',
+    id: '2',
   ),
   Product(
     title: "Smart Watch",
@@ -82,7 +82,7 @@ final List<Product> all = [
     review: "(20 Reviews)",
     rate: 4.0,
     quantity: 1,
-    // id: '3',
+    id: '3',
   ),
   Product(
     title: "Mens Jacket",
@@ -100,7 +100,7 @@ final List<Product> all = [
     review: "(20 Reviews)",
     rate: 5.0,
     quantity: 1,
-    // id: '4',
+    id: '4',
   ),
   Product(
     title: "Watch",
@@ -118,7 +118,7 @@ final List<Product> all = [
     review: "(100 Reviews)",
     rate: 5.0,
     quantity: 1,
-    // id: '5',
+    id: '5',
   ),
   Product(
     title: "Air Jordan",
@@ -136,7 +136,7 @@ final List<Product> all = [
     review: "(55 Reviews)",
     rate: 5.0,
     quantity: 1,
-    // id: '6',
+    id: '6',
   ),
   Product(
     title: "Super Perfume",
@@ -154,7 +154,7 @@ final List<Product> all = [
     review: "(99 Reviews)",
     rate: 4.7,
     quantity: 1,
-    // id: '7',
+    id: '7',
   ),
   Product(
     title: "Wedding Ring",
@@ -172,7 +172,7 @@ final List<Product> all = [
     review: "(80 Reviews)",
     rate: 4.5,
     quantity: 1,
-    // id: '8',
+    id: '8',
   ),
   Product(
     title: "  Pants",
@@ -190,7 +190,7 @@ final List<Product> all = [
     review: "(55 Reviews)",
     rate: 5.0,
     quantity: 1,
-    // id: '9',
+    id: '9',
   ),
 ];
 
@@ -212,7 +212,7 @@ final List<Product> shoes = [
     review: "(55 Reviews)",
     rate: 5.0,
     quantity: 1,
-    // id: '1',
+    id: '10',
   ),
   Product(
     title: "Vans Old Skool",
@@ -230,7 +230,7 @@ final List<Product> shoes = [
     review: "(200 Reviews)",
     rate: 5.0,
     quantity: 1,
-    // id: '2',
+    id: '11',
   ),
   Product(
     title: "Women-Shoes",
@@ -248,7 +248,7 @@ final List<Product> shoes = [
     review: "(100 Reviews)",
     rate: 4.8,
     quantity: 1,
-    // id: '3',
+    id: '12',
   ),
   Product(
     title: "Sports Shoes",
@@ -266,7 +266,7 @@ final List<Product> shoes = [
     review: "(60 Reviews)",
     rate: 3.0,
     quantity: 1,
-    // id: '4',
+    id: '13',
   ),
   Product(
     title: "White Sneaker",
@@ -284,7 +284,7 @@ final List<Product> shoes = [
     review: "(00 Reviews)",
     rate: 0.0,
     quantity: 1,
-    // id: '4',
+    id: '14',
   ),
 ];
 
@@ -306,7 +306,7 @@ final List<Product> beauty = [
     review: "(200 Reviews)",
     rate: 4.0,
     quantity: 1,
-    // id: '5',
+    id: '15',
   ),
   Product(
     title: "Super Perfume",
@@ -324,7 +324,7 @@ final List<Product> beauty = [
     review: "(99 Reviews)",
     rate: 4.7,
     quantity: 1,
-    // id: '6',
+    id: '16',
   ),
   Product(
     title: "Skin-Care Product",
@@ -342,7 +342,7 @@ final List<Product> beauty = [
     review: "(20 Reviews)",
     rate: 4.2,
     quantity: 1,
-    // id: '7',
+    id: '17',
   ),
 ];
 
@@ -363,7 +363,7 @@ final List<Product> womenFashion = [
     review: "(25 Reviews)",
     rate: 5.0,
     quantity: 1,
-    // id: '8',
+    id: '18',
   ),
   Product(
     title: "Mens Jacket",
@@ -381,7 +381,7 @@ final List<Product> womenFashion = [
     review: "(100 Reviews)",
     rate: 4.0,
     quantity: 1,
-    // id: '9',
+    id: '19',
   ),
   Product(
     title: "T-Shert",
@@ -399,7 +399,7 @@ final List<Product> womenFashion = [
     review: "(20 Reviews)",
     rate: 5.0,
     quantity: 1,
-    // id: '10',
+    id: '20',
   ),
   Product(
     title: "  Pants",
@@ -417,7 +417,7 @@ final List<Product> womenFashion = [
     review: "(55 Reviews)",
     rate: 5.0,
     quantity: 1,
-    // id: '11',
+    id: '21',
   ),
 ];
 
@@ -440,7 +440,7 @@ final List<Product> jewelry = [
     review: "(320 Reviews)",
     rate: 4.5,
     quantity: 1,
-    // id: '1',
+    id: '22',
   ),
   Product(
     title: "Jewelry-Box",
@@ -458,7 +458,7 @@ final List<Product> jewelry = [
     review: "(100 Reviews)",
     rate: 5.0,
     quantity: 1,
-    // id: '2',
+    id: '23',
   ),
   Product(
     title: "Wedding Ring",
@@ -476,7 +476,7 @@ final List<Product> jewelry = [
     review: "(80 Reviews)",
     rate: 4.5,
     quantity: 1,
-    // id: '3',
+    id: '24',
   ),
   Product(
     title: "Necklace-Jewellery",
@@ -494,7 +494,7 @@ final List<Product> jewelry = [
     review: "(22 Reviews)",
     rate: 3.5,
     quantity: 1,
-    // id: '4',
+    id: '25',
   ),
 ];
 
@@ -515,7 +515,7 @@ final List<Product> menFashion = [
     review: "(90 Reviews)",
     rate: 5.0,
     quantity: 1,
-    // id: '5',
+    id: '26',
   ),
   Product(
     title: "Men Pants",
@@ -533,7 +533,7 @@ final List<Product> menFashion = [
     review: "(500 Reviews)",
     rate: 4.5,
     quantity: 1,
-    // id: '6',
+    id: '27',
   ),
   Product(
     title: "Men Shert",
@@ -551,7 +551,7 @@ final List<Product> menFashion = [
     review: "(200 Reviews)",
     rate: 3.0,
     quantity: 1,
-    // id: '7',
+    id: '28',
   ),
   Product(
     title: "T-Shirt",
@@ -569,7 +569,7 @@ final List<Product> menFashion = [
     review: "(1k Reviews)",
     rate: 5.0,
     quantity: 1,
-    // id: '8',
+    id: '29',
   ),
   Product(
     title: "Watch",
@@ -587,6 +587,6 @@ final List<Product> menFashion = [
     review: "(100 Reviews)",
     rate: 5.0,
     quantity: 1,
-    // id: '9',
+    id: '30',
   ),
 ];
