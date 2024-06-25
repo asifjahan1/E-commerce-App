@@ -17,16 +17,19 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int currentSlider = 0;
   int selectedIndex = 0;
+
+  // Define selectcategories at the class level so it is accessible throughout the class
+  List<List<Product>> selectcategories = [
+    all,
+    shoes,
+    beauty,
+    womenFashion,
+    jewelry,
+    menFashion
+  ];
+
   @override
   Widget build(BuildContext context) {
-    List<List<Product>> selectcategories = [
-      all,
-      shoes,
-      beauty,
-      womenFashion,
-      jewelry,
-      menFashion
-    ];
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -45,11 +48,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ImageSlider(
                 currentSlide: currentSlider,
                 onChange: (value) {
-                  setState(
-                    () {
-                      currentSlider = value;
-                    },
-                  );
+                  setState(() {
+                    currentSlider = value;
+                  });
                 },
               ),
               const SizedBox(height: 20),
@@ -85,10 +86,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 0.75,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 20),
+                  crossAxisCount: 2,
+                  childAspectRatio: 0.75,
+                  crossAxisSpacing: 20,
+                  mainAxisSpacing: 20,
+                ),
                 itemCount: selectcategories[selectedIndex].length,
                 itemBuilder: (context, index) {
                   return ProductCard(
@@ -114,11 +116,19 @@ class _HomeScreenState extends State<HomeScreen> {
           return GestureDetector(
             onTap: () {
               setState(() {
-                selectedIndex = index;
+                // Prevent out of bounds error
+                if (index < selectcategories.length) {
+                  selectedIndex = index;
+                  print("Selected index: $selectedIndex"); // Debug print
+                } else {
+                  print("Invalid index: $index"); // Debug print
+                }
               });
             },
             child: Container(
               padding: const EdgeInsets.all(5),
+              margin: const EdgeInsets.only(
+                  right: 10), // Added margin for better spacing
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 color: selectedIndex == index
@@ -133,8 +143,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       image: DecorationImage(
-                          image: AssetImage(categoriesList[index].image),
-                          fit: BoxFit.cover),
+                        image: AssetImage(categoriesList[index].image),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 5),
@@ -144,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

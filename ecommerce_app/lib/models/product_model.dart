@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Product {
+  // final String id;
   final String title;
   final String description;
   final String image;
@@ -12,19 +13,22 @@ class Product {
   final double rate;
   int quantity;
 
-  Product(
-      {required this.title,
-      required this.review,
-      required this.description,
-      required this.image,
-      required this.price,
-      required this.colors,
-      required this.seller,
-      required this.category,
-      required this.rate,
-      required this.quantity});
+  Product({
+    // required this.id,
+    required this.title,
+    required this.review,
+    required this.description,
+    required this.image,
+    required this.price,
+    required this.colors,
+    required this.seller,
+    required this.category,
+    required this.rate,
+    required this.quantity,
+  });
 }
 
+// All Category er product eidike hobe
 final List<Product> all = [
   Product(
     title: "Wireless Headphones",
@@ -42,6 +46,7 @@ final List<Product> all = [
     review: "(320 Reviews)",
     rate: 4.8,
     quantity: 1,
+    // id: '1',
   ),
   Product(
     title: "Woman Sweter",
@@ -59,6 +64,7 @@ final List<Product> all = [
     review: "(32 Reviews)",
     rate: 4.5,
     quantity: 1,
+    // id: '2',
   ),
   Product(
     title: "Smart Watch",
@@ -76,6 +82,7 @@ final List<Product> all = [
     review: "(20 Reviews)",
     rate: 4.0,
     quantity: 1,
+    // id: '3',
   ),
   Product(
     title: "Mens Jacket",
@@ -93,6 +100,7 @@ final List<Product> all = [
     review: "(20 Reviews)",
     rate: 5.0,
     quantity: 1,
+    // id: '4',
   ),
   Product(
     title: "Watch",
@@ -110,6 +118,7 @@ final List<Product> all = [
     review: "(100 Reviews)",
     rate: 5.0,
     quantity: 1,
+    // id: '5',
   ),
   Product(
     title: "Air Jordan",
@@ -127,6 +136,7 @@ final List<Product> all = [
     review: "(55 Reviews)",
     rate: 5.0,
     quantity: 1,
+    // id: '6',
   ),
   Product(
     title: "Super Perfume",
@@ -144,6 +154,7 @@ final List<Product> all = [
     review: "(99 Reviews)",
     rate: 4.7,
     quantity: 1,
+    // id: '7',
   ),
   Product(
     title: "Wedding Ring",
@@ -161,6 +172,7 @@ final List<Product> all = [
     review: "(80 Reviews)",
     rate: 4.5,
     quantity: 1,
+    // id: '8',
   ),
   Product(
     title: "  Pants",
@@ -178,9 +190,11 @@ final List<Product> all = [
     review: "(55 Reviews)",
     rate: 5.0,
     quantity: 1,
+    // id: '9',
   ),
 ];
 
+// Shoes related product eidike hobe
 final List<Product> shoes = [
   Product(
     title: "Air Jordan",
@@ -198,6 +212,7 @@ final List<Product> shoes = [
     review: "(55 Reviews)",
     rate: 5.0,
     quantity: 1,
+    // id: '1',
   ),
   Product(
     title: "Vans Old Skool",
@@ -215,6 +230,7 @@ final List<Product> shoes = [
     review: "(200 Reviews)",
     rate: 5.0,
     quantity: 1,
+    // id: '2',
   ),
   Product(
     title: "Women-Shoes",
@@ -232,6 +248,7 @@ final List<Product> shoes = [
     review: "(100 Reviews)",
     rate: 4.8,
     quantity: 1,
+    // id: '3',
   ),
   Product(
     title: "Sports Shoes",
@@ -249,6 +266,7 @@ final List<Product> shoes = [
     review: "(60 Reviews)",
     rate: 3.0,
     quantity: 1,
+    // id: '4',
   ),
   Product(
     title: "White Sneaker",
@@ -266,9 +284,11 @@ final List<Product> shoes = [
     review: "(00 Reviews)",
     rate: 0.0,
     quantity: 1,
+    // id: '4',
   ),
 ];
 
+// Beauty Related products eidike hobe
 final List<Product> beauty = [
   Product(
     title: "Face Care Product",
@@ -286,6 +306,7 @@ final List<Product> beauty = [
     review: "(200 Reviews)",
     rate: 4.0,
     quantity: 1,
+    // id: '5',
   ),
   Product(
     title: "Super Perfume",
@@ -303,12 +324,13 @@ final List<Product> beauty = [
     review: "(99 Reviews)",
     rate: 4.7,
     quantity: 1,
+    // id: '6',
   ),
   Product(
     title: "Skin-Care Product",
     description:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Donec massa sapien faucibus et molestie ac feugiat. In massa tempor nec feugiat nisl. Libero id faucibus nisl tincidunt.",
-    image: "images/beauty/skin-care.png",
+    image: "images/beauty/face care.png",
     price: 999,
     seller: "Mr Beast",
     colors: [
@@ -320,6 +342,7 @@ final List<Product> beauty = [
     review: "(20 Reviews)",
     rate: 4.2,
     quantity: 1,
+    // id: '7',
   ),
 ];
 
@@ -340,6 +363,7 @@ final List<Product> womenFashion = [
     review: "(25 Reviews)",
     rate: 5.0,
     quantity: 1,
+    // id: '8',
   ),
   Product(
     title: "Mens Jacket",
@@ -357,6 +381,7 @@ final List<Product> womenFashion = [
     review: "(100 Reviews)",
     rate: 4.0,
     quantity: 1,
+    // id: '9',
   ),
   Product(
     title: "T-Shert",
@@ -374,6 +399,7 @@ final List<Product> womenFashion = [
     review: "(20 Reviews)",
     rate: 5.0,
     quantity: 1,
+    // id: '10',
   ),
   Product(
     title: "  Pants",
@@ -391,8 +417,12 @@ final List<Product> womenFashion = [
     review: "(55 Reviews)",
     rate: 5.0,
     quantity: 1,
+    // id: '11',
   ),
 ];
+
+// Add more product lists if needed
+
 final List<Product> jewelry = [
   Product(
     title: "Earrings",
@@ -410,6 +440,7 @@ final List<Product> jewelry = [
     review: "(320 Reviews)",
     rate: 4.5,
     quantity: 1,
+    // id: '1',
   ),
   Product(
     title: "Jewelry-Box",
@@ -427,6 +458,7 @@ final List<Product> jewelry = [
     review: "(100 Reviews)",
     rate: 5.0,
     quantity: 1,
+    // id: '2',
   ),
   Product(
     title: "Wedding Ring",
@@ -444,6 +476,7 @@ final List<Product> jewelry = [
     review: "(80 Reviews)",
     rate: 4.5,
     quantity: 1,
+    // id: '3',
   ),
   Product(
     title: "Necklace-Jewellery",
@@ -461,8 +494,10 @@ final List<Product> jewelry = [
     review: "(22 Reviews)",
     rate: 3.5,
     quantity: 1,
+    // id: '4',
   ),
 ];
+
 final List<Product> menFashion = [
   Product(
     title: "Man Jacket",
@@ -480,6 +515,7 @@ final List<Product> menFashion = [
     review: "(90 Reviews)",
     rate: 5.0,
     quantity: 1,
+    // id: '5',
   ),
   Product(
     title: "Men Pants",
@@ -497,6 +533,7 @@ final List<Product> menFashion = [
     review: "(500 Reviews)",
     rate: 4.5,
     quantity: 1,
+    // id: '6',
   ),
   Product(
     title: "Men Shert",
@@ -514,6 +551,7 @@ final List<Product> menFashion = [
     review: "(200 Reviews)",
     rate: 3.0,
     quantity: 1,
+    // id: '7',
   ),
   Product(
     title: "T-Shirt",
@@ -531,6 +569,7 @@ final List<Product> menFashion = [
     review: "(1k Reviews)",
     rate: 5.0,
     quantity: 1,
+    // id: '8',
   ),
   Product(
     title: "Watch",
@@ -548,5 +587,6 @@ final List<Product> menFashion = [
     review: "(100 Reviews)",
     rate: 5.0,
     quantity: 1,
+    // id: '9',
   ),
 ];

@@ -1,10 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:ecommerce_app/Provider/add_to_cart_provider.dart';
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/models/product_model.dart';
-import 'package:flutter/material.dart';
 
 class AddToCart extends StatefulWidget {
   final Product product;
+
   const AddToCart({super.key, required this.product});
 
   @override
@@ -16,7 +17,6 @@ class _AddToCartState extends State<AddToCart> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = CartProvider.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Container(
@@ -40,7 +40,7 @@ class _AddToCartState extends State<AddToCart> {
                 children: [
                   IconButton(
                     onPressed: () {
-                      if (currentIndex != 1) {
+                      if (currentIndex > 1) {
                         setState(() {
                           currentIndex--;
                         });
@@ -78,20 +78,24 @@ class _AddToCartState extends State<AddToCart> {
             ),
             GestureDetector(
               onTap: () {
-                provider.toogleFavorite(widget.product);
-                // if items is add then show this snackbar
-                const snackBar = SnackBar(
-                  content: Text(
-                    "Successfully added!",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25,
-                      color: Colors.white,
+                final provider = CartProvider.of(context, listen: false);
+                widget.product.quantity = currentIndex;
+                provider.toggleFavorite(widget.product);
+
+                // Show a snackbar after adding to cart
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      "Successfully added!",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
                     ),
+                    duration: Duration(seconds: 1),
                   ),
-                  duration: Duration(seconds: 1),
                 );
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
               },
               child: Container(
                 height: 55,
@@ -104,9 +108,10 @@ class _AddToCartState extends State<AddToCart> {
                 child: const Text(
                   "Add to Cart",
                   style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
                 ),
               ),
             )
