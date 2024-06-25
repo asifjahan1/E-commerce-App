@@ -93,10 +93,10 @@ class _DetailScreenState extends State<DetailScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: currentImage == index
-                          ? Colors.deepOrange
+                          ? const Color(0xffff660e)
                           : Colors.transparent,
                       border: Border.all(
-                        color: Colors.deepOrange,
+                        color: const Color(0xffff660e),
                       ),
                     ),
                   ),
