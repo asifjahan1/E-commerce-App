@@ -1,15 +1,18 @@
+// ignore_for_file: library_private_types_in_public_api
+
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/models/product_model.dart';
 import 'package:ecommerce_app/screens/Detail/Widget/addto_cart.dart';
 import 'package:ecommerce_app/screens/Detail/Widget/description.dart';
 import 'package:ecommerce_app/screens/Detail/Widget/detail_app_bar.dart';
-import 'package:ecommerce_app/screens/Detail/Widget/image_slider.dart';
 import 'package:ecommerce_app/screens/Detail/Widget/items_details.dart';
 
 class DetailScreen extends StatefulWidget {
   final Product product;
-  const DetailScreen({Key? key, required this.product}) : super(key: key);
+
+  const DetailScreen({super.key, required this.product});
 
   @override
   _DetailScreenState createState() => _DetailScreenState();
@@ -18,6 +21,41 @@ class DetailScreen extends StatefulWidget {
 class _DetailScreenState extends State<DetailScreen> {
   int currentImage = 0;
   int currentColor = 1;
+  late Timer _timer;
+  final PageController _pageController = PageController();
+
+  @override
+  void initState() {
+    super.initState();
+    _startAutoScroll();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _startAutoScroll() {
+    _timer = Timer.periodic(const Duration(seconds: 2), (timer) {
+      if (currentImage < 4) {
+        currentImage++;
+        _pageController.animateToPage(
+          currentImage,
+          duration: const Duration(milliseconds: 1000),
+          curve: Curves.easeInOut,
+        );
+      } else {
+        currentImage = 0;
+        _pageController.animateToPage(
+          currentImage,
+          duration: const Duration(milliseconds: 1000),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +66,11 @@ class _DetailScreenState extends State<DetailScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              DetailAppBar(product: widget.product),
+              Builder(
+                builder: (BuildContext context) {
+                  return DetailAppBar(product: widget.product);
+                },
+              ),
               MyImageSlider(
                 image: widget.product.image,
                 onChange: (index) {
@@ -36,6 +78,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     currentImage = index;
                   });
                 },
+                pageController: _pageController,
               ),
               const SizedBox(height: 10),
               Row(
@@ -43,17 +86,17 @@ class _DetailScreenState extends State<DetailScreen> {
                 children: List.generate(
                   5,
                   (index) => AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 500),
                     width: currentImage == index ? 15 : 8,
                     height: 8,
                     margin: const EdgeInsets.only(right: 3),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: currentImage == index
-                          ? Colors.black
+                          ? Colors.deepOrange
                           : Colors.transparent,
                       border: Border.all(
-                        color: Colors.black,
+                        color: Colors.deepOrange,
                       ),
                     ),
                   ),
@@ -96,7 +139,7 @@ class _DetailScreenState extends State<DetailScreen> {
                             });
                           },
                           child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 300),
+                            duration: const Duration(milliseconds: 1000),
                             width: 40,
                             height: 40,
                             decoration: BoxDecoration(
@@ -140,6 +183,36 @@ class _DetailScreenState extends State<DetailScreen> {
         child: AddToCart(product: widget.product),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    );
+  }
+}
+
+class MyImageSlider extends StatelessWidget {
+  final Function(int) onChange;
+  final String image;
+  final PageController pageController;
+
+  const MyImageSlider({
+    super.key,
+    required this.image,
+    required this.onChange,
+    required this.pageController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 250,
+      child: PageView.builder(
+        controller: pageController,
+        onPageChanged: onChange,
+        itemBuilder: (context, index) {
+          return Hero(
+            tag: image,
+            child: Image.asset(image),
+          );
+        },
+      ),
     );
   }
 }
