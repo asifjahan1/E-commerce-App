@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/models/product_model.dart';
 import 'package:ecommerce_app/screens/Detail/Widget/addto_cart.dart';
@@ -6,36 +7,28 @@ import 'package:ecommerce_app/screens/Detail/Widget/detail_app_bar.dart';
 import 'package:ecommerce_app/screens/Detail/Widget/image_slider.dart';
 import 'package:ecommerce_app/screens/Detail/Widget/items_details.dart';
 
-import 'package:flutter/material.dart';
-
 class DetailScreen extends StatefulWidget {
   final Product product;
-  const DetailScreen({super.key, required this.product});
+  const DetailScreen({Key? key, required this.product}) : super(key: key);
 
   @override
-  State<DetailScreen> createState() => _DetailScreenState();
+  _DetailScreenState createState() => _DetailScreenState();
 }
 
 class _DetailScreenState extends State<DetailScreen> {
   int currentImage = 0;
   int currentColor = 1;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kcontentColor,
-      // for add to cart , icon and quantity
-      floatingActionButton: AddToCart(product: widget.product),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // for back button share and favorite,
-              DetailAppBar(
-                product: widget.product,
-              ),
-              // for detail image slider
+              DetailAppBar(product: widget.product),
               MyImageSlider(
                 image: widget.product.image,
                 onChange: (index) {
@@ -50,7 +43,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 children: List.generate(
                   5,
                   (index) => AnimatedContainer(
-                    duration: const Duration(microseconds: 300),
+                    duration: const Duration(milliseconds: 300),
                     width: currentImage == index ? 15 : 8,
                     height: 8,
                     margin: const EdgeInsets.only(right: 3),
@@ -80,12 +73,11 @@ class _DetailScreenState extends State<DetailScreen> {
                   left: 20,
                   right: 20,
                   top: 20,
-                  bottom: 100,
+                  bottom: 100, // Adjusted for AddToCart button
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // for product name, price, rating, and seller
                     ItemsDetails(product: widget.product),
                     const SizedBox(height: 20),
                     const Text(
@@ -126,25 +118,28 @@ class _DetailScreenState extends State<DetailScreen> {
                               width: 35,
                               height: 35,
                               decoration: BoxDecoration(
-                                  color: widget.product.colors[index],
-                                  shape: BoxShape.circle),
+                                color: widget.product.colors[index],
+                                shape: BoxShape.circle,
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
                     const SizedBox(height: 25),
-                    // for description
-                    Description(
-                      description: widget.product.description,
-                    )
+                    Description(description: widget.product.description),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),
       ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 15),
+        child: AddToCart(product: widget.product),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
