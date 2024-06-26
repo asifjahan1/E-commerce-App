@@ -85,11 +85,12 @@ class _AddToCartState extends State<AddToCart> {
                 // Show a snackbar after adding to cart
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
+                    backgroundColor: kprimaryColor,
                     content: Text(
                       "Successfully added!",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                        fontSize: 18,
                         color: Colors.white,
                       ),
                     ),
