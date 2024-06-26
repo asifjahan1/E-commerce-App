@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             textTheme: GoogleFonts.mulishTextTheme(),
           ),
-          home: const BottomNavBar(),
+          home: const BottomNavBar(initialIndex: 2),
         ),
       );
 }

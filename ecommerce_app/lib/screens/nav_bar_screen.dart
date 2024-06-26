@@ -6,7 +6,7 @@ import 'package:ecommerce_app/screens/Profile/profile.dart';
 import 'Favorite/favorite.dart';
 
 class BottomNavBar extends StatefulWidget {
-  const BottomNavBar({super.key});
+  const BottomNavBar({super.key, required int initialIndex});
 
   // Define a method to access the state of BottomNavBar
   static _BottomNavBarState of(BuildContext context) =>
