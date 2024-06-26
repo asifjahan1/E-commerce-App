@@ -47,7 +47,9 @@ class _CartScreenState extends State<CartScreen> {
                     backgroundColor: Colors.white,
                     padding: const EdgeInsets.all(15),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
                   icon: const Icon(
                     Icons.arrow_back_ios,
                   ),

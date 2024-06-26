@@ -30,92 +30,100 @@ class _AddToCartState extends State<AddToCart> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-              height: 40,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.white, width: 2),
-              ),
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      if (currentIndex > 1) {
-                        setState(() {
-                          currentIndex--;
-                        });
-                      }
-                    },
-                    iconSize: 18,
-                    icon: const Icon(
-                      Icons.remove,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(width: 5),
-                  Text(
-                    currentIndex.toString(),
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(width: 5),
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        currentIndex++;
-                      });
-                    },
-                    iconSize: 18,
-                    icon: const Icon(
-                      Icons.add,
-                      color: Colors.white,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                final provider = CartProvider.of(context, listen: false);
-                widget.product.quantity = currentIndex;
-                provider.toggleFavorite(widget.product);
-
-                // Show a snackbar after adding to cart
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    backgroundColor: kprimaryColor,
-                    content: Text(
-                      "Successfully added!",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
+            Flexible(
+              child: MaterialButton(
+                onPressed: null,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  side: const BorderSide(color: Colors.white, width: 2),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        if (currentIndex > 1) {
+                          setState(() {
+                            currentIndex--;
+                          });
+                        }
+                      },
+                      iconSize: 18,
+                      icon: const Icon(
+                        Icons.remove,
                         color: Colors.white,
                       ),
                     ),
-                    duration: Duration(seconds: 1),
-                  ),
-                );
-              },
+                    const SizedBox(width: 5),
+                    Text(
+                      currentIndex.toString(),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          currentIndex++;
+                        });
+                      },
+                      iconSize: 18,
+                      icon: const Icon(
+                        Icons.add,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Flexible(
               child: Container(
                 height: 55,
-                decoration: BoxDecoration(
-                  color: kprimaryColor,
-                  borderRadius: BorderRadius.circular(50),
+                constraints: const BoxConstraints(
+                  minWidth: 100,
                 ),
-                alignment: Alignment.center,
-                padding: const EdgeInsets.symmetric(horizontal: 50),
-                child: const Text(
-                  "Add to Cart",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
+                child: MaterialButton(
+                  onPressed: () {
+                    final provider = CartProvider.of(context, listen: false);
+                    widget.product.quantity = currentIndex;
+                    provider.toggleFavorite(widget.product);
+
+                    // Show a snackbar after adding to cart
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        backgroundColor: kprimaryColor,
+                        content: Text(
+                          "Successfully added!",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
+                        ),
+                        duration: Duration(seconds: 1),
+                      ),
+                    );
+                  },
+                  color: kprimaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: const Text(
+                    "Add to Cart",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
