@@ -87,7 +87,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 children: List.generate(
                   5,
                   (index) => AnimatedContainer(
-                    duration: const Duration(milliseconds: 500),
+                    duration: const Duration(milliseconds: 1000),
                     width: currentImage == index ? 15 : 8,
                     height: 8,
                     margin: const EdgeInsets.only(right: 3),
@@ -180,8 +180,11 @@ class _DetailScreenState extends State<DetailScreen> {
         ),
       ),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 15),
-        child: AddToCart(product: widget.product),
+        padding: const EdgeInsets.only(bottom: 20),
+        child: SizedBox(
+          width: double.infinity,
+          child: AddToCart(product: widget.product),
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
