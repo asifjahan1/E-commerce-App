@@ -14,15 +14,20 @@ class DetailAppBar extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       child: Row(
         children: [
-          IconButton(
-            style: IconButton.styleFrom(
-              backgroundColor: Colors.white,
-              padding: const EdgeInsets.all(15),
+          Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
             ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.arrow_back_ios),
+            padding: const EdgeInsets.all(15),
+            child: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.arrow_back_ios),
+              color: Colors.black, // Change color if needed
+              iconSize: 24.0, // Adjust the size if necessary
+            ),
           ),
           const Spacer(),
           IconButton(
@@ -46,7 +51,7 @@ class DetailAppBar extends StatelessWidget {
               provider.isExist(product)
                   ? Icons.favorite
                   : Icons.favorite_border,
-              color: Colors.black,
+              color: const Color(0xffff660e),
               size: 25,
             ),
           ),

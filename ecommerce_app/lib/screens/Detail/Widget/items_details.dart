@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 class ItemsDetails extends StatelessWidget {
   final Product product;
+
   const ItemsDetails({super.key, required this.product});
 
   @override
@@ -31,7 +32,6 @@ class ItemsDetails extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10),
-                // for rating
                 Row(
                   children: [
                     Container(
@@ -50,9 +50,7 @@ class ItemsDetails extends StatelessWidget {
                             size: 15,
                             color: Colors.white,
                           ),
-                          const SizedBox(
-                            width: 3,
-                          ),
+                          const SizedBox(width: 3),
                           Text(
                             product.rate.toString(),
                             style: const TextStyle(
@@ -71,9 +69,9 @@ class ItemsDetails extends StatelessWidget {
                         color: Colors.grey,
                         fontSize: 15,
                       ),
-                    )
+                    ),
                   ],
-                )
+                ),
               ],
             ),
             const Spacer(),
@@ -87,13 +85,15 @@ class ItemsDetails extends StatelessWidget {
                   TextSpan(
                     text: product.seller,
                     style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold),
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
             ),
           ],
-        )
+        ),
       ],
     );
   }

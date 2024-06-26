@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 class Description extends StatelessWidget {
   final String description;
-  const Description({super.key, required this.description});
+
+  const Description({Key? key, required this.description}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,24 +25,26 @@ class Description extends StatelessWidget {
               child: const Text(
                 "Description",
                 style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: 16),
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
               ),
             ),
-            const Text(
+            Text(
               "Specifications",
               style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                  fontSize: 16),
-            ),
-            const Text(
-              "Reviews",
-              style: TextStyle(
-                fontSize: 16,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
+                fontSize: 16,
+              ),
+            ),
+            Text(
+              "Reviews",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+                fontSize: 16,
               ),
             ),
           ],

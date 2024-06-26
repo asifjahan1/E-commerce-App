@@ -102,9 +102,9 @@ class _ImageSliderState extends State<ImageSlider> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: _currentSlide == index
-                        ? Colors.black
+                        ? const Color(0xffff660e)
                         : Colors.transparent,
-                    border: Border.all(color: Colors.black),
+                    border: Border.all(color: const Color(0xffff660e)),
                   ),
                 ),
               ),

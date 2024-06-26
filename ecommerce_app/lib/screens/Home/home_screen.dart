@@ -64,12 +64,10 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               const SizedBox(height: 35),
               // for custom appbar
-              CustomAppBar(
-                  onAvatarTap: _onAvatarTap), // Provide the callback here
+              CustomAppBar(onAvatarTap: _onAvatarTap),
               const SizedBox(height: 20),
               // for search bar
-              MySearchBAR(
-                  onSearch: _filterProducts), // Pass the onSearch callback
+              MySearchBAR(onSearch: _filterProducts),
               const SizedBox(height: 20),
               ImageSlider(
                 currentSlide: currentSlider,
@@ -151,12 +149,11 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             child: Container(
               padding: const EdgeInsets.all(5),
-              margin: const EdgeInsets.only(
-                  right: 10), // Added margin for better spacing
+              margin: const EdgeInsets.only(right: 10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 color: selectedIndex == index
-                    ? Colors.blue[200]
+                    ? const Color(0xffF5F5F5)
                     : Colors.transparent,
               ),
               child: Column(

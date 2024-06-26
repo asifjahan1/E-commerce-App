@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'dart:async';
+import 'package:ecommerce_app/screens/Detail/Widget/image_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/models/product_model.dart';
@@ -183,36 +184,6 @@ class _DetailScreenState extends State<DetailScreen> {
         child: AddToCart(product: widget.product),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-    );
-  }
-}
-
-class MyImageSlider extends StatelessWidget {
-  final Function(int) onChange;
-  final String image;
-  final PageController pageController;
-
-  const MyImageSlider({
-    super.key,
-    required this.image,
-    required this.onChange,
-    required this.pageController,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 250,
-      child: PageView.builder(
-        controller: pageController,
-        onPageChanged: onChange,
-        itemBuilder: (context, index) {
-          return Hero(
-            tag: image,
-            child: Image.asset(image),
-          );
-        },
-      ),
     );
   }
 }
