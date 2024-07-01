@@ -28,19 +28,19 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
       case 'bkash':
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => BkashCheckout()),
+          MaterialPageRoute(builder: (context) => const BkashCheckout()),
         );
         break;
       case 'card':
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => CardCheckout()),
+          MaterialPageRoute(builder: (context) => const CardCheckout()),
         );
         break;
       case 'cod':
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => CodCheckout()),
+          MaterialPageRoute(builder: (context) => const CodCheckout()),
         );
         break;
     }
