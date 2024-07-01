@@ -1,5 +1,6 @@
 import 'package:ecommerce_app/Provider/add_to_cart_provider.dart';
 import 'package:ecommerce_app/constants.dart';
+import 'package:ecommerce_app/screens/Payment/payment_method_screen.dart';
 import 'package:flutter/material.dart';
 
 class CheckOutBox extends StatefulWidget {
@@ -70,8 +71,7 @@ class _CheckOutBoxState extends State<CheckOutBox> {
                 ),
               ),
               Text(
-                // "\৳${provider.totalPrice()}",
-                "\BDT ${provider.totalPrice()}",
+                "BDT ${provider.totalPrice()}",
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -93,13 +93,12 @@ class _CheckOutBoxState extends State<CheckOutBox> {
                 ),
               ),
               Text(
-                // "\৳${provider.totalPrice()}",
-                "\BDT ${provider.totalPrice()}",
+                "BDT ${provider.totalPrice()}",
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 ),
-              )
+              ),
             ],
           ),
           const SizedBox(height: 20),
@@ -108,7 +107,14 @@ class _CheckOutBoxState extends State<CheckOutBox> {
               backgroundColor: kprimaryColor,
               minimumSize: const Size(double.infinity, 55),
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const PaymentMethodScreen(),
+                ),
+              );
+            },
             child: const Text(
               "Check Out",
               style: TextStyle(
@@ -123,4 +129,3 @@ class _CheckOutBoxState extends State<CheckOutBox> {
     );
   }
 }
-// now we add the provider and display the total price
