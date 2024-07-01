@@ -1,12 +1,10 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:ecommerce_app/screens/Payment/bkash_checkout.dart';
 import 'package:ecommerce_app/screens/Payment/card_checkout.dart';
 import 'package:ecommerce_app/screens/Payment/cod_checkout.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/constants.dart';
-// Import your checkout pages here
-// import 'package:ecommerce_app/screens/bkash_checkout.dart';
-// import 'package:ecommerce_app/screens/card_checkout.dart';
-// import 'package:ecommerce_app/screens/cod_checkout.dart';
 
 class PaymentMethodScreen extends StatefulWidget {
   const PaymentMethodScreen({super.key});
@@ -92,7 +90,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                         _selectMethod('bkash');
                       },
                       style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: kprimaryColor, width: 2),
+                        side: const BorderSide(color: kprimaryColor, width: 2),
                         padding: const EdgeInsets.symmetric(
                             vertical: 15, horizontal: 20),
                         shape: RoundedRectangleBorder(
@@ -154,7 +152,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                         _selectMethod('card');
                       },
                       style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: kprimaryColor, width: 2),
+                        side: const BorderSide(color: kprimaryColor, width: 2),
                         padding: const EdgeInsets.symmetric(
                             vertical: 15, horizontal: 20),
                         shape: RoundedRectangleBorder(
@@ -232,7 +230,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                         _selectMethod('cod');
                       },
                       style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: kprimaryColor, width: 2),
+                        side: const BorderSide(color: kprimaryColor, width: 2),
                         padding: const EdgeInsets.symmetric(
                             vertical: 15, horizontal: 20),
                         shape: RoundedRectangleBorder(
