@@ -73,7 +73,10 @@ class _CartScreenState extends State<CartScreen> {
                 ],
               ),
             ),
-            Expanded(
+            // Replace Expanded with Container and set a height
+            SizedBox(
+              height: MediaQuery.of(context).size.height *
+                  0.7, // Set height based on screen size
               child: ListView.builder(
                 shrinkWrap: true,
                 itemCount: finalList.length,
@@ -123,7 +126,7 @@ class _CartScreenState extends State<CartScreen> {
                                   ),
                                   const SizedBox(height: 10),
                                   Text(
-                                    "\$${cartItems.price}",
+                                    "BDT ${cartItems.price}",
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 14,
@@ -140,12 +143,11 @@ class _CartScreenState extends State<CartScreen> {
                         right: 35,
                         child: Column(
                           children: [
-                            // for remove items
                             IconButton(
                               onPressed: () {
-                                // for remove ites for cart
-                                finalList.removeAt(index);
-                                setState(() {});
+                                setState(() {
+                                  finalList.removeAt(index);
+                                });
                               },
                               icon: const Icon(
                                 Icons.delete,
@@ -153,7 +155,6 @@ class _CartScreenState extends State<CartScreen> {
                                 size: 20,
                               ),
                             ),
-                            // for items quantity
                             const SizedBox(height: 10),
                             Container(
                               height: 40,

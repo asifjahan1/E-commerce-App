@@ -1,6 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:ecommerce_app/screens/Payment/bkash_checkout.dart';
+import 'package:ecommerce_app/screens/Payment/Features/bkash_checkout.dart';
 import 'package:ecommerce_app/screens/Payment/card_checkout.dart';
 import 'package:ecommerce_app/screens/Payment/cod_checkout.dart';
 import 'package:flutter/material.dart';

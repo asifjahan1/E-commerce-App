@@ -37,6 +37,9 @@ dependencies:
   cupertino_icons: ^1.0.6
   provider: ^6.1.2
   google_fonts: ^6.2.1
+  http: ^1.2.1
+  webview_flutter: ^4.8.0
+  flutter_secure_storage: ^9.2.2
 
 dev_dependencies:
   flutter_test:
