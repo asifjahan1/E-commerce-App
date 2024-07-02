@@ -24,12 +24,6 @@ class _MySearchBARState extends State<MySearchBAR> {
         padding: const EdgeInsets.symmetric(horizontal: 15),
         child: Row(
           children: [
-            const Icon(
-              Icons.search,
-              color: Colors.grey,
-              size: 30,
-            ),
-            const SizedBox(width: 10),
             Expanded(
               child: TextField(
                 onChanged: widget.onSearch,
@@ -39,15 +33,10 @@ class _MySearchBARState extends State<MySearchBAR> {
                 ),
               ),
             ),
-            Container(
-              height: 25,
-              width: 1.5,
-              color: Colors.grey,
-            ),
             IconButton(
               onPressed: () {},
               icon: const Icon(
-                Icons.tune,
+                Icons.search,
                 color: Colors.grey,
               ),
             ),

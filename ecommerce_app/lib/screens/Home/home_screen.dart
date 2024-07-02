@@ -63,10 +63,10 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 35),
-              // for custom appbar
+              // custom appbar
               CustomAppBar(onAvatarTap: _onAvatarTap),
               const SizedBox(height: 20),
-              // for search bar
+              // search bar
               MySearchBAR(onSearch: _filterProducts),
               const SizedBox(height: 20),
               ImageSlider(
@@ -104,23 +104,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               // for shopping items
               const SizedBox(height: 10),
-              GridView.builder(
-                padding: EdgeInsets.zero,
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.75,
-                  crossAxisSpacing: 20,
-                  mainAxisSpacing: 20,
-                ),
-                itemCount: _filteredProducts.length,
-                itemBuilder: (context, index) {
-                  return ProductCard(
-                    product: _filteredProducts[index],
+              Wrap(
+                spacing: 20,
+                runSpacing: 20,
+                children: _filteredProducts.map((product) {
+                  return SizedBox(
+                    width: (MediaQuery.of(context).size.width - 60) / 2,
+                    child: ProductCard(
+                      product: product,
+                    ),
                   );
-                },
-              )
+                }).toList(),
+              ),
             ],
           ),
         ),

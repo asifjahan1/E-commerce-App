@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/screens/Detail/details_screen.dart';
 import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/Provider/add_to_cart_provider.dart';
@@ -73,121 +74,136 @@ class _CartScreenState extends State<CartScreen> {
                 ],
               ),
             ),
-            // Replace Expanded with Container and set a height
             SizedBox(
-              height: MediaQuery.of(context).size.height *
-                  0.7, // Set height based on screen size
+              height: MediaQuery.of(context).size.height * 0.7,
               child: ListView.builder(
                 shrinkWrap: true,
                 itemCount: finalList.length,
                 itemBuilder: (context, index) {
                   final cartItems = finalList[index];
-                  return Stack(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(15),
-                        child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.white,
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              DetailScreen(product: cartItems),
+                        ),
+                      );
+                    },
+                    child: Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.white,
+                            ),
+                            padding: const EdgeInsets.all(20),
+                            child: Row(
+                              children: [
+                                Hero(
+                                  tag: 'productImage${cartItems.id}',
+                                  child: Container(
+                                    height: 100,
+                                    width: 90,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: kcontentColor,
+                                    ),
+                                    child: Image.asset(cartItems.image),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        cartItems.title,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 5),
+                                      Text(
+                                        cartItems.category,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                          color: Colors.grey.shade400,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Text(
+                                        "BDT ${cartItems.price}",
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                          padding: const EdgeInsets.all(20),
-                          child: Row(
+                        ),
+                        Positioned(
+                          top: 35,
+                          right: 35,
+                          child: Column(
                             children: [
+                              IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    finalList.removeAt(index);
+                                  });
+                                },
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                  size: 20,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
                               Container(
-                                height: 100,
-                                width: 90,
+                                height: 40,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
                                   color: kcontentColor,
+                                  border: Border.all(
+                                    color: Colors.grey.shade400,
+                                    width: 2,
+                                  ),
                                 ),
-                                child: Image.asset(cartItems.image),
-                              ),
-                              const SizedBox(width: 10),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    cartItems.title,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
+                                child: Row(
+                                  children: [
+                                    const SizedBox(width: 10),
+                                    producrQuantity(Icons.add, index),
+                                    const SizedBox(width: 10),
+                                    Text(
+                                      cartItems.quantity.toString(),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Text(
-                                    cartItems.category,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      color: Colors.grey.shade400,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Text(
-                                    "BDT ${cartItems.price}",
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ],
+                                    const SizedBox(width: 10),
+                                    producrQuantity(Icons.remove, index),
+                                    const SizedBox(width: 10),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
                         ),
-                      ),
-                      Positioned(
-                        top: 35,
-                        right: 35,
-                        child: Column(
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  finalList.removeAt(index);
-                                });
-                              },
-                              icon: const Icon(
-                                Icons.delete,
-                                color: Colors.red,
-                                size: 20,
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            Container(
-                              height: 40,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: kcontentColor,
-                                border: Border.all(
-                                  color: Colors.grey.shade400,
-                                  width: 2,
-                                ),
-                              ),
-                              child: Row(
-                                children: [
-                                  const SizedBox(width: 10),
-                                  producrQuantity(Icons.add, index),
-                                  const SizedBox(width: 10),
-                                  Text(
-                                    cartItems.quantity.toString(),
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  producrQuantity(Icons.remove, index),
-                                  const SizedBox(width: 10),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   );
                 },
               ),
