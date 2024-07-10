@@ -1,15 +1,24 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:ecommerce_app/Provider/add_to_cart_provider.dart';
+import 'package:flutter/material.dart';
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/models/product_model.dart';
 
 class AddToCart extends StatefulWidget {
   final Product product;
+  final Function()? onAddToCart;
+  final Function(int) updateCartCount; // Function to update cart item count
 
-  const AddToCart({super.key, required this.product});
+  const AddToCart({
+    super.key,
+    required this.product,
+    this.onAddToCart,
+    required this.updateCartCount,
+  });
 
   @override
-  State<AddToCart> createState() => _AddToCartState();
+  _AddToCartState createState() => _AddToCartState();
 }
 
 class _AddToCartState extends State<AddToCart> {
@@ -32,7 +41,13 @@ class _AddToCartState extends State<AddToCart> {
           children: [
             Flexible(
               child: MaterialButton(
-                onPressed: null,
+                onPressed: () {
+                  if (currentIndex > 1) {
+                    setState(() {
+                      currentIndex--;
+                    });
+                  }
+                },
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                   side: const BorderSide(color: Colors.white, width: 2),
@@ -41,19 +56,10 @@ class _AddToCartState extends State<AddToCart> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconButton(
-                      onPressed: () {
-                        if (currentIndex > 1) {
-                          setState(() {
-                            currentIndex--;
-                          });
-                        }
-                      },
-                      iconSize: 18,
-                      icon: const Icon(
-                        Icons.remove,
-                        color: Colors.white,
-                      ),
+                    const Icon(
+                      Icons.remove,
+                      color: Colors.white,
+                      size: 18,
                     ),
                     const SizedBox(width: 5),
                     Text(
@@ -107,6 +113,14 @@ class _AddToCartState extends State<AddToCart> {
                         duration: Duration(seconds: 1),
                       ),
                     );
+
+                    // Call the callback function to notify parent
+                    if (widget.onAddToCart != null) {
+                      widget.onAddToCart!();
+                    }
+
+                    // Update cart item count in DetailScreen
+                    widget.updateCartCount(provider.cart.length);
                   },
                   color: kprimaryColor,
                   shape: RoundedRectangleBorder(

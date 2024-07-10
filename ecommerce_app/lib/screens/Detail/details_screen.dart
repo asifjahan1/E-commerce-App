@@ -1,10 +1,8 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'dart:async';
-import 'package:ecommerce_app/screens/Detail/Widget/image_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/models/product_model.dart';
+import 'package:ecommerce_app/screens/Detail/Widget/image_slider.dart';
 import 'package:ecommerce_app/screens/Detail/Widget/addto_cart.dart';
 import 'package:ecommerce_app/screens/Detail/Widget/description.dart';
 import 'package:ecommerce_app/screens/Detail/Widget/detail_app_bar.dart';
@@ -24,6 +22,7 @@ class _DetailScreenState extends State<DetailScreen> {
   int currentColor = 1;
   late Timer _timer;
   final PageController _pageController = PageController();
+  int cartItemCount = 0; // Variable to store the number of items in the cart
 
   @override
   void initState() {
@@ -58,6 +57,13 @@ class _DetailScreenState extends State<DetailScreen> {
     });
   }
 
+  // Function to update cart item count
+  void updateCartItemCount(int count) {
+    setState(() {
+      cartItemCount = count;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +75,9 @@ class _DetailScreenState extends State<DetailScreen> {
             children: [
               Builder(
                 builder: (BuildContext context) {
-                  return DetailAppBar(product: widget.product);
+                  return DetailAppBar(
+                      product: widget.product,
+                      updateCartCount: updateCartItemCount);
                 },
               ),
               MyImageSlider(
@@ -81,28 +89,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 },
                 pageController: _pageController,
               ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  5,
-                  (index) => AnimatedContainer(
-                    duration: const Duration(milliseconds: 1000),
-                    width: currentImage == index ? 15 : 8,
-                    height: 8,
-                    margin: const EdgeInsets.only(right: 3),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: currentImage == index
-                          ? const Color(0xffff660e)
-                          : Colors.transparent,
-                      border: Border.all(
-                        color: const Color(0xffff660e),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              // Existing code...
               const SizedBox(height: 20),
               Container(
                 width: double.infinity,
@@ -183,7 +170,8 @@ class _DetailScreenState extends State<DetailScreen> {
         padding: const EdgeInsets.only(bottom: 20),
         child: SizedBox(
           width: double.infinity,
-          child: AddToCart(product: widget.product),
+          child: AddToCart(
+              product: widget.product, updateCartCount: updateCartItemCount),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

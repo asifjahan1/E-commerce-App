@@ -1,20 +1,22 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
-import 'package:badges/badges.dart' as badges; // Use alias to avoid conflict
+import 'package:badges/badges.dart' as badges;
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/screens/Cart/cart_screen.dart';
 import 'package:ecommerce_app/screens/Home/home_screen.dart';
 import 'package:ecommerce_app/screens/Profile/profile.dart';
-import 'Favorite/favorite.dart';
+import 'package:ecommerce_app/screens/Favorite/favorite.dart';
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key, required int initialIndex});
 
   // Define a method to access the state of BottomNavBar
-  static _BottomNavBarState of(BuildContext context) =>
-      context.findAncestorStateOfType<_BottomNavBarState>()!;
+  static _BottomNavBarState? of(BuildContext context) =>
+      context.findAncestorStateOfType<_BottomNavBarState>();
 
   @override
-  State<BottomNavBar> createState() => _BottomNavBarState();
+  _BottomNavBarState createState() => _BottomNavBarState();
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
@@ -37,6 +39,14 @@ class _BottomNavBarState extends State<BottomNavBar> {
   void addToCart() {
     setState(() {
       cartItemCount++;
+    });
+  }
+
+  void removeFromCart() {
+    setState(() {
+      if (cartItemCount > 0) {
+        cartItemCount--;
+      }
     });
   }
 
@@ -94,7 +104,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         child: currentIndex == index
             ? Text(
                 label,
-                style: TextStyle(
+                style: const TextStyle(
                   color: kprimaryColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 16, // Change this value to make the text bigger
@@ -126,12 +136,12 @@ class _BottomNavBarState extends State<BottomNavBar> {
           showBadge: cartItemCount > 0,
           badgeContent: Text(
             '$cartItemCount',
-            style: TextStyle(color: Colors.white),
+            style: const TextStyle(color: Colors.white),
           ),
           child: currentIndex == index
               ? Text(
                   label,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: kprimaryColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 16, // Change this value to make the text bigger

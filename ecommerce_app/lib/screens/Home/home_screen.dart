@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onAvatarTap() {
     // Navigate to the profile screen, which is index 4
     setState(() {
-      BottomNavBar.of(context).updateIndex(4);
+      BottomNavBar.of(context)?.updateIndex(4);
     });
   }
 
