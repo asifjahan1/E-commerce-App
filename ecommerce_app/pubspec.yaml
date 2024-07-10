@@ -43,6 +43,7 @@ dependencies:
   flutter_stripe: ^10.2.0
   stripe_android: ^10.2.0
   badges: ^3.1.2
+  shared_preferences: ^2.2.3
 
 dev_dependencies:
   flutter_test:

@@ -14,6 +14,7 @@ class _CheckOutBoxState extends State<CheckOutBox> {
   @override
   Widget build(BuildContext context) {
     final provider = CartProvider.of(context);
+    // final provider = Provider.of<CartProvider>(context);
     return Container(
       height: 300,
       width: double.infinity,

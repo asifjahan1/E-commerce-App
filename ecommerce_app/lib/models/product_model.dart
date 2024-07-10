@@ -26,6 +26,40 @@ class Product {
     required this.rate,
     required this.quantity,
   });
+
+  // added this line for save the current data
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'review': review,
+      'description': description,
+      'image': image,
+      'price': price,
+      'colors': colors.map((color) => color.value).toList(),
+      'seller': seller,
+      'category': category,
+      'rate': rate,
+      'quantity': quantity,
+    };
+  }
+
+  // added this line for save the current data
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
+      id: json['id'],
+      title: json['title'],
+      review: json['review'],
+      description: json['description'],
+      image: json['image'],
+      price: json['price'],
+      colors: (json['colors'] as List).map((color) => Color(color)).toList(),
+      seller: json['seller'],
+      category: json['category'],
+      rate: json['rate'],
+      quantity: json['quantity'],
+    );
+  }
 }
 
 // All Category er product eidike hobe

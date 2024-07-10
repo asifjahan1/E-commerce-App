@@ -16,6 +16,7 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     final provider = CartProvider.of(context);
+    // final provider = Provider.of<CartProvider>(context);
     final finalList = provider.cart;
 
     producrQuantity(IconData icon, int index) {
