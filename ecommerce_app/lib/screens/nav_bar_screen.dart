@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:badges/badges.dart' as badges; // Use alias to avoid conflict
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/screens/Cart/cart_screen.dart';
 import 'package:ecommerce_app/screens/Home/home_screen.dart';
@@ -18,6 +19,7 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavBarState extends State<BottomNavBar> {
   int currentIndex = 2;
+  int cartItemCount = 0; // Variable to store the number of items in the cart
   List screens = const [
     Scaffold(),
     Favorite(),
@@ -29,6 +31,12 @@ class _BottomNavBarState extends State<BottomNavBar> {
   void updateIndex(int index) {
     setState(() {
       currentIndex = index;
+    });
+  }
+
+  void addToCart() {
+    setState(() {
+      cartItemCount++;
     });
   }
 
@@ -51,71 +59,93 @@ class _BottomNavBarState extends State<BottomNavBar> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
-        elevation: 1,
-        height: 60,
-        color: Colors.white,
+        // padding: EdgeInsets.all(8),
+        elevation: 5,
+        height: 70,
+        color: Colors.black,
         shape: const CircularNotchedRectangle(),
-        notchMargin: 10,
+        notchMargin: 8,
         clipBehavior: Clip.antiAliasWithSaveLayer,
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  currentIndex = 0;
-                });
-              },
-              icon: Icon(
-                Icons.grid_view_outlined,
-                size: 30,
-                color: currentIndex == 0 ? kprimaryColor : Colors.grey.shade400,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  currentIndex = 1;
-                });
-              },
-              icon: Icon(
-                Icons.favorite_border,
-                size: 30,
-                color: currentIndex == 1 ? kprimaryColor : Colors.grey.shade400,
-              ),
-            ),
-            const SizedBox(
-              width: 15,
-            ),
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  currentIndex = 3;
-                });
-              },
-              icon: Icon(
-                Icons.shopping_cart_outlined,
-                size: 30,
-                color: currentIndex == 3 ? kprimaryColor : Colors.grey.shade400,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  currentIndex = 4;
-                });
-              },
-              icon: Icon(
-                Icons.person,
-                size: 30,
-                color: currentIndex == 4 ? kprimaryColor : Colors.grey.shade400,
-              ),
-            ),
+            buildNavItem(0, Icons.grid_view_outlined, 'Category'),
+            buildNavItem(1, Icons.favorite_border, 'Favorite'),
+            const SizedBox(width: 8),
+            buildCartNavItem(3, Icons.shopping_cart_outlined, 'Cart'),
+            buildNavItem(4, Icons.person, 'Profile'),
           ],
         ),
       ),
       body: screens[currentIndex],
+    );
+  }
+
+  Widget buildNavItem(int index, IconData icon, String label) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          currentIndex = index;
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: currentIndex == index
+            ? Text(
+                label,
+                style: TextStyle(
+                  color: kprimaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16, // Change this value to make the text bigger
+                ),
+              )
+            : Icon(
+                icon,
+                size: 30,
+                color: currentIndex == index
+                    ? kprimaryColor
+                    : Colors.grey.shade400,
+              ),
+      ),
+    );
+  }
+
+  Widget buildCartNavItem(int index, IconData icon, String label) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          currentIndex = index;
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: badges.Badge(
+          // Use the alias here
+          position: badges.BadgePosition.topEnd(top: -10, end: -10),
+          showBadge: cartItemCount > 0,
+          badgeContent: Text(
+            '$cartItemCount',
+            style: TextStyle(color: Colors.white),
+          ),
+          child: currentIndex == index
+              ? Text(
+                  label,
+                  style: TextStyle(
+                    color: kprimaryColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16, // Change this value to make the text bigger
+                  ),
+                )
+              : Icon(
+                  icon,
+                  size: 30,
+                  color: currentIndex == index
+                      ? kprimaryColor
+                      : Colors.grey.shade400,
+                ),
+        ),
+      ),
     );
   }
 }
