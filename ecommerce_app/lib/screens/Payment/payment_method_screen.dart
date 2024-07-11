@@ -1,13 +1,12 @@
-// ignore_for_file: library_private_types_in_public_api
-
-import 'package:ecommerce_app/screens/Payment/Features/bkash_checkout.dart';
-import 'package:ecommerce_app/screens/Payment/card_checkout.dart';
-import 'package:ecommerce_app/screens/Payment/cod_checkout.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/constants.dart';
+import 'package:ecommerce_app/screens/Payment/card_checkout.dart';
+import 'package:ecommerce_app/screens/Payment/Features/bkash_checkout.dart';
+import 'package:ecommerce_app/screens/Payment/cod_checkout.dart';
 
 class PaymentMethodScreen extends StatefulWidget {
-  const PaymentMethodScreen({super.key});
+  final double totalAmount;
+  const PaymentMethodScreen({super.key, required this.totalAmount});
 
   @override
   _PaymentMethodScreenState createState() => _PaymentMethodScreenState();
@@ -26,19 +25,25 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
       case 'bkash':
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const BkashCheckout()),
+          MaterialPageRoute(
+              builder: (context) =>
+                  BkashCheckout(totalAmount: widget.totalAmount)),
         );
         break;
       case 'card':
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const CardCheckout()),
+          MaterialPageRoute(
+              builder: (context) =>
+                  CardCheckout(totalAmount: widget.totalAmount)),
         );
         break;
       case 'cod':
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const CodCheckout()),
+          MaterialPageRoute(
+              builder: (context) =>
+                  CodCheckout(totalAmount: widget.totalAmount)),
         );
         break;
     }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CodCheckout extends StatefulWidget {
-  const CodCheckout({super.key});
+  const CodCheckout({super.key, required double totalAmount});
 
   @override
   State<CodCheckout> createState() => _CodCheckoutState();

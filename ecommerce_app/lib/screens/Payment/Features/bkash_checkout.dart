@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BkashCheckout extends StatefulWidget {
-  const BkashCheckout({super.key});
+  const BkashCheckout({super.key, required double totalAmount});
 
   @override
   State<BkashCheckout> createState() => _BkashCheckoutState();

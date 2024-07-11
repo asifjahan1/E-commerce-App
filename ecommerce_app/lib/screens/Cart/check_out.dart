@@ -112,7 +112,9 @@ class _CheckOutBoxState extends State<CheckOutBox> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const PaymentMethodScreen(),
+                  builder: (context) => PaymentMethodScreen(
+                      totalAmount:
+                          provider.totalPrice()), // Pass totalAmount here
                 ),
               );
             },

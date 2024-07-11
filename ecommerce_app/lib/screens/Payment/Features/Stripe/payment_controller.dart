@@ -11,6 +11,15 @@ final log = Logger('PaymentController');
 class PaymentController {
   Map<String, dynamic>? paymentIntentData;
 
+  void setAmount(double amount) {}
+
+  Future<bool> processPayment() async {
+    // Simulate payment processing
+    await Future.delayed(const Duration(seconds: 2));
+    bool paymentSuccessful = true;
+    return paymentSuccessful;
+  }
+
   Future<void> makePayment({
     required String amount,
     required String currency,
