@@ -44,6 +44,8 @@ dependencies:
   stripe_android: ^10.2.0
   badges: ^3.1.2
   shared_preferences: ^2.2.3
+  firebase_core: ^3.2.0
+  logging: ^1.2.0
 
 dev_dependencies:
   flutter_test:
