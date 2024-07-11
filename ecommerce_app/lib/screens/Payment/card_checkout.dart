@@ -1,13 +1,15 @@
-import 'package:ecommerce_app/screens/Payment/Features/Stripe/payment_controller.dart';
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/constants.dart';
+import 'package:ecommerce_app/screens/Payment/Features/Stripe/payment_controller.dart';
 
 class CardCheckout extends StatefulWidget {
-  final double totalAmount; // Total amount from PaymentMethodScreen
-  const CardCheckout({Key? key, required this.totalAmount}) : super(key: key);
+  final double totalAmount;
+  CardCheckout({super.key, required this.totalAmount});
 
   @override
-  State<CardCheckout> createState() => _CardCheckoutState();
+  _CardCheckoutState createState() => _CardCheckoutState();
 }
 
 class _CardCheckoutState extends State<CardCheckout> {
@@ -16,6 +18,7 @@ class _CardCheckoutState extends State<CardCheckout> {
   @override
   void initState() {
     super.initState();
+    // Initialize the payment controller with the total amount
     _paymentController.setAmount(widget.totalAmount);
   }
 
@@ -56,38 +59,50 @@ class _CardCheckoutState extends State<CardCheckout> {
             ),
             Expanded(
               child: Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Perform payment logic using _paymentController
-                    _paymentController.processPayment().then((success) {
-                      if (success) {
-                        // Payment successful, navigate to success screen or perform further actions
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Payment Successful')),
-                        );
-                        // Navigate to success screen or back to home
-                      } else {
-                        // Payment failed, show error message or retry option
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content:
-                                  Text('Payment Failed. Please try again.')),
-                        );
-                      }
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: kprimaryColor,
-                    minimumSize: const Size(200, 50),
-                  ),
-                  child: const Text(
-                    "Pay Now",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Total Amount: BDT ${widget.totalAmount.toStringAsFixed(2)}",
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Call method to initiate payment
+                        _paymentController.processPayment().then((success) {
+                          if (success) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Payment Successful')),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content:
+                                    Text('Payment Failed. Please try again.'),
+                              ),
+                            );
+                          }
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: kprimaryColor,
+                        minimumSize: const Size(200, 50),
+                      ),
+                      child: const Text(
+                        "Pay Now",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
