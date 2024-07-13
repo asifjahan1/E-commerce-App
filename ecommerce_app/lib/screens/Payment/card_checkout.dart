@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api
 
 import 'dart:convert';
-
 import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -56,15 +55,23 @@ class _CardCheckoutState extends State<CardCheckout> {
             ),
             Expanded(
               child: Center(
-                child: TextButton(
+                child: ElevatedButton(
                   onPressed: () async {
                     await makePayment(context);
                   },
+                  style: ElevatedButton.styleFrom(
+                    elevation: 2,
+                    backgroundColor: const Color(0xffff660e),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 15),
+                    textStyle: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   child: const Text(
                     'Make Payment',
-                    style: TextStyle(
-                      color: Color(0xffff660e),
-                    ),
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
               ),
