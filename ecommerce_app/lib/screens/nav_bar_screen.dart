@@ -9,9 +9,10 @@ import 'package:ecommerce_app/screens/Profile/profile.dart';
 import 'package:ecommerce_app/screens/Favorite/favorite.dart';
 
 class BottomNavBar extends StatefulWidget {
-  const BottomNavBar({super.key, required int initialIndex});
+  final int initialIndex;
 
-  // Define a method to access the state of BottomNavBar
+  const BottomNavBar({super.key, required this.initialIndex});
+
   static _BottomNavBarState? of(BuildContext context) =>
       context.findAncestorStateOfType<_BottomNavBarState>();
 
@@ -20,8 +21,15 @@ class BottomNavBar extends StatefulWidget {
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
-  int currentIndex = 2;
-  int cartItemCount = 0; // Variable to store the number of items in the cart
+  late int currentIndex;
+  int cartItemCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    currentIndex = widget.initialIndex;
+  }
+
   List screens = const [
     Scaffold(),
     Favorite(),
@@ -69,7 +77,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
-        // padding: EdgeInsets.all(8),
         elevation: 5,
         height: 70,
         color: Colors.black,
@@ -131,7 +138,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: badges.Badge(
-          // Use the alias here
           position: badges.BadgePosition.topEnd(top: -10, end: -10),
           showBadge: cartItemCount > 0,
           badgeContent: Text(

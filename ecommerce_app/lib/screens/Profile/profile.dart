@@ -39,9 +39,9 @@ class Profile extends StatelessWidget {
                               children: [
                                 Stack(
                                   children: [
-                                    Hero(
+                                    const Hero(
                                       tag: 'avatarHero',
-                                      child: const CircleAvatar(
+                                      child: CircleAvatar(
                                         radius: 42,
                                         backgroundImage:
                                             AssetImage("images/profile3.png"),

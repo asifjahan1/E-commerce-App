@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as https;
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -14,13 +15,6 @@ class CardCheckout extends StatefulWidget {
 
 class _CardCheckoutState extends State<CardCheckout> {
   Map<String, dynamic>? paymentIntent;
-
-  // @override
-  // void initState() {
-  //   // super.initState();
-  //   // // Initialize the payment controller with the total amount
-  //   // _paymentController.setAmount(widget.totalAmount);
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +55,7 @@ class _CardCheckoutState extends State<CardCheckout> {
               child: Center(
                 child: TextButton(
                   onPressed: () async {
-                    await makePayment();
+                    await makePayment(context);
                   },
                   child: const Text(
                     'Make Payment',
@@ -78,9 +72,8 @@ class _CardCheckoutState extends State<CardCheckout> {
     );
   }
 
-  Future<void> makePayment() async {
+  Future<void> makePayment(BuildContext context) async {
     try {
-      // Convert total amount to integer cents here
       final intAmount = (widget.totalAmount * 100).toInt();
       paymentIntent = await createPaymentIntent(intAmount.toString(), 'AED');
 
@@ -99,13 +92,13 @@ class _CardCheckoutState extends State<CardCheckout> {
           )
           .then((value) {});
 
-      await displayPaymentSheet();
+      await displayPaymentSheet(context);
     } catch (e, s) {
-      print('exception:$e$s');
+      print('Exception: $e\n$s');
     }
   }
 
-  Future<void> displayPaymentSheet() async {
+  Future<void> displayPaymentSheet(BuildContext context) async {
     try {
       await Stripe.instance.presentPaymentSheet().then((value) {
         showDialog(
@@ -123,7 +116,9 @@ class _CardCheckoutState extends State<CardCheckout> {
                     Text(
                       "Payment Successful",
                       style: TextStyle(
-                          color: Colors.green, fontWeight: FontWeight.bold),
+                        color: Colors.green,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
                 ),
@@ -132,15 +127,24 @@ class _CardCheckoutState extends State<CardCheckout> {
           ),
         );
         paymentIntent = null;
+
+        // Navigate to Profile screen after 5 seconds
+        Future.delayed(const Duration(seconds: 5), () {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+                builder: (_) => const BottomNavBar(initialIndex: 4)),
+            (route) => false, // Remove all routes from stack
+          );
+        });
       }).onError((error, stackTrace) {
-        print('Error is:--->$error $stackTrace');
+        print('Error: $error\n$stackTrace');
       });
     } on StripeException catch (e) {
-      print('Error is:---> $e');
+      print('Stripe Exception: $e');
       showDialog(
         context: context,
         builder: (_) => const AlertDialog(
-          content: Text("Cancelled"),
+          content: Text("Payment Failed"),
         ),
       );
     }
@@ -164,16 +168,11 @@ class _CardCheckoutState extends State<CardCheckout> {
         },
         body: body,
       );
-      print('payment Intent Body->> ${response.body.toString()}');
+      print('Payment Intent Body: ${response.body.toString()}');
       return jsonDecode(response.body);
     } catch (err) {
-      print('err charging user: ${err.toString()}');
+      print('Error charging user: ${err.toString()}');
       return null;
     }
-  }
-
-  String calculateAmount(String amount) {
-    final calculateAmount = (int.parse(amount)) * 100;
-    return calculateAmount.toString();
   }
 }
