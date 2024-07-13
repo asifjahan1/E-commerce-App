@@ -1,26 +1,26 @@
-// ignore_for_file: must_be_immutable
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:ecommerce_app/constants.dart';
-import 'package:ecommerce_app/screens/Payment/Features/Stripe/payment_controller.dart';
+import 'package:http/http.dart' as https;
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 class CardCheckout extends StatefulWidget {
   final double totalAmount;
-  CardCheckout({super.key, required this.totalAmount});
+  const CardCheckout({super.key, required this.totalAmount});
 
   @override
   _CardCheckoutState createState() => _CardCheckoutState();
 }
 
 class _CardCheckoutState extends State<CardCheckout> {
-  final PaymentController _paymentController = PaymentController();
+  Map<String, dynamic>? paymentIntent;
 
-  @override
-  void initState() {
-    super.initState();
-    // Initialize the payment controller with the total amount
-    _paymentController.setAmount(widget.totalAmount);
-  }
+  // @override
+  // void initState() {
+  //   // super.initState();
+  //   // // Initialize the payment controller with the total amount
+  //   // _paymentController.setAmount(widget.totalAmount);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -59,50 +59,11 @@ class _CardCheckoutState extends State<CardCheckout> {
             ),
             Expanded(
               child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Total Amount: BDT ${widget.totalAmount.toStringAsFixed(2)}",
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Call method to initiate payment
-                        _paymentController.processPayment().then((success) {
-                          if (success) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Payment Successful')),
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content:
-                                    Text('Payment Failed. Please try again.'),
-                              ),
-                            );
-                          }
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: kprimaryColor,
-                        minimumSize: const Size(200, 50),
-                      ),
-                      child: const Text(
-                        "Pay Now",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
+                child: TextButton(
+                  onPressed: () async {
+                    await makePayment();
+                  },
+                  child: const Text('Make Payment'),
                 ),
               ),
             ),
@@ -110,5 +71,101 @@ class _CardCheckoutState extends State<CardCheckout> {
         ),
       ),
     );
+  }
+
+  Future<void> makePayment() async {
+    try {
+      paymentIntent = await createPaymentIntent('10', 'USD');
+      await Stripe.instance
+          .initPaymentSheet(
+            paymentSheetParameters: SetupPaymentSheetParameters(
+              paymentIntentClientSecret: paymentIntent!['client_secret'],
+              googlePay: const PaymentSheetGooglePay(
+                testEnv: true,
+                currencyCode: 'AED',
+                merchantCountryCode: 'UAE',
+              ),
+              style: ThemeMode.dark,
+              merchantDisplayName: 'Asif',
+            ),
+          )
+          .then((value) {});
+
+      await displayPaymentSheet();
+    } catch (e, s) {
+      print('exception:$e$s');
+    }
+  }
+
+  Future<void> displayPaymentSheet() async {
+    try {
+      await Stripe.instance.presentPaymentSheet().then((value) {
+        showDialog(
+          context: context,
+          builder: (_) => const AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.check_circle,
+                      color: Colors.green,
+                    ),
+                    Text(
+                      "Payment Successful",
+                      style: TextStyle(
+                          color: Colors.green, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+        paymentIntent = null;
+      }).onError((error, stackTrace) {
+        print('Error is:--->$error $stackTrace');
+      });
+    } on StripeException catch (e) {
+      print('Error is:---> $e');
+      showDialog(
+        context: context,
+        builder: (_) => const AlertDialog(
+          content: Text("Cancelled"),
+        ),
+      );
+    }
+  }
+
+  Future<Map<String, dynamic>?> createPaymentIntent(
+      String amount, String currency) async {
+    try {
+      Map<String, dynamic> body = {
+        'amount': calculateAmount(amount),
+        'currency': currency,
+        'payment_method_types[]': 'card', // এখানে পরিবর্তন করা হয়েছে
+      };
+
+      var response = await https.post(
+        Uri.parse('https://api.stripe.com/v1/payment_intents'),
+        headers: {
+          'Authorization':
+              'Bearer sk_test_51Pb4xjAPX9zikVxBegXLWkmf83Koxg2yMNskOkBMWabj1sjETtIojtrOKXuwM8d0KmMg2H7BSkQM27LJEya3k44s00yCpHwFt0',
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: body,
+      );
+      print('payment Intent Body->> ${response.body.toString()}');
+      return jsonDecode(response.body);
+    } catch (err) {
+      print('err charging user: ${err.toString()}');
+      return null;
+    }
+  }
+
+  String calculateAmount(String amount) {
+    final calculateAmount = (int.parse(amount)) * 100;
+    return calculateAmount.toString();
   }
 }

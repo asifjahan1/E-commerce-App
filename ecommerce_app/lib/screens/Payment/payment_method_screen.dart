@@ -26,24 +26,25 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  BkashCheckout(totalAmount: widget.totalAmount)),
+            builder: (context) =>
+                BkashCheckout(totalAmount: widget.totalAmount),
+          ),
         );
         break;
       case 'card':
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  CardCheckout(totalAmount: widget.totalAmount)),
+            builder: (context) => CardCheckout(totalAmount: widget.totalAmount),
+          ),
         );
         break;
       case 'cod':
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  CodCheckout(totalAmount: widget.totalAmount)),
+            builder: (context) => CodCheckout(totalAmount: widget.totalAmount),
+          ),
         );
         break;
     }

@@ -44,3 +44,159 @@ class MyApp extends StatelessWidget {
         ),
       );
 }
+
+// Testing
+
+// import 'dart:convert';
+// import 'package:http/http.dart' as https;
+// import 'package:flutter/material.dart';
+// import 'package:flutter_stripe/flutter_stripe.dart';
+// import 'package:google_fonts/google_fonts.dart';
+
+// import 'dart:convert';
+// import 'package:flutter/material.dart';
+// import 'package:http/http.dart' as https;
+// import 'package:flutter_stripe/flutter_stripe.dart';
+// import 'package:google_fonts/google_fonts.dart';
+
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   Stripe.publishableKey =
+//       'pk_test_51Pb4xjAPX9zikVxBWkYKnHEj3Rpzu1kYw0tFuVgc1G7ombMJVTkNUA2Sd9iHjjfcHxa9SBMBtAkmR1nysPpnjvMM00YdMUGBpG';
+//   runApp(const MyApp());
+// }
+
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       theme: ThemeData(
+//         textTheme: GoogleFonts.mulishTextTheme(),
+//       ),
+//       home: const HomeScreen(),
+//     );
+//   }
+// }
+
+// class HomeScreen extends StatefulWidget {
+//   const HomeScreen({super.key});
+
+//   @override
+//   State<HomeScreen> createState() => _HomeScreenState();
+// }
+
+// class _HomeScreenState extends State<HomeScreen> {
+//   Map<String, dynamic>? paymentIntent;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('Stripe Account'),
+//       ),
+//       body: Center(
+//         child: TextButton(
+//           onPressed: () async {
+//             await makePayment();
+//           },
+//           child: const Text('Make Payment'),
+//         ),
+//       ),
+//     );
+//   }
+
+//   Future<void> makePayment() async {
+//     try {
+//       paymentIntent = await createPaymentIntent('10', 'USD');
+//       await Stripe.instance
+//           .initPaymentSheet(
+//             paymentSheetParameters: SetupPaymentSheetParameters(
+//               paymentIntentClientSecret: paymentIntent!['client_secret'],
+//               googlePay: const PaymentSheetGooglePay(
+//                 testEnv: true,
+//                 currencyCode: 'USD',
+//                 merchantCountryCode: 'US',
+//               ),
+//               style: ThemeMode.dark,
+//               merchantDisplayName: 'Adnan',
+//             ),
+//           )
+//           .then((value) {});
+
+//       await displayPaymentSheet();
+//     } catch (e, s) {
+//       print('exception:$e$s');
+//     }
+//   }
+
+//   Future<void> displayPaymentSheet() async {
+//     try {
+//       await Stripe.instance.presentPaymentSheet().then((value) {
+//         showDialog(
+//           context: context,
+//           builder: (_) => const AlertDialog(
+//             content: Column(
+//               mainAxisSize: MainAxisSize.min,
+//               children: [
+//                 Row(
+//                   children: [
+//                     Icon(
+//                       Icons.check_circle,
+//                       color: Colors.green,
+//                     ),
+//                     Text("Payment Successful"),
+//                   ],
+//                 ),
+//               ],
+//             ),
+//           ),
+//         );
+//         paymentIntent = null;
+//       }).onError((error, stackTrace) {
+//         print('Error is:--->$error $stackTrace');
+//       });
+//     } on StripeException catch (e) {
+//       print('Error is:---> $e');
+//       showDialog(
+//         context: context,
+//         builder: (_) => const AlertDialog(
+//           content: Text("Cancelled"),
+//         ),
+//       );
+//     }
+//   }
+
+//   Future<Map<String, dynamic>?> createPaymentIntent(
+//       String amount, String currency) async {
+//     try {
+//       Map<String, dynamic> body = {
+//         'amount': calculateAmount(amount),
+//         'currency': currency,
+//         'payment_method_types[]': 'card', // এখানে পরিবর্তন করা হয়েছে
+//       };
+
+//       var response = await https.post(
+//         Uri.parse('https://api.stripe.com/v1/payment_intents'),
+//         headers: {
+//           'Authorization':
+//               'Bearer sk_test_51Pb4xjAPX9zikVxBegXLWkmf83Koxg2yMNskOkBMWabj1sjETtIojtrOKXuwM8d0KmMg2H7BSkQM27LJEya3k44s00yCpHwFt0',
+//           'Content-Type': 'application/x-www-form-urlencoded'
+//         },
+//         body: body,
+//       );
+//       print('payment Intent Body->> ${response.body.toString()}');
+//       return jsonDecode(response.body);
+//     } catch (err) {
+//       print('err charging user: ${err.toString()}');
+//       return null;
+//     }
+//   }
+
+//   String calculateAmount(String amount) {
+//     final calculateAmount = (int.parse(amount)) * 100;
+//     return calculateAmount.toString();
+//   }
+// }
