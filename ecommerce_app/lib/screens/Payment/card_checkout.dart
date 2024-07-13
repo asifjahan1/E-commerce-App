@@ -1,6 +1,9 @@
+// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api
+
 import 'dart:convert';
 
 import 'package:ecommerce_app/screens/nav_bar_screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as https;
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -94,7 +97,9 @@ class _CardCheckoutState extends State<CardCheckout> {
 
       await displayPaymentSheet(context);
     } catch (e, s) {
-      print('Exception: $e\n$s');
+      if (kDebugMode) {
+        print('Exception: $e\n$s');
+      }
     }
   }
 
@@ -114,7 +119,7 @@ class _CardCheckoutState extends State<CardCheckout> {
                       color: Colors.green,
                     ),
                     Text(
-                      "Payment Successful",
+                      "Payment Successful!",
                       style: TextStyle(
                         color: Colors.green,
                         fontWeight: FontWeight.bold,
@@ -137,10 +142,14 @@ class _CardCheckoutState extends State<CardCheckout> {
           );
         });
       }).onError((error, stackTrace) {
-        print('Error: $error\n$stackTrace');
+        if (kDebugMode) {
+          print('Error: $error\n$stackTrace');
+        }
       });
     } on StripeException catch (e) {
-      print('Stripe Exception: $e');
+      if (kDebugMode) {
+        print('Stripe Exception: $e');
+      }
       showDialog(
         context: context,
         builder: (_) => const AlertDialog(
@@ -168,10 +177,14 @@ class _CardCheckoutState extends State<CardCheckout> {
         },
         body: body,
       );
-      print('Payment Intent Body: ${response.body.toString()}');
+      if (kDebugMode) {
+        print('Payment Intent Body: ${response.body.toString()}');
+      }
       return jsonDecode(response.body);
     } catch (err) {
-      print('Error charging user: ${err.toString()}');
+      if (kDebugMode) {
+        print('Error charging user: ${err.toString()}');
+      }
       return null;
     }
   }
