@@ -6,7 +6,7 @@ import 'package:ecommerce_app/screens/Cart/check_out.dart';
 import 'package:ecommerce_app/constants.dart';
 
 class CartScreen extends StatefulWidget {
-  const CartScreen({Key? key}) : super(key: key);
+  const CartScreen({super.key});
 
   @override
   State<CartScreen> createState() => _CartScreenState();

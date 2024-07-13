@@ -63,7 +63,12 @@ class _CardCheckoutState extends State<CardCheckout> {
                   onPressed: () async {
                     await makePayment();
                   },
-                  child: const Text('Make Payment'),
+                  child: const Text(
+                    'Make Payment',
+                    style: TextStyle(
+                      color: Color(0xffff660e),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -75,7 +80,10 @@ class _CardCheckoutState extends State<CardCheckout> {
 
   Future<void> makePayment() async {
     try {
-      paymentIntent = await createPaymentIntent('10', 'USD');
+      // Convert total amount to integer cents here
+      final intAmount = (widget.totalAmount * 100).toInt();
+      paymentIntent = await createPaymentIntent(intAmount.toString(), 'AED');
+
       await Stripe.instance
           .initPaymentSheet(
             paymentSheetParameters: SetupPaymentSheetParameters(
@@ -142,9 +150,9 @@ class _CardCheckoutState extends State<CardCheckout> {
       String amount, String currency) async {
     try {
       Map<String, dynamic> body = {
-        'amount': calculateAmount(amount),
+        'amount': amount,
         'currency': currency,
-        'payment_method_types[]': 'card', // এখানে পরিবর্তন করা হয়েছে
+        'payment_method_types[]': 'card',
       };
 
       var response = await https.post(
