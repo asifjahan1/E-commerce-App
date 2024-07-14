@@ -94,12 +94,28 @@ class _CartScreenState extends State<CartScreen> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          Text(
-                            "BDT ${cartItem.price}",
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
+                          Column(
+                            // amake show korte hobe jokhon location a BD thakbe tokhon BDT show korbe
+                            // otherwise AED show korbe or other country
+                            // jodi other country show kore tahole amake rate onujayi hisheb korte hobe
+                            children: [
+                              Text(
+                                "BDT ${cartItem.price}",
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              Text(
+                                "AED ${cartItem.price}",
+                                style: const TextStyle(
+                                  color: Colors.black54,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
