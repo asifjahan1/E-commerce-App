@@ -31,7 +31,7 @@ class _CartScreenState extends State<CartScreen> {
 
     void removeFromCart(int index) {
       setState(() {
-        finalList.removeAt(index);
+        provider.removeProduct(index);
       });
     }
 
@@ -162,8 +162,6 @@ class _CartScreenState extends State<CartScreen> {
 
     return Scaffold(
       backgroundColor: kcontentColor,
-      bottomSheet:
-          const CheckOutBox(), // Assuming CheckOutBox is a separate widget
       body: SafeArea(
         child: Column(
           children: [
@@ -203,11 +201,11 @@ class _CartScreenState extends State<CartScreen> {
             ),
             Expanded(
               child: ListView.builder(
-                shrinkWrap: true,
                 itemCount: finalList.length,
                 itemBuilder: (context, index) => buildCartItem(context, index),
               ),
             ),
+            const CheckOutBox(),
           ],
         ),
       ),

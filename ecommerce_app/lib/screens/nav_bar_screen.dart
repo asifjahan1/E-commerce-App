@@ -91,7 +91,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
             buildNavItem(1, Icons.favorite_border, 'Favorite'),
             const SizedBox(width: 8),
             buildCartNavItem(3, Icons.shopping_cart_outlined, 'Cart'),
-            buildNavItem(4, Icons.person, 'Profile'),
+            buildNavItem(4, Icons.person, 'Account'),
           ],
         ),
       ),
