@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api
 
 import 'package:ecommerce_app/constants.dart';
 import 'package:flutter/foundation.dart';
@@ -8,8 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class RegistrationScreen extends StatefulWidget {
   final String phoneNumber;
 
-  const RegistrationScreen({Key? key, required this.phoneNumber})
-      : super(key: key);
+  const RegistrationScreen({super.key, required this.phoneNumber});
 
   @override
   _RegistrationScreenState createState() => _RegistrationScreenState();
@@ -74,12 +73,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kprimaryColor,
       body: SafeArea(
         child: Container(
           width: double.infinity,
           height: double.infinity,
-          color: Colors.orange,
+          color: kcontentColor,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
           child: Column(
             children: [
@@ -91,7 +89,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   },
                   icon: Icon(
                     Icons.keyboard_arrow_down_rounded,
-                    color: Colors.white.withOpacity(0.8),
+                    color: Colors.black.withOpacity(0.8),
                     size: 40,
                   ),
                 ),
@@ -102,35 +100,65 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   Expanded(
                     child: TextField(
                       controller: _phoneNumberController,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: "Enter the Mobile Number",
-                        border: OutlineInputBorder(),
                         filled: true,
                         fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: kprimaryColor,
+                            width: 1.5,
+                          ),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
                       ),
                     ),
                   ),
                   const SizedBox(width: 10),
-                  ElevatedButton(
+
+                  // mobile number integration
+                  MaterialButton(
                     onPressed: _sendCode,
-                    child: const Text("Send"),
+                    color: kprimaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: const Text(
+                      "Send",
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ],
               ),
               const SizedBox(height: 20),
               TextField(
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: "Enter the received code",
-                  border: OutlineInputBorder(),
+                  border: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: kprimaryColor,
+                      width: 1.5,
+                    ),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
                   filled: true,
                   fillColor: Colors.white,
                 ),
                 controller: _codeController,
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
+              MaterialButton(
                 onPressed: _verifyCode,
-                child: const Text("Submit"),
+                color: kprimaryColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: const Text(
+                  "Submit",
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
               const Spacer(),
             ],
