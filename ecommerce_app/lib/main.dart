@@ -8,9 +8,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:logging/logging.dart';
 import 'screens/nav_bar_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   Stripe.publishableKey =
       'pk_test_51Pb4xjAPX9zikVxBWkYKnHEj3Rpzu1kYw0tFuVgc1G7ombMJVTkNUA2Sd9iHjjfcHxa9SBMBtAkmR1nysPpnjvMM00YdMUGBpG';
   _setupLogging();

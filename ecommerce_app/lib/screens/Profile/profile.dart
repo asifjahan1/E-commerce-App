@@ -185,6 +185,7 @@
 // }
 
 import 'package:ecommerce_app/constants.dart';
+import 'package:ecommerce_app/screens/Profile/Widgets/register_mobile.dart';
 import 'package:flutter/material.dart';
 
 class Profile extends StatelessWidget {
@@ -234,7 +235,11 @@ class Profile extends StatelessWidget {
               Center(
                 child: MaterialButton(
                   onPressed: () {
-                    // Handle login/sign up button press
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const RegisterMobile(),
+                      ),
+                    );
                   },
                   color: kprimaryColor,
                   textColor: Colors.white,
