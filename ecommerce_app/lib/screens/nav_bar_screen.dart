@@ -35,6 +35,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
     Favorite(),
     HomeScreen(),
     CartScreen(),
+    // Profile(phoneNumber: ''),
     Profile(),
   ];
 

@@ -1,9 +1,8 @@
-// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api
-
-import 'package:ecommerce_app/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ecommerce_app/constants.dart';
 
 class RegistrationScreen extends StatefulWidget {
   final String phoneNumber;
@@ -56,13 +55,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
       try {
         await FirebaseAuth.instance.signInWithCredential(credential);
-        // Logic to register the phone number
-        if (kDebugMode) {
-          print("Phone number registered successfully");
-        }
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('registeredPhoneNumber', widget.phoneNumber);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Mobile Number Confirmed')),
+        );
+
         Navigator.of(context).pop();
       } catch (e) {
-        // Show error message
         if (kDebugMode) {
           print("Invalid code");
         }
@@ -115,8 +116,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ),
                   ),
                   const SizedBox(width: 10),
-
-                  // mobile number integration
                   MaterialButton(
                     onPressed: _sendCode,
                     color: kprimaryColor,
