@@ -1,10 +1,12 @@
 import 'package:ecommerce_app/Provider/add_to_cart_provider.dart';
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/screens/Payment/payment_method_screen.dart';
+import 'package:ecommerce_app/screens/Profile/Widgets/register_mobile.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CheckOutBox extends StatefulWidget {
-  const CheckOutBox({super.key});
+  const CheckOutBox({Key? key}) : super(key: key);
 
   @override
   State<CheckOutBox> createState() => _CheckOutBoxState();
@@ -39,23 +41,50 @@ class _CheckOutBoxState extends State<CheckOutBox> {
       });
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-            backgroundColor: Colors.grey,
-            content: Text(
-              'Invalid discount code',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-            )),
+          backgroundColor: Colors.grey,
+          content: Text(
+            'Invalid discount code',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+        ),
       );
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
+  void _handleCheckout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? registeredPhoneNumber = prefs.getString('registeredPhoneNumber');
+
+    if (registeredPhoneNumber != null && registeredPhoneNumber.isNotEmpty) {
+      // User is registered, navigate to PaymentMethodScreen
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              PaymentMethodScreen(totalAmount: _getTotalAmount()),
+        ),
+      );
+    } else {
+      // User is not registered, navigate to RegisterMobile
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RegisterMobile(),
+        ),
+      );
+    }
+  }
+
+  double _getTotalAmount() {
     final provider = CartProvider.of(context);
     final totalPrice = provider.totalPrice();
     final discountedAmount = totalPrice * _discountPercentage;
     final discountedPrice = totalPrice - discountedAmount;
+    return _appliedCode.isNotEmpty ? discountedPrice : totalPrice;
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
         height: 300,
@@ -116,7 +145,7 @@ class _CheckOutBoxState extends State<CheckOutBox> {
                   ),
                 ),
                 Text(
-                  "BDT $totalPrice",
+                  "BDT ${CartProvider.of(context).totalPrice()}",
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
@@ -138,7 +167,7 @@ class _CheckOutBoxState extends State<CheckOutBox> {
                     ),
                   ),
                   Text(
-                    "BDT ${discountedAmount.toStringAsFixed(2)}",
+                    "BDT ${(_getTotalAmount() - CartProvider.of(context).totalPrice()).toStringAsFixed(2)}",
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
@@ -163,8 +192,8 @@ class _CheckOutBoxState extends State<CheckOutBox> {
                 ),
                 Text(
                   _appliedCode.isNotEmpty
-                      ? "BDT ${discountedPrice.toStringAsFixed(2)}"
-                      : "BDT $totalPrice",
+                      ? "BDT ${_getTotalAmount().toStringAsFixed(2)}"
+                      : "BDT ${CartProvider.of(context).totalPrice()}",
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
@@ -179,15 +208,7 @@ class _CheckOutBoxState extends State<CheckOutBox> {
                   backgroundColor: kprimaryColor,
                   minimumSize: const Size(double.infinity, 55),
                 ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          PaymentMethodScreen(totalAmount: discountedPrice),
-                    ),
-                  );
-                },
+                onPressed: _handleCheckout,
                 child: const Text(
                   "Check Out",
                   style: TextStyle(

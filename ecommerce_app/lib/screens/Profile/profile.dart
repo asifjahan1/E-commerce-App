@@ -29,6 +29,7 @@ class _ProfileState extends State<Profile> {
     });
   }
 
+  // login and logout er somoye 'Profile' Update hoy na, eita fix korte hobe!
   Future<void> _logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('registeredPhoneNumber');
