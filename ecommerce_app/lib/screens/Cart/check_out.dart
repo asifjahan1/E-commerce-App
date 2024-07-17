@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CheckOutBox extends StatefulWidget {
-  const CheckOutBox({Key? key}) : super(key: key);
+  const CheckOutBox({super.key});
 
   @override
   State<CheckOutBox> createState() => _CheckOutBoxState();
