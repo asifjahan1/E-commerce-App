@@ -1,10 +1,15 @@
-import 'package:flutter/material.dart';
 import 'package:ecommerce_app/constants.dart';
+import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatefulWidget {
   final VoidCallback onLogout;
+  final bool isLoggedIn;
 
-  const SettingsScreen({super.key, required this.onLogout});
+  const SettingsScreen({
+    Key? key,
+    required this.onLogout,
+    required this.isLoggedIn,
+  }) : super(key: key);
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -16,6 +21,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       body: SafeArea(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -40,26 +46,115 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             Expanded(
-              child: Center(
-                child: MaterialButton(
-                  onPressed: () {
-                    widget.onLogout();
-                    Navigator.of(context).popUntil((route) => route.isFirst);
-                  },
-                  color: kprimaryColor,
-                  textColor: Colors.white,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 15, horizontal: 50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+              child: ListView(
+                padding: const EdgeInsets.all(8.0),
+                children: [
+                  ListTile(
+                    title: const Text("Account Information"),
+                    onTap: () {
+                      // Navigate to Account Information screen
+                    },
                   ),
-                  child: const Text(
-                    'Logout',
-                    style: TextStyle(fontSize: 16),
+                  ListTile(
+                    title: const Text("Address Book"),
+                    onTap: () {
+                      // Navigate to Address Book screen
+                    },
+                  ),
+                  ListTile(
+                    title: const Text("Notification Settings"),
+                    onTap: () {
+                      // Navigate to Notification Settings screen
+                    },
+                  ),
+                  ListTile(
+                    title: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10.0),
+                          child: Image.asset(
+                            'images/bangladesh.png',
+                            width: 24,
+                            height: 24,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        const Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Country"),
+                            Text(
+                              "Bangladesh",
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    onTap: () {
+                      // Navigate to Country selection screen
+                    },
+                  ),
+                  ListTile(
+                    title: const Row(
+                      children: [
+                        Text("ভাষা - Language"),
+                        Spacer(),
+                        Text(
+                          "English",
+                          textAlign: TextAlign.right,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                    onTap: () {
+                      // Navigate to Language selection screen
+                    },
+                  ),
+                  ListTile(
+                    title: const Text("General"),
+                    onTap: () {
+                      // Navigate to General settings screen
+                    },
+                  ),
+                  ListTile(
+                    title: const Text("Policies"),
+                    onTap: () {
+                      // Navigate to Policies screen
+                    },
+                  ),
+                  ListTile(
+                    title: const Text("Help"),
+                    onTap: () {
+                      // Navigate to Help screen
+                    },
+                  ),
+                ],
+              ),
+            ),
+            if (widget.isLoggedIn)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: MaterialButton(
+                    onPressed: () {
+                      widget.onLogout();
+                      Navigator.of(context).pop();
+                    },
+                    color: kprimaryColor,
+                    textColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 15, horizontal: 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: const Text(
+                      'Logout',
+                      style: TextStyle(fontSize: 16),
+                    ),
                   ),
                 ),
               ),
-            ),
           ],
         ),
       ),

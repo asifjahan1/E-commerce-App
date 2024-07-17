@@ -45,7 +45,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
             InkWell(
               onTap: widget.onAvatarTap,
               child: const Hero(
-                tag: 'avatarHero', // Unique tag for the Hero widget
+                tag: 'avatarHero',
                 child: CircleAvatar(
                   backgroundColor: Color(0xffF5F5F5),
                   radius: 25,

@@ -1,5 +1,6 @@
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/registration_screen.dart';
+import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:flutter/material.dart';
 
 class RegisterMobile extends StatefulWidget {
@@ -43,7 +44,7 @@ class _RegisterMobileState extends State<RegisterMobile> {
         child: Container(
           width: double.infinity,
           height: double.infinity,
-          color: Colors.orange,
+          color: kprimaryColor,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
           child: Column(
             children: [
@@ -51,10 +52,15 @@ class _RegisterMobileState extends State<RegisterMobile> {
                 alignment: Alignment.topLeft,
                 child: IconButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    // Navigate to Profile screen using BottomNavBar index update
+                    BottomNavBar.of(context)?.updateIndex(4);
+                    Navigator.of(context).popUntil((route) => route.isFirst);
                   },
-                  icon: Icon(Icons.close,
-                      color: Colors.white.withOpacity(0.8), size: 35),
+                  icon: Icon(
+                    Icons.close,
+                    color: Colors.white.withOpacity(0.8),
+                    size: 35,
+                  ),
                 ),
               ),
               const Spacer(),
@@ -97,8 +103,8 @@ class _RegisterMobileState extends State<RegisterMobile> {
                         Padding(
                           padding: const EdgeInsets.all(10),
                           child: Image.asset(
-                            width: 28,
                             'images/bangladesh.png',
+                            width: 28,
                             height: 24,
                             fit: BoxFit.contain,
                           ),

@@ -1,11 +1,11 @@
-import 'package:ecommerce_app/screens/Profile/Widgets/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ecommerce_app/constants.dart';
+import 'package:ecommerce_app/screens/Profile/Widgets/settings.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/register_mobile.dart';
 
 class Profile extends StatefulWidget {
-  const Profile({super.key});
+  const Profile({Key? key}) : super(key: key);
 
   @override
   State<Profile> createState() => _ProfileState();
@@ -30,9 +30,14 @@ class _ProfileState extends State<Profile> {
   Future<void> _logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('registeredPhoneNumber');
+    await prefs.remove('password');
     setState(() {
       _registeredPhoneNumber = null;
     });
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => const Profile()),
+      (Route<dynamic> route) => false,
+    );
   }
 
   @override
@@ -54,36 +59,26 @@ class _ProfileState extends State<Profile> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            // Handle add button press
-                          },
-                          icon: const Icon(Icons.add),
-                          color: kprimaryColor,
-                        ),
-                        if (_registeredPhoneNumber != null)
-                          Text(
-                            _registeredPhoneNumber!,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                      ],
+                    Icon(
+                      _registeredPhoneNumber != null ? Icons.person : Icons.add,
+                      size: 30,
+                    ),
+                    Text(
+                      _registeredPhoneNumber ?? '',
+                      style: const TextStyle(fontSize: 20),
                     ),
                     IconButton(
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) =>
-                                SettingsScreen(onLogout: _logout),
+                            builder: (context) => SettingsScreen(
+                              onLogout: _logout,
+                              isLoggedIn: _registeredPhoneNumber != null,
+                            ),
                           ),
                         );
                       },
-                      icon: const Icon(Icons.settings),
-                      color: kprimaryColor,
+                      icon: const Icon(Icons.settings, size: 30),
                     ),
                   ],
                 ),
@@ -91,25 +86,28 @@ class _ProfileState extends State<Profile> {
               const SizedBox(height: 20),
               if (_registeredPhoneNumber == null)
                 Center(
-                  child: MaterialButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const RegisterMobile(),
+                  child: Column(
+                    children: [
+                      MaterialButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const RegisterMobile(),
+                            ),
+                          );
+                        },
+                        color: kprimaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50),
                         ),
-                      );
-                    },
-                    color: kprimaryColor,
-                    textColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 15, horizontal: 50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: const Text(
-                      'Login / SignUp',
-                      style: TextStyle(fontSize: 16),
-                    ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 15),
+                        child: const Text(
+                          "Login / SignUp",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
             ],
