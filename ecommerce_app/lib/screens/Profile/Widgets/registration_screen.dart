@@ -9,7 +9,8 @@ import 'package:ecommerce_app/screens/Profile/Widgets/mobile_login.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/mobile_forgot_password.dart';
 
 class RegistrationScreen extends StatefulWidget {
-  const RegistrationScreen({super.key, required String phoneNumber});
+  final String phoneNumber;
+  const RegistrationScreen({super.key, required this.phoneNumber});
 
   @override
   _RegistrationScreenState createState() => _RegistrationScreenState();
@@ -118,7 +119,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: kcontentColor,
       appBar: AppBar(
         backgroundColor: kcontentColor,
         leading: Align(
@@ -136,114 +137,115 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         ),
       ),
       body: SafeArea(
-        child: Container(
-          width: double.infinity,
-          height: double.infinity,
-          color: kcontentColor,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-          child: Column(
-            children: [
-              const Spacer(),
-              TextField(
-                controller: _phoneNumberController,
-                decoration: InputDecoration(
-                  hintText: "Enter Mobile Number",
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: kprimaryColor,
-                      width: 1.5,
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+            child: Column(
+              children: [
+                TextField(
+                  controller: _phoneNumberController,
+                  decoration: InputDecoration(
+                    hintText: "Enter Mobile Number",
+                    helperText: "e.g: +8801234567890",
+                    helperStyle: const TextStyle(
+                      color: Colors.grey,
                     ),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  filled: true,
-                  fillColor: Colors.white,
-                  suffixIcon: TextButton(
-                    onPressed: _sendCode,
-                    child: const Text(
-                      "Send",
-                      style: TextStyle(
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(
                         color: kprimaryColor,
-                        fontWeight: FontWeight.bold,
+                        width: 1.5,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    suffixIcon: TextButton(
+                      onPressed: _sendCode,
+                      child: const Text(
+                        "Send",
+                        style: TextStyle(
+                          color: kprimaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: _codeController,
-                decoration: InputDecoration(
-                  hintText: "Enter the Received Code",
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: kprimaryColor,
-                      width: 1.5,
-                    ),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  filled: true,
-                  fillColor: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: _passwordController,
-                decoration: InputDecoration(
-                  hintText: "Make a Password",
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: kprimaryColor,
-                      width: 1.5,
-                    ),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  filled: true,
-                  fillColor: Colors.white,
-                ),
-                obscureText: true,
-              ),
-              const SizedBox(height: 2),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: _resetPassword,
-                    child: const Text(
-                      "Forget Password?",
-                      style: TextStyle(
+                const SizedBox(height: 20),
+                TextField(
+                  controller: _codeController,
+                  decoration: InputDecoration(
+                    hintText: "Enter the Received Code",
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(
                         color: kprimaryColor,
-                        fontWeight: FontWeight.bold,
+                        width: 1.5,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                TextField(
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                    hintText: "Make a Password",
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: kprimaryColor,
+                        width: 1.5,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                  obscureText: true,
+                ),
+                const SizedBox(height: 2),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: _resetPassword,
+                      child: const Text(
+                        "Forget Password?",
+                        style: TextStyle(
+                          color: kprimaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                MaterialButton(
+                  onPressed: _verifyCode,
+                  color: kprimaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
                   ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              MaterialButton(
-                onPressed: _verifyCode,
-                color: kprimaryColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: const Text(
-                  "Submit",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              const SizedBox(height: 10),
-              TextButton(
-                onPressed: _navigateToLoginScreen,
-                child: const Text(
-                  "Already have Account? Login",
-                  style: TextStyle(
-                    color: kprimaryColor,
-                    fontWeight: FontWeight.bold,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: const Text(
+                    "Submit",
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
-              ),
-              const Spacer(),
-            ],
+                const SizedBox(height: 10),
+                TextButton(
+                  onPressed: _navigateToLoginScreen,
+                  child: const Text(
+                    "Already have Account? Login",
+                    style: TextStyle(
+                      color: kprimaryColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

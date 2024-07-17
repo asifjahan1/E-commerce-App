@@ -81,6 +81,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 controller: _phoneNumberController,
                 decoration: InputDecoration(
                   hintText: "Enter your mobile number",
+                  helperText: "e.g: +8801234567890",
+                  helperStyle: const TextStyle(
+                    color: Colors.grey,
+                  ),
                   border: OutlineInputBorder(
                     borderSide: const BorderSide(
                       color: kprimaryColor,

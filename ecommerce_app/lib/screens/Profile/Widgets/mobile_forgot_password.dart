@@ -93,6 +93,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 controller: _phoneNumberController,
                 decoration: InputDecoration(
                   hintText: "Enter Mobile Number",
+                  helperText: "e.g: +8801234567890",
+                  helperStyle: const TextStyle(
+                    color: Colors.grey,
+                  ),
                   border: OutlineInputBorder(
                     borderSide: const BorderSide(
                       color: Colors.grey,
