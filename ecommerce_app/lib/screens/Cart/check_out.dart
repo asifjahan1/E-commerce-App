@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:ecommerce_app/Provider/add_to_cart_provider.dart';
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/screens/Payment/payment_method_screen.dart';
@@ -69,7 +71,7 @@ class _CheckOutBoxState extends State<CheckOutBox> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => RegisterMobile(),
+          builder: (context) => const RegisterMobile(),
         ),
       );
     }
