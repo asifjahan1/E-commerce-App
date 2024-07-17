@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:ecommerce_app/screens/Profile/Widgets/mobile_forgot_password.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/register_mobile.dart';
 import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +37,16 @@ class _LoginScreenState extends State<LoginScreen> {
         const SnackBar(content: Text('Invalid phone number or password')),
       );
     }
+  }
+
+  void _resetPassword() async {
+    // Navigate to ForgotPassword screen
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ForgotPassword(),
+      ),
+    );
   }
 
   @override
@@ -112,6 +123,22 @@ class _LoginScreenState extends State<LoginScreen> {
                   fillColor: Colors.white,
                 ),
                 obscureText: true,
+              ),
+              const SizedBox(height: 2),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: _resetPassword,
+                    child: const Text(
+                      "Forget Password?",
+                      style: TextStyle(
+                        color: kprimaryColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 20),
               MaterialButton(
