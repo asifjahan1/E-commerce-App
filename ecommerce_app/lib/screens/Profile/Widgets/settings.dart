@@ -6,10 +6,10 @@ class SettingsScreen extends StatefulWidget {
   final bool isLoggedIn;
 
   const SettingsScreen({
-    Key? key,
+    super.key,
     required this.onLogout,
     required this.isLoggedIn,
-  }) : super(key: key);
+  });
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ecommerce_app/constants.dart';
@@ -5,7 +7,7 @@ import 'package:ecommerce_app/screens/Profile/Widgets/settings.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/register_mobile.dart';
 
 class Profile extends StatefulWidget {
-  const Profile({Key? key}) : super(key: key);
+  const Profile({super.key});
 
   @override
   State<Profile> createState() => _ProfileState();
@@ -59,13 +61,24 @@ class _ProfileState extends State<Profile> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(
-                      _registeredPhoneNumber != null ? Icons.person : Icons.add,
-                      size: 30,
-                    ),
-                    Text(
-                      _registeredPhoneNumber ?? '',
-                      style: const TextStyle(fontSize: 20),
+                    Row(
+                      children: [
+                        Icon(
+                          _registeredPhoneNumber != null
+                              ? Icons.person
+                              : Icons.add,
+                          size: 30,
+                          color: kprimaryColor,
+                        ),
+                        const SizedBox(width: 3),
+                        Text(
+                          _registeredPhoneNumber ?? '',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: kprimaryColor,
+                          ),
+                        ),
+                      ],
                     ),
                     IconButton(
                       onPressed: () {
@@ -78,7 +91,11 @@ class _ProfileState extends State<Profile> {
                           ),
                         );
                       },
-                      icon: const Icon(Icons.settings, size: 30),
+                      icon: const Icon(
+                        Icons.settings,
+                        size: 30,
+                        color: kprimaryColor,
+                      ),
                     ),
                   ],
                 ),
