@@ -405,6 +405,7 @@ class _BkashCheckoutState extends State<BkashCheckout> {
                 const SizedBox(height: 10),
                 if (bKashURL == null) ...[
                   TextField(
+                    readOnly: true,
                     controller: amountController,
                     decoration: InputDecoration(
                       hintText: "Amount",
