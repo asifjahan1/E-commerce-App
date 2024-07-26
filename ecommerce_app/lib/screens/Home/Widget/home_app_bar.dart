@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/constants.dart';
+import 'package:flutter/widgets.dart';
 
 class CustomAppBar extends StatefulWidget {
   final VoidCallback onAvatarTap;
@@ -21,7 +22,24 @@ class _CustomAppBarState extends State<CustomAppBar> {
             backgroundColor: kcontentColor,
             padding: const EdgeInsets.all(15),
           ),
-          onPressed: () {},
+          onPressed: () {
+            // 07/22/24 tarikhe add kora hoiche nicher eita
+            const Drawer(
+              child: Column(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: CircleAvatar(
+                      backgroundColor: Color(0xffF5F5F5),
+                      radius: 25,
+                      backgroundImage: AssetImage("images/profile3.png"),
+                    ),
+                  ),
+                ],
+              ),
+            );
+            //
+          },
           icon: Image.asset(
             "images/icon.png",
             height: 20,
@@ -44,14 +62,19 @@ class _CustomAppBarState extends State<CustomAppBar> {
             const SizedBox(width: 5),
             InkWell(
               onTap: widget.onAvatarTap,
-              child: const Hero(
-                tag: 'avatarHero',
-                child: CircleAvatar(
-                  backgroundColor: Color(0xffF5F5F5),
-                  radius: 25,
-                  backgroundImage: AssetImage("images/profile3.png"),
-                ),
+              child: const CircleAvatar(
+                backgroundColor: Color(0xffF5F5F5),
+                radius: 25,
+                backgroundImage: AssetImage("images/profile3.png"),
               ),
+              // child: const Hero(
+              //   tag: 'avatarHero',
+              //   child: CircleAvatar(
+              //     backgroundColor: Color(0xffF5F5F5),
+              //     radius: 25,
+              //     backgroundImage: AssetImage("images/profile3.png"),
+              //   ),
+              // ),
             ),
           ],
         ),

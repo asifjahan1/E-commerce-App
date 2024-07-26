@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/constants.dart';
+import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -139,7 +140,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: MaterialButton(
                     onPressed: () {
                       widget.onLogout();
-                      Navigator.of(context).pop();
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const BottomNavBar(initialIndex: 4),
+                        ),
+                      );
                     },
                     color: kprimaryColor,
                     textColor: Colors.white,

@@ -1,7 +1,7 @@
-import 'package:ecommerce_app/constants.dart';
-import 'package:ecommerce_app/screens/Profile/Widgets/mobile_login.dart';
-import 'package:ecommerce_app/screens/Profile/Widgets/register_mobile.dart';
 import 'package:flutter/material.dart';
+import 'package:ecommerce_app/constants.dart';
+import 'package:ecommerce_app/screens/Profile/Widgets/register_mobile.dart';
+import 'package:ecommerce_app/screens/Profile/Widgets/mobile_login.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
@@ -20,7 +20,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
     // Implement your validation logic here, for example, checking if the phone number is valid
     if (_isValidPhoneNumber(phoneNumber) && _isValidPassword(newPassword)) {
-      // Password reset logic here, e.g., update password in database or authentication service
+      // update password in database or authentication service
       _showSnackbar('Password changed successfully');
 
       // Proceed to login screen
@@ -36,7 +36,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   }
 
   bool _isValidPhoneNumber(String phoneNumber) {
-    // Replace with your validation logic
+    // validation logic
     // For now, just check if it's not empty
     return phoneNumber.isNotEmpty;
   }
@@ -56,6 +56,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor: kcontentColor,
       appBar: AppBar(
         backgroundColor: Colors.white,
         leading: IconButton(
@@ -76,7 +77,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           child: Text(
             'Reset Password',
             style: TextStyle(
-                color: Colors.green, fontSize: 20, fontWeight: FontWeight.bold),
+              color: Colors.green,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),

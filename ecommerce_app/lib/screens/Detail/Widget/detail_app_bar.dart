@@ -7,7 +7,7 @@ import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
 
-class DetailAppBar extends StatelessWidget {
+class DetailAppBar extends StatefulWidget {
   final Product product;
   final Function(int) updateCartCount;
 
@@ -17,6 +17,11 @@ class DetailAppBar extends StatelessWidget {
     required this.updateCartCount,
   });
 
+  @override
+  State<DetailAppBar> createState() => _DetailAppBarState();
+}
+
+class _DetailAppBarState extends State<DetailAppBar> {
   @override
   Widget build(BuildContext context) {
     final favoriteProvider = FavoriteProvider.of(context);
@@ -96,9 +101,9 @@ class DetailAppBar extends StatelessWidget {
               padding: const EdgeInsets.all(15),
             ),
             onPressed: () {
-              favoriteProvider.toggleFavorite(product);
+              favoriteProvider.toggleFavorite(widget.product);
             },
-            icon: favoriteProvider.isExist(product)
+            icon: favoriteProvider.isExist(widget.product)
                 ? const Icon(Icons.favorite, color: kprimaryColor)
                 : const Icon(Icons.favorite_border),
           ),

@@ -1,7 +1,9 @@
+// ignore_for_file: library_private_types_in_public_api
+
+import 'package:ecommerce_app/screens/Payment/Features/BKash/Bkash%20Checkout/bkash_checkout.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/screens/Payment/card_checkout.dart';
-import 'package:ecommerce_app/screens/Payment/Features/bkash_checkout.dart';
 import 'package:ecommerce_app/screens/Payment/cod_checkout.dart';
 
 class PaymentMethodScreen extends StatefulWidget {
@@ -75,7 +77,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                     ),
                   ),
                   const Text(
-                    "Payment Method",
+                    "Choose Payment Method",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 25,

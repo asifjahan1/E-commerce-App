@@ -1,12 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:ecommerce_app/screens/Profile/Widgets/mobile_forgot_password.dart';
-import 'package:ecommerce_app/screens/Profile/Widgets/register_mobile.dart';
 import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ecommerce_app/constants.dart';
-import 'package:ecommerce_app/screens/Profile/profile.dart';
+import 'package:ecommerce_app/screens/Profile/Widgets/mobile_forgot_password.dart';
+// import 'package:ecommerce_app/screens/nav_bar_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ecommerce_app/screens/Profile/Widgets/register_mobile.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -22,15 +22,19 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _login() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? registeredPhoneNumber = prefs.getString('registeredPhoneNumber');
-    String? registeredPassword = prefs.getString('password');
+    String? storedPassword = prefs.getString('password');
 
     if (registeredPhoneNumber == _phoneNumberController.text &&
-        registeredPassword == _passwordController.text) {
-      // Navigate to Profile screen with BottomNavBar index set to 4
-      BottomNavBar.of(context)?.updateIndex(4); // Update index to 4
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => const Profile()),
-        (Route<dynamic> route) => false,
+        storedPassword == _passwordController.text) {
+      // Save login state for 30 days
+      await prefs.setBool('isLoggedIn', true);
+      await prefs.setString('loginTime', DateTime.now().toIso8601String());
+
+      // Navigate to Profile screen with updated BottomNavBar index
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const BottomNavBar(initialIndex: 4),
+        ),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -72,7 +76,10 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Text(
             'Login',
             style: TextStyle(
-                color: Colors.green, fontSize: 25, fontWeight: FontWeight.bold),
+              color: Colors.green,
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         actions: const [
@@ -154,9 +161,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: const Text(
                   "Login",
                   style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold),
+                    color: Colors.white,
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],
