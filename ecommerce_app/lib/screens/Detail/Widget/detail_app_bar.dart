@@ -2,7 +2,6 @@ import 'package:ecommerce_app/Provider/add_to_cart_provider.dart';
 import 'package:ecommerce_app/Provider/favorite_provider.dart';
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/models/product_model.dart';
-import 'package:ecommerce_app/screens/Cart/cart_screen.dart';
 import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
@@ -58,13 +57,12 @@ class _DetailAppBarState extends State<DetailAppBar> {
                 ),
                 onPressed: () {
                   // Update BottomNavBar index and navigate to CartScreen
-                  final bottomNavBarState = BottomNavBar.of(context);
-                  if (bottomNavBarState != null) {
-                    bottomNavBarState.updateIndex(3);
-                  }
+                  BottomNavBar.of(context)?.updateIndex(3);
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const CartScreen()),
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            const BottomNavBar(initialIndex: 3)),
                   );
                 },
                 icon: const Icon(Icons.shopping_cart_outlined),
