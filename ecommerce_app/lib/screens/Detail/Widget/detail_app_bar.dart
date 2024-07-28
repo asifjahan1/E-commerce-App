@@ -58,7 +58,10 @@ class _DetailAppBarState extends State<DetailAppBar> {
                 ),
                 onPressed: () {
                   // Update BottomNavBar index and navigate to CartScreen
-                  BottomNavBar.of(context)?.updateIndex(3);
+                  final bottomNavBarState = BottomNavBar.of(context);
+                  if (bottomNavBarState != null) {
+                    bottomNavBarState.updateIndex(3);
+                  }
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const CartScreen()),
