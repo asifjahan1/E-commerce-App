@@ -391,95 +391,85 @@ class _BkashCheckoutState extends State<BkashCheckout> {
           },
           icon: const Icon(Icons.arrow_back_ios),
         ),
-        title: const Text("Pay with Bkash"),
+        title: const Text("Checkout"),
         centerTitle: true,
         backgroundColor: const Color(0xffEE1284),
         foregroundColor: Colors.white,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                const SizedBox(height: 10),
-                if (bKashURL == null) ...[
-                  TextField(
-                    readOnly: true,
-                    controller: amountController,
-                    decoration: InputDecoration(
-                      hintText: "Amount",
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0xffEE1284),
-                          width: 1.5,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
+        child: Column(
+          children: [
+            const SizedBox(height: 20),
+            if (bKashURL == null) ...[
+              TextField(
+                readOnly: true,
+                controller: amountController,
+                decoration: InputDecoration(
+                  hintText: "Amount",
+                  border: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Color(0xffEE1284),
+                      width: 1.5,
                     ),
-                    keyboardType: TextInputType.number,
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: invoiceNumberController,
-                    decoration: InputDecoration(
-                      hintText: "Invoice Number",
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0xffEE1284),
-                          width: 1.5,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
+                ),
+                keyboardType: TextInputType.number,
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: invoiceNumberController,
+                decoration: InputDecoration(
+                  hintText: "Invoice Number",
+                  border: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Color(0xffEE1284),
+                      width: 1.5,
                     ),
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
-                  const SizedBox(height: 16),
-                  MaterialButton(
-                    // padding: const EdgeInsets.only(
-                    //   top: 10,
-                    //   bottom: 10,
-                    //   left: 10,
-                    //   right: 10,
-                    // ),
-                    color: const Color(0xffEE1284),
-                    onPressed: () async {
+                ),
+              ),
+              const SizedBox(height: 16),
+              MaterialButton(
+                color: const Color(0xffEE1284),
+                onPressed: () async {
+                  setState(() {
+                    loading = true;
+                  });
+                  await grantToken().then((grantTokenResponse) async {
+                    await createPayment(
+                      idToken: grantTokenResponse.idToken,
+                      amount: amountController.text,
+                      invoiceNumber: invoiceNumberController.text,
+                    ).then((createPaymentResponse) {
                       setState(() {
-                        loading = true;
+                        loading = false;
+                        bKashURL = createPaymentResponse.bkashURL;
                       });
-                      await grantToken().then((grantTokenResponse) async {
-                        await createPayment(
-                          idToken: grantTokenResponse.idToken,
-                          amount: amountController.text,
-                          invoiceNumber: invoiceNumberController.text,
-                        ).then((createPaymentResponse) {
-                          setState(() {
-                            loading = false;
-                            bKashURL = createPaymentResponse.bkashURL;
-                          });
-                        });
-                      });
-                    },
-                    child: loading
-                        ? const CircularProgressIndicator(color: Colors.white)
-                        : const Text(
-                            "Checkout",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                  ),
-                ] else ...[
-                  Expanded(
-                    child: WebViewWidget(
-                      controller: WebViewController()
-                        ..setJavaScriptMode(JavaScriptMode.unrestricted)
-                        ..loadRequest(
-                          Uri.parse(bKashURL!),
-                        ),
+                    });
+                  });
+                },
+                child: loading
+                    ? const CircularProgressIndicator(color: Colors.white)
+                    : const Text(
+                        "Pay with Bkash",
+                        style: TextStyle(color: Colors.white),
+                      ),
+              ),
+            ] else ...[
+              Expanded(
+                child: WebViewWidget(
+                  controller: WebViewController()
+                    ..setJavaScriptMode(JavaScriptMode.unrestricted)
+                    ..loadRequest(
+                      Uri.parse(bKashURL!),
                     ),
-                  ),
-                ],
-              ],
-            ),
-          ),
+                ),
+              ),
+            ],
+          ],
         ),
       ),
     );
