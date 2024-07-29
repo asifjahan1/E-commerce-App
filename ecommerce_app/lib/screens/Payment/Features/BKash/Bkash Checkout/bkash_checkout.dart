@@ -21,13 +21,12 @@ class _BkashCheckoutState extends State<BkashCheckout> {
   bool loading = false;
   TextEditingController amountController = TextEditingController();
   TextEditingController invoiceNumberController = TextEditingController();
-  String? bKashURL; // Add this state variable
+  String? bKashURL;
 
   @override
   void initState() {
     super.initState();
-    amountController.text =
-        widget.totalAmount.toString(); // Initialize the amount
+    amountController.text = widget.totalAmount.toString();
   }
 
   // Grant token
