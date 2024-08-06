@@ -62,11 +62,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
             const SizedBox(width: 5),
             InkWell(
               onTap: widget.onAvatarTap,
-              child: const CircleAvatar(
-                backgroundColor: Color(0xffF5F5F5),
-                radius: 25,
-                backgroundImage: AssetImage("images/profile3.png"),
-              ),
+              child: const Icon(Icons.person, size: 25, color: Colors.grey),
+              // child: const CircleAvatar(
+              //   backgroundColor: Color(0xffF5F5F5),
+              //   radius: 25,
+              //   backgroundImage: AssetImage("images/profile3.png"),
+              // ),
               // child: const Hero(
               //   tag: 'avatarHero',
               //   child: CircleAvatar(
