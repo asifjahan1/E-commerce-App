@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ecommerce_app/constants.dart';
@@ -29,7 +30,6 @@ class _ProfileState extends State<Profile> {
     });
   }
 
-  // login and logout er somoye 'Profile' Update hoy na, eita fix korte hobe!
   Future<void> _logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('registeredPhoneNumber');
@@ -38,7 +38,8 @@ class _ProfileState extends State<Profile> {
       _registeredPhoneNumber = null;
     });
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => const Profile()),
+      MaterialPageRoute(
+          builder: (context) => const BottomNavBar(initialIndex: 4)),
       (Route<dynamic> route) => false,
     );
   }

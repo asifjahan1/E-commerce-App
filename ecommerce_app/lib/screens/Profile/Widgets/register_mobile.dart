@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/constants.dart';
+import 'package:ecommerce_app/screens/Profile/Widgets/Email%20RegLog/email_login.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/registration_screen.dart';
 import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:flutter/material.dart';
@@ -131,7 +132,10 @@ class _RegisterMobileState extends State<RegisterMobile> {
                   ),
                   const SizedBox(height: 20),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const EmailLoginPage()));
+                    },
                     child: const Text(
                       "Login with email",
                       style: TextStyle(
