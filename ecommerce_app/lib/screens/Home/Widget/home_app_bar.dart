@@ -62,7 +62,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
     } catch (e) {
       // Handle errors
       setState(() {
-        _location = 'Failed to get location: $e';
+        _location = 'Failed to get location';
+        // _location = 'Failed to get location: $e';
       });
     }
   }
@@ -96,7 +97,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   Icons.location_on_outlined,
                   color: Colors.black54,
                 ),
-                const SizedBox(width: 5),
+                const SizedBox(width: 2.5),
                 Text(
                   _location,
                   style: const TextStyle(
