@@ -2,6 +2,7 @@
 
 import 'package:ecommerce_app/Provider/add_to_cart_provider.dart';
 import 'package:ecommerce_app/Provider/favorite_provider.dart';
+import 'package:ecommerce_app/screens/Payment/Features/BKash/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,6 +14,8 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // store secret api keys
+  await storeAndRetrieveApiKey();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
