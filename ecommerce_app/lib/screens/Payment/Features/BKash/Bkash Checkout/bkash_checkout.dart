@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:ecommerce_app/screens/Payment/Features/BKash/Models/create_payment_response.dart';
+// import 'package:ecommerce_app/screens/Payment/Features/BKash/Models/execute_payment_response.dart';
 import 'package:ecommerce_app/screens/Payment/Features/BKash/Models/grant_token_response.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -123,6 +124,47 @@ class _BkashCheckoutState extends State<BkashCheckout> {
     );
   }
 
+  // // Execute Payment
+  // Future<ExecutePaymentResponse> executePayment(
+  //     String paymentID, String idToken) async {
+  //   final response = await http.post(
+  //     Uri.parse(
+  //         "https://tokenized.sandbox.bka.sh/v1.2.0-beta/tokenized/checkout/execute"),
+  //     headers: {
+  //       "Accept": "application/json",
+  //       "Authorization": idToken,
+  //       "X-App-Key": "4f6o0cjiki2rfm34kfdadl1eqq",
+  //     },
+  //     body: jsonEncode({
+  //       "paymentID": paymentID,
+  //     }),
+  //   );
+
+  //   if (response.statusCode == 200) {
+  //     if (kDebugMode) {
+  //       print("execute payment: ${response.body}");
+  //     }
+  //     return ExecutePaymentResponse.fromJson(jsonDecode(response.body));
+  //   } else {
+  //     Fluttertoast.showToast(msg: "Something went wrong: ${response.body}");
+  //   }
+
+  //   return ExecutePaymentResponse(
+  //     paymentID: "paymentID",
+  //     customerMsisdn: "customerMsisdn",
+  //     payerReference: "01874392463",
+  //     paymentExecuteTime: "paymentExecuteTime",
+  //     trxID: "trxID",
+  //     transactionStatus: "transactionStatus",
+  //     amount: "amount",
+  //     currency: "BDT",
+  //     intent: "sale",
+  //     merchantInvoiceNumber: "invoiceNumber",
+  //     statusCode: response.statusCode.toString(),
+  //     statusMessage: response.reasonPhrase ?? "Unknown error",
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -214,6 +256,26 @@ class _BkashCheckoutState extends State<BkashCheckout> {
                     ),
                 ),
               ),
+              // // execute payment response
+              // const SizedBox(height: 16),
+              // MaterialButton(
+              //   color: const Color(0xffEE1284),
+              //   onPressed: () async {
+              //     final grantTokenResponse = await grantToken();
+              //     await executePayment(
+              //       "paymentID",
+              //       grantTokenResponse.idToken,
+              //     ).then((executePaymentResponse) {
+              //       Fluttertoast.showToast(
+              //         msg: "Payment executed: ${executePaymentResponse.trxID}",
+              //       );
+              //     });
+              //   },
+              //   child: const Text(
+              //     "Complete Payment",
+              //     style: TextStyle(color: Colors.white),
+              //   ),
+              // ),
             ],
           ],
         ),

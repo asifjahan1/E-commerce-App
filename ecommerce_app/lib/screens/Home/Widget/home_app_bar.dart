@@ -62,7 +62,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
     } catch (e) {
       // Handle errors
       setState(() {
-        _location = 'Failed to get location';
+        _location = 'Try connect Internet';
         // _location = 'Failed to get location: $e';
       });
     }
