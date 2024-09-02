@@ -13,21 +13,21 @@ class CustomAppBar extends StatefulWidget {
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
-  String _location = 'Loading...';
-
-  @override
-  void initState() {
-    super.initState();
-    _getLocation();
-  }
+  bool loading = false;
+  String _location = 'Tap to get location';
 
   Future<void> _getLocation() async {
+    setState(() {
+      loading = true;
+    });
+
     try {
       // Check if location services are enabled
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
         setState(() {
           _location = 'Location services are disabled.';
+          loading = false;
         });
         return;
       }
@@ -40,6 +40,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
             permission != LocationPermission.always) {
           setState(() {
             _location = 'Location permissions are denied.';
+            loading = false;
           });
           return;
         }
@@ -58,12 +59,13 @@ class _CustomAppBarState extends State<CustomAppBar> {
       // Update location state with formatted address
       setState(() {
         _location = '${placemark.locality}, ${placemark.country}';
+        loading = false;
       });
     } catch (e) {
       // Handle errors
       setState(() {
-        _location = 'Try connect Internet';
-        // _location = 'Failed to get location: $e';
+        _location = 'Try connect internet';
+        loading = false;
       });
     }
   }
@@ -98,12 +100,21 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   color: Colors.black54,
                 ),
                 const SizedBox(width: 2.5),
-                Text(
-                  _location,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.black54,
-                  ),
+                GestureDetector(
+                  onTap: _getLocation,
+                  child: loading
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(color: Colors.grey),
+                        )
+                      : Text(
+                          _location,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black54,
+                          ),
+                        ),
                 ),
               ],
             ),
