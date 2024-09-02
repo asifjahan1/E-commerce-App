@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
@@ -83,7 +84,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 padding: const EdgeInsets.all(15),
               ),
               onPressed: () {
-                // Add drawer or other functionality here if needed
+                BottomNavBar.of(context)?.updateIndex(0);
+                // Navigator.of(context).popUntil((route) => route.isFirst);
               },
               icon: Image.asset(
                 "images/icon.png",
