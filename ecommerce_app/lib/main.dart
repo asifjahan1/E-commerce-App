@@ -1,7 +1,8 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, library_private_types_in_public_api, use_build_context_synchronously
 
 import 'package:ecommerce_app/Provider/add_to_cart_provider.dart';
 import 'package:ecommerce_app/Provider/favorite_provider.dart';
+import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/screens/Payment/Features/BKash/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -48,9 +49,48 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             textTheme: GoogleFonts.mulishTextTheme(),
           ),
-          home: const BottomNavBar(initialIndex: 2),
+          home: const SplashScreen(),
         ),
       );
+}
+
+// splash_screen.dart file
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _navigateToHome();
+  }
+
+  _navigateToHome() async {
+    await Future.delayed(const Duration(seconds: 2), () {});
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => const BottomNavBar(initialIndex: 2),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: kprimaryColor,
+      body: Center(
+        child: Image.asset(
+          'images/Noor Al-Sana.jpg',
+          height: 100,
+          fit: BoxFit.contain,
+        ),
+      ),
+    );
+  }
 }
 
 // Testing
