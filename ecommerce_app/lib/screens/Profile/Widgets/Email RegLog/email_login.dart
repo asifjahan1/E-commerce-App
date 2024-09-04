@@ -22,9 +22,9 @@ class _EmailLoginPageState extends State<EmailLoginPage> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) {
-            if (request.url.startsWith('https://accounts.google.com/')) {
-              String email =
-                  request.url.replaceFirst('https://accounts.google.com/', '');
+            if (request.url.startsWith('https://accounts.google.com/signin')) {
+              String email = request.url
+                  .replaceFirst('https://accounts.google.com/signin', '');
               _loginWithEmail(email);
               return NavigationDecision.prevent;
             }
@@ -32,7 +32,7 @@ class _EmailLoginPageState extends State<EmailLoginPage> {
           },
         ),
       )
-      ..loadRequest(Uri.parse('https://accounts.google.com/'));
+      ..loadRequest(Uri.parse('https://accounts.google.com/signin'));
   }
 
   @override
