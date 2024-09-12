@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/foundation.dart';
 import 'package:ecommerce_app/constants.dart';
@@ -21,6 +22,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final TextEditingController _codeController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String? _verificationId;
+  bool _isLoading = false; // Add a flag for loading state
 
   bool _isPhoneNumberRegistered(String phoneNumber) {
     // Replace with your logic to check if the phone number is registered
@@ -40,24 +42,34 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       return;
     }
 
+    setState(() {
+      _isLoading = true; // Show loading indicator
+    });
+
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: phoneNumber,
       verificationCompleted: (PhoneAuthCredential credential) async {
         await FirebaseAuth.instance.signInWithCredential(credential);
       },
       verificationFailed: (FirebaseAuthException e) {
+        setState(() {
+          _isLoading = false;
+        });
         if (kDebugMode) {
-          print('Failed to verify phone number: ${e.message}');
+          print('Failed to verify phone number');
+          // print('Failed to verify phone number: ${e.message}');
         }
       },
       codeSent: (String verificationId, int? resendToken) {
         setState(() {
           _verificationId = verificationId;
+          _isLoading = false;
         });
       },
       codeAutoRetrievalTimeout: (String verificationId) {
         setState(() {
           _verificationId = verificationId;
+          _isLoading = false;
         });
       },
     );
@@ -65,6 +77,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   void _verifyCode() async {
     String code = _codeController.text;
+    String password = _passwordController.text;
 
     if (_verificationId != null) {
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
@@ -79,7 +92,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           'registeredPhoneNumber',
           _phoneNumberController.text,
         );
-        await prefs.setString('password', _passwordController.text);
+        await prefs.setString('password', password); // Save password
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Mobile Number Confirmed')),
@@ -159,16 +172,24 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ),
                     filled: true,
                     fillColor: Colors.white,
-                    suffixIcon: TextButton(
-                      onPressed: _sendCode,
-                      child: const Text(
-                        "Send",
-                        style: TextStyle(
-                          color: kprimaryColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
+                    suffixIcon: _isLoading
+                        ? Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: LoadingAnimationWidget.inkDrop(
+                              color: kprimaryColor,
+                              size: 40,
+                            ),
+                          )
+                        : TextButton(
+                            onPressed: _sendCode,
+                            child: const Text(
+                              "Send",
+                              style: TextStyle(
+                                color: kprimaryColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                   ),
                 ),
                 const SizedBox(height: 20),

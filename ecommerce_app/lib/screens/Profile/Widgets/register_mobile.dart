@@ -117,6 +117,7 @@ class _RegisterMobileState extends State<RegisterMobile> {
                         const SizedBox(width: 10),
                         Expanded(
                           child: TextField(
+                            readOnly: true,
                             controller: _phoneNumberController,
                             decoration: const InputDecoration(
                               hintText: "Enter your mobile number",

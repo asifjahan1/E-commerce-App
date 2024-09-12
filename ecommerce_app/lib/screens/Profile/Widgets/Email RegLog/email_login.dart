@@ -1,7 +1,6 @@
-// ignore_for_file: library_private_types_in_public_api
-
-import 'package:ecommerce_app/screens/nav_bar_screen.dart';
+import 'package:ecommerce_app/screens/Profile/Widgets/Email%20RegLog/google_login_button.dart';
 import 'package:flutter/material.dart';
+import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class EmailLoginPage extends StatefulWidget {
@@ -13,6 +12,7 @@ class EmailLoginPage extends StatefulWidget {
 
 class _EmailLoginPageState extends State<EmailLoginPage> {
   late final WebViewController _controller;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -21,18 +21,31 @@ class _EmailLoginPageState extends State<EmailLoginPage> {
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
         NavigationDelegate(
-          onNavigationRequest: (NavigationRequest request) {
-            if (request.url.startsWith('https://accounts.google.com/signin')) {
-              String email = request.url
-                  .replaceFirst('https://accounts.google.com/signin', '');
-              _loginWithEmail(email);
-              return NavigationDecision.prevent;
+          onPageFinished: (String url) {
+            setState(() {
+              isLoading = false; // Hide loading indicator
+            });
+            // Check if the URL contains a specific redirect URI
+            if (url.startsWith('https://yourapp.com/auth/callback') ||
+                url.startsWith('https://localhost')) {
+              _loginSuccess();
             }
+          },
+          onNavigationRequest: (NavigationRequest request) {
             return NavigationDecision.navigate;
           },
         ),
       )
       ..loadRequest(Uri.parse('https://accounts.google.com/signin'));
+  }
+
+  void _loginSuccess() {
+    // Navigate to the 4th index of the BottomNavBar on successful login
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => const BottomNavBar(initialIndex: 4),
+      ),
+    );
   }
 
   @override
@@ -42,9 +55,7 @@ class _EmailLoginPageState extends State<EmailLoginPage> {
         title: const Text("Login with Email"),
         leading: IconButton(
           onPressed: () {
-            // Navigate to Profile screen using BottomNavBar index update
-            BottomNavBar.of(context)?.updateIndex(4);
-            Navigator.of(context).popUntil((route) => route.isFirst);
+            Navigator.of(context).pop();
           },
           icon: Icon(
             Icons.close,
@@ -53,19 +64,20 @@ class _EmailLoginPageState extends State<EmailLoginPage> {
           ),
         ),
       ),
-      body: WebViewWidget(
-        controller: _controller,
-      ),
-    );
-  }
-
-  Future<void> _loginWithEmail(String email) async {
-    // Perform your login logic here, like sending the email to your backend for authentication
-
-    // On success, navigate to the 3rd index of the BottomNavBar
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => const BottomNavBar(initialIndex: 4),
+      body: Stack(
+        children: [
+          WebViewWidget(
+            controller: _controller,
+          ),
+          if (isLoading) const Center(child: CircularProgressIndicator()),
+          // Add the Google Login Button
+          const Positioned(
+            bottom: 20,
+            left: 20,
+            right: 20,
+            child: GoogleLoginButton(),
+          ),
+        ],
       ),
     );
   }

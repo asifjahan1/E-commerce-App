@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,27 +13,27 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  String? _registeredPhoneNumber;
+  String? _registeredEmail;
 
   @override
   void initState() {
     super.initState();
-    _loadRegisteredPhoneNumber();
+    _loadRegisteredEmail();
   }
 
-  Future<void> _loadRegisteredPhoneNumber() async {
+  Future<void> _loadRegisteredEmail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      _registeredPhoneNumber = prefs.getString('registeredPhoneNumber');
+      _registeredEmail = prefs.getString('registeredEmail');
     });
   }
 
   Future<void> _logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('registeredPhoneNumber');
+    await prefs.remove('registeredEmail');
     await prefs.remove('password');
     setState(() {
-      _registeredPhoneNumber = null;
+      _registeredEmail = null;
     });
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
@@ -66,15 +64,13 @@ class _ProfileState extends State<Profile> {
                     Row(
                       children: [
                         Icon(
-                          _registeredPhoneNumber != null
-                              ? Icons.person
-                              : Icons.add,
+                          _registeredEmail != null ? Icons.email : Icons.add,
                           size: 30,
                           color: kprimaryColor,
                         ),
                         const SizedBox(width: 3),
                         Text(
-                          _registeredPhoneNumber ?? '',
+                          _registeredEmail ?? '',
                           style: const TextStyle(
                             fontSize: 12,
                             color: kprimaryColor,
@@ -88,7 +84,7 @@ class _ProfileState extends State<Profile> {
                           MaterialPageRoute(
                             builder: (context) => SettingsScreen(
                               onLogout: _logout,
-                              isLoggedIn: _registeredPhoneNumber != null,
+                              isLoggedIn: _registeredEmail != null,
                             ),
                           ),
                         );
@@ -103,7 +99,7 @@ class _ProfileState extends State<Profile> {
                 ),
               ),
               const SizedBox(height: 20),
-              if (_registeredPhoneNumber == null)
+              if (_registeredEmail == null)
                 Center(
                   child: Column(
                     children: [
