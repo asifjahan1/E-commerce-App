@@ -1,5 +1,6 @@
 import 'package:ecommerce_app/constants.dart';
-import 'package:ecommerce_app/screens/Profile/Widgets/Email%20RegLog/email_login.dart';
+import 'package:ecommerce_app/screens/Profile/Widgets/Email%20RegLog/google_login_button.dart';
+import 'package:ecommerce_app/screens/Profile/Widgets/mobile_login.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/registration_screen.dart';
 import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:flutter/material.dart';
@@ -82,6 +83,7 @@ class _RegisterMobileState extends State<RegisterMobile> {
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic,
                       fontSize: 18,
                     ),
                   ),
@@ -90,6 +92,7 @@ class _RegisterMobileState extends State<RegisterMobile> {
                     "Register or Login with Mobile Number",
                     style: TextStyle(
                       color: Colors.white,
+                      fontStyle: FontStyle.italic,
                       fontSize: 14,
                     ),
                   ),
@@ -132,20 +135,137 @@ class _RegisterMobileState extends State<RegisterMobile> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const EmailLoginPage()));
-                    },
-                    child: const Text(
-                      "Login with email",
-                      style: TextStyle(
-                        color: Colors.white,
-                        decoration: TextDecoration.underline,
-                        fontSize: 16,
-                      ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Divider(
+                            thickness: 1.0,
+                            color: Colors.white30,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text(
+                            "Or continue with",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontStyle: FontStyle.italic,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Divider(
+                            thickness: 1.0,
+                            color: Colors.white30,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                  const SizedBox(height: 15),
+                  // Google and Apple Login
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: (() => const GoogleLoginButton()),
+                        child: Container(
+                          height: 60,
+                          width: 60,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                              ),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Image.asset("images/google.png"),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 30),
+                      GestureDetector(
+                        // onTap: () {},
+                        onTap: (() => const GoogleLoginButton()),
+                        child: Container(
+                          height: 60,
+                          width: 60,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                              ),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Image.asset("images/apple.png"),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Already a member?",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 17,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          // Navigate to Login screen
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const LoginScreen(),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          "Login",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     Navigator.of(context).push(MaterialPageRoute(
+                  //         builder: (context) => const GoogleLoginButton()));
+                  //   },
+                  //   child: const Text(
+                  //     "Login with email",
+                  //     style: TextStyle(
+                  //       color: Colors.white,
+                  //       decoration: TextDecoration.underline,
+                  //       fontSize: 16,
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
               const Spacer(),

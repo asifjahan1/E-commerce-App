@@ -77,7 +77,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           child: Text(
             'Reset Password',
             style: TextStyle(
-              color: Colors.green,
+              color: kprimaryColor,
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
