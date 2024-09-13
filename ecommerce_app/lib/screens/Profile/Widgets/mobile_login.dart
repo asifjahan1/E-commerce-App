@@ -149,6 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(
                         color: kprimaryColor,
                         fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic,
                       ),
                     ),
                   ),

@@ -234,24 +234,24 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                   obscureText: true,
                 ),
-                const SizedBox(height: 2),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: _resetPassword,
-                      child: const Text(
-                        "Forget Password?",
-                        style: TextStyle(
-                          color: kprimaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontStyle: FontStyle.italic,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
+                // const SizedBox(height: 2),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.end,
+                //   children: [
+                //     TextButton(
+                //       onPressed: _resetPassword,
+                //       child: const Text(
+                //         "Forget Password?",
+                //         style: TextStyle(
+                //           color: kprimaryColor,
+                //           fontWeight: FontWeight.bold,
+                //           fontStyle: FontStyle.italic,
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                const SizedBox(height: 22),
                 MaterialButton(
                   onPressed: _verifyCode,
                   color: kprimaryColor,
