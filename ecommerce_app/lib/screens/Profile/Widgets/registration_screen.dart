@@ -159,7 +159,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   controller: _phoneNumberController,
                   decoration: InputDecoration(
                     hintText: "Enter Mobile Number",
-                    helperText: "e.g: +8801234567890",
+                    helperText: "e.g: +8801234567890, +971 2 1234567",
                     helperStyle: const TextStyle(
                       color: Colors.grey,
                     ),

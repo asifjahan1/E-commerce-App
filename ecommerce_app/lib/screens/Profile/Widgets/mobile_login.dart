@@ -4,7 +4,6 @@ import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/mobile_forgot_password.dart';
-// import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/register_mobile.dart';
 
@@ -21,22 +20,26 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _login() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Fetch the registered phone number and password from SharedPreferences
     String? registeredPhoneNumber = prefs.getString('registeredPhoneNumber');
     String? storedPassword = prefs.getString('password');
 
+    // Check if the entered phone number and password match the saved values
     if (registeredPhoneNumber == _phoneNumberController.text &&
         storedPassword == _passwordController.text) {
-      // Save login state for 30 days
+      // If match, save the login state and login time for 30 days
       await prefs.setBool('isLoggedIn', true);
       await prefs.setString('loginTime', DateTime.now().toIso8601String());
 
-      // Navigate to Profile screen with updated BottomNavBar index
+      // Navigate to the Profile screen (BottomNavBar with index 4)
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => const BottomNavBar(initialIndex: 4),
         ),
       );
     } else {
+      // If the phone number or password is incorrect, show an error message
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Invalid phone number or password')),
       );
@@ -44,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _resetPassword() async {
-    // Navigate to ForgotPassword screen
+    // Navigate to ForgotPassword screen if user clicks on "Forget Password?"
     await Navigator.push(
       context,
       MaterialPageRoute(
@@ -72,16 +75,15 @@ class _LoginScreenState extends State<LoginScreen> {
             size: 30,
           ),
         ),
-        title: const Center(
-          child: Text(
-            'Login',
-            style: TextStyle(
-              color: Colors.green,
-              fontSize: 25,
-              fontWeight: FontWeight.bold,
-            ),
+        title: const Text(
+          'Login',
+          style: TextStyle(
+            color: kprimaryColor,
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
           ),
         ),
+        centerTitle: true,
         actions: const [
           SizedBox(),
         ],
@@ -95,11 +97,12 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // TextField for phone number input
               TextField(
                 controller: _phoneNumberController,
                 decoration: InputDecoration(
                   hintText: "Enter your mobile number",
-                  helperText: "e.g: +8801234567890",
+                  helperText: "e.g: +8801234567890, +971 2 1234567",
                   helperStyle: const TextStyle(
                     color: Colors.grey,
                   ),
@@ -115,6 +118,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               const SizedBox(height: 20),
+
+              // TextField for password input
               TextField(
                 controller: _passwordController,
                 decoration: InputDecoration(
@@ -132,6 +137,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 obscureText: true,
               ),
               const SizedBox(height: 2),
+
+              // Forget password button
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -148,6 +155,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
               const SizedBox(height: 20),
+
+              // Login button
               MaterialButton(
                 onPressed: _login,
                 color: kprimaryColor,
