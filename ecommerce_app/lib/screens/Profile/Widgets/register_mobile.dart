@@ -225,9 +225,10 @@ class _RegisterMobileState extends State<RegisterMobile> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
-                        "Already a member?",
+                        "Already have account?",
                         style: TextStyle(
                           color: Colors.white,
+                          fontStyle: FontStyle.italic,
                           fontSize: 17,
                         ),
                       ),
