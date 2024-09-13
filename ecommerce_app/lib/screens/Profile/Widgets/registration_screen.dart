@@ -148,6 +148,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             ),
           ),
         ),
+        title: const Text(
+          "Registration",
+          style: TextStyle(
+            color: kprimaryColor,
+            fontWeight: FontWeight.bold,
+            // fontStyle: FontStyle.italic,
+          ),
+        ),
+        centerTitle: true,
       ),
       body: SafeArea(
         child: Center(
@@ -236,6 +245,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         style: TextStyle(
                           color: kprimaryColor,
                           fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.italic,
                         ),
                       ),
                     ),
@@ -262,6 +272,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     style: TextStyle(
                       color: kprimaryColor,
                       fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic,
                     ),
                   ),
                 ),
