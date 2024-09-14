@@ -1,5 +1,6 @@
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 
 class GoogleSignInService {
@@ -9,7 +10,13 @@ class GoogleSignInService {
     try {
       final GoogleSignInAccount? user = await _googleSignIn.signIn();
       if (user != null) {
-        // Navigate to BottomNavBar after successful login
+        // Store the email in SharedPreferences
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('registeredEmail', user.email);
+        await prefs.setString(
+            'registeredPhoneNumber', ''); // Clear phone number if needed
+
+        // Navigate to BottomNavBar at index 4
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (context) => const BottomNavBar(initialIndex: 4),
@@ -17,7 +24,6 @@ class GoogleSignInService {
         );
       }
     } catch (error) {
-      // Handle error here
       print("Google Sign-In Error: $error");
     }
   }

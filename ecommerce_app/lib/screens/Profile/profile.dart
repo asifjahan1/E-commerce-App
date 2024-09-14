@@ -1,9 +1,10 @@
-import 'package:ecommerce_app/screens/nav_bar_screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/settings.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/register_mobile.dart';
+import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -14,30 +15,59 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   String? _registeredEmail;
+  String? _registeredPhoneNumber;
+  // bool _isLoggedInWithPhone = false;
+  // bool _isLoggedInWithEmail = false;
 
   @override
   void initState() {
     super.initState();
-    _loadRegisteredEmail();
+    _loadRegisteredInfo();
   }
 
-  Future<void> _loadRegisteredEmail() async {
+  Future<void> _storeEmail(String email) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('registeredEmail', email);
+    print('Stored Email: $email');
+  }
+
+  Future<void> _storePhoneNumber(String phoneNumber) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('registeredPhoneNumber', phoneNumber);
+    print('Stored Phone Number: $phoneNumber');
+  }
+
+  Future<void> _loadRegisteredInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       _registeredEmail = prefs.getString('registeredEmail');
+      _registeredPhoneNumber = prefs.getString('registeredPhoneNumber');
+      if (kDebugMode) {
+        print('Loaded Email: $_registeredEmail');
+      }
+      if (kDebugMode) {
+        print('Loaded Phone Number: $_registeredPhoneNumber');
+      }
     });
   }
 
   Future<void> _logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('registeredEmail');
+    await prefs.remove('registeredPhoneNumber');
     await prefs.remove('password');
+    await prefs.remove('isLoggedInWithPhone');
+    await prefs.remove('isLoggedInWithEmail');
     setState(() {
       _registeredEmail = null;
+      _registeredPhoneNumber = null;
+      // _isLoggedInWithPhone = false;
+      // _isLoggedInWithEmail = false;
     });
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
-          builder: (context) => const BottomNavBar(initialIndex: 4)),
+        builder: (context) => const BottomNavBar(initialIndex: 4),
+      ),
       (Route<dynamic> route) => false,
     );
   }
@@ -64,18 +94,32 @@ class _ProfileState extends State<Profile> {
                     Row(
                       children: [
                         Icon(
-                          _registeredEmail != null ? Icons.email : Icons.add,
+                          _registeredEmail != null
+                              ? Icons.email
+                              : _registeredPhoneNumber != null
+                                  ? Icons.person
+                                  : Icons.add,
                           size: 30,
                           color: kprimaryColor,
                         ),
-                        const SizedBox(width: 3),
-                        Text(
-                          _registeredEmail ?? '',
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: kprimaryColor,
-                          ),
-                        ),
+                        const SizedBox(width: 10),
+                        _registeredEmail != null
+                            ? Text(
+                                _registeredEmail!,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: kprimaryColor,
+                                ),
+                              )
+                            : _registeredPhoneNumber != null
+                                ? Text(
+                                    _registeredPhoneNumber!,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      color: kprimaryColor,
+                                    ),
+                                  )
+                                : Container(),
                       ],
                     ),
                     IconButton(
@@ -84,7 +128,8 @@ class _ProfileState extends State<Profile> {
                           MaterialPageRoute(
                             builder: (context) => SettingsScreen(
                               onLogout: _logout,
-                              isLoggedIn: _registeredEmail != null,
+                              isLoggedIn: _registeredEmail != null ||
+                                  _registeredPhoneNumber != null,
                             ),
                           ),
                         );
@@ -99,7 +144,7 @@ class _ProfileState extends State<Profile> {
                 ),
               ),
               const SizedBox(height: 20),
-              if (_registeredEmail == null)
+              if (_registeredEmail == null && _registeredPhoneNumber == null)
                 Center(
                   child: Column(
                     children: [
