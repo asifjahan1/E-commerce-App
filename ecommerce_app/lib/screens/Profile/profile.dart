@@ -92,7 +92,6 @@ class _ProfileState extends State<Profile> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Profile header section with icon and email/phone display
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(15),
