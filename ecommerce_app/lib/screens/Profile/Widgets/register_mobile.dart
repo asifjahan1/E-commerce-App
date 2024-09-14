@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:ecommerce_app/constants.dart';
-import 'package:ecommerce_app/screens/Profile/Widgets/Email%20RegLog/home.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/mobile_login.dart';
 import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/registration_screen.dart';
@@ -76,7 +75,7 @@ class _RegisterMobileState extends State<RegisterMobile> {
     // Navigate to Home screen with the email address
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => Home(email: googleUser.email),
+        builder: (context) => const BottomNavBar(initialIndex: 4),
       ),
     );
   }
