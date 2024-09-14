@@ -1,9 +1,13 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:ecommerce_app/constants.dart';
-import 'package:ecommerce_app/screens/Profile/Widgets/Email%20RegLog/google_login_button.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/mobile_login.dart';
-import 'package:ecommerce_app/screens/Profile/Widgets/registration_screen.dart';
 import 'package:ecommerce_app/screens/nav_bar_screen.dart';
+import 'package:ecommerce_app/screens/Profile/Widgets/registration_screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class RegisterMobile extends StatefulWidget {
   const RegisterMobile({super.key});
@@ -36,6 +40,48 @@ class _RegisterMobileState extends State<RegisterMobile> {
     // Implement your logic to check if the phone number is registered
     // For now, let's assume it returns false
     return false;
+  }
+
+  Future<void> _loginWithGoogle() async {
+    // Initialize GoogleSignIn
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+
+    // Ensure the user is signed out before prompting account selection
+    await googleSignIn.signOut();
+
+    // Now prompt the user to select a Google account
+    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+    // Check if the user canceled the sign-in process
+    if (googleUser == null) {
+      // User canceled the sign-in process
+      if (kDebugMode) {
+        print('User canceled the login process');
+      }
+      return;
+    }
+
+    // Obtain the authentication details from the selected Google account
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+
+    // Create a new credential using the GoogleAuthProvider
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    // Sign in to Firebase with the Google credentials
+    await FirebaseAuth.instance.signInWithCredential(credential);
+
+    // After successful login, navigate to BottomNavBar at index 4
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => const BottomNavBar(
+          initialIndex: 4,
+        ),
+      ),
+    );
   }
 
   @override
@@ -171,7 +217,7 @@ class _RegisterMobileState extends State<RegisterMobile> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       GestureDetector(
-                        onTap: (() => const GoogleLoginButton()),
+                        onTap: _loginWithGoogle,
                         child: Container(
                           height: 60,
                           width: 60,
@@ -181,7 +227,7 @@ class _RegisterMobileState extends State<RegisterMobile> {
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
+                                color: Colors.grey.withOpacity(0.1),
                                 spreadRadius: 2,
                                 blurRadius: 5,
                               ),
@@ -195,8 +241,8 @@ class _RegisterMobileState extends State<RegisterMobile> {
                       ),
                       const SizedBox(width: 30),
                       GestureDetector(
-                        // onTap: () {},
-                        onTap: (() => const GoogleLoginButton()),
+                        // for Apple Login
+                        onTap: () {},
                         child: Container(
                           height: 60,
                           width: 60,
@@ -206,7 +252,7 @@ class _RegisterMobileState extends State<RegisterMobile> {
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
+                                color: Colors.grey.withOpacity(0.1),
                                 spreadRadius: 2,
                                 blurRadius: 5,
                               ),
@@ -252,21 +298,6 @@ class _RegisterMobileState extends State<RegisterMobile> {
                       ),
                     ],
                   ),
-
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     Navigator.of(context).push(MaterialPageRoute(
-                  //         builder: (context) => const GoogleLoginButton()));
-                  //   },
-                  //   child: const Text(
-                  //     "Login with email",
-                  //     style: TextStyle(
-                  //       color: Colors.white,
-                  //       decoration: TextDecoration.underline,
-                  //       fontSize: 16,
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
               const Spacer(),

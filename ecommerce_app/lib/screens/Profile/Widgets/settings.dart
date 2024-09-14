@@ -1,6 +1,8 @@
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsScreen extends StatefulWidget {
   final VoidCallback onLogout;
@@ -138,8 +140,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: Center(
                   child: MaterialButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      // Call the logout function
                       widget.onLogout();
+
+                      // Remove the registered email from SharedPreferences
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      await prefs.remove('registeredEmail');
+
+                      // Log out from Google account
+                      await GoogleSignIn().signOut();
+
+                      // Navigate back to the Profile page with default state
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
                           builder: (context) =>
