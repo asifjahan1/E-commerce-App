@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:ecommerce_app/constants.dart';
+import 'package:ecommerce_app/screens/Profile/Widgets/Email%20RegLog/home.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/mobile_login.dart';
 import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/registration_screen.dart';
@@ -43,7 +44,6 @@ class _RegisterMobileState extends State<RegisterMobile> {
   }
 
   Future<void> _loginWithGoogle() async {
-    // Initialize GoogleSignIn
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
     // Ensure the user is signed out before prompting account selection
@@ -52,7 +52,6 @@ class _RegisterMobileState extends State<RegisterMobile> {
     // Now prompt the user to select a Google account
     final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
-    // Check if the user canceled the sign-in process
     if (googleUser == null) {
       // User canceled the sign-in process
       if (kDebugMode) {
@@ -74,12 +73,10 @@ class _RegisterMobileState extends State<RegisterMobile> {
     // Sign in to Firebase with the Google credentials
     await FirebaseAuth.instance.signInWithCredential(credential);
 
-    // After successful login, navigate to BottomNavBar at index 4
+    // Navigate to Home screen with the email address
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => const BottomNavBar(
-          initialIndex: 4,
-        ),
+        builder: (context) => Home(email: googleUser.email),
       ),
     );
   }
