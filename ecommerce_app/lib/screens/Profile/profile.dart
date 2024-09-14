@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, unused_element
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +37,6 @@ class _ProfileState extends State<Profile> {
     });
   }
 
-  // Store email in SharedPreferences
   Future<void> _storeEmail(String email) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('registeredEmail', email);
@@ -44,7 +45,6 @@ class _ProfileState extends State<Profile> {
     }
   }
 
-  // Store phone number in SharedPreferences
   Future<void> _storePhoneNumber(String phoneNumber) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('registeredPhoneNumber', phoneNumber);
@@ -53,7 +53,6 @@ class _ProfileState extends State<Profile> {
     }
   }
 
-  // Load email and phone number from SharedPreferences
   Future<void> _loadRegisteredInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -66,15 +65,14 @@ class _ProfileState extends State<Profile> {
     });
   }
 
-  // Logout function to clear SharedPreferences and Firebase sign out
   Future<void> _logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.clear(); // Clear all shared preferences
+    await prefs.clear();
     setState(() {
       _registeredEmail = null;
       _registeredPhoneNumber = null;
     });
-    FirebaseAuth.instance.signOut(); // Sign out from Firebase
+    FirebaseAuth.instance.signOut();
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (context) => const BottomNavBar(initialIndex: 4),
@@ -105,12 +103,14 @@ class _ProfileState extends State<Profile> {
                     Row(
                       children: [
                         Icon(
-                          (_registeredEmail != null || widget.email != null)
-                              ? Icons.add
+                          _registeredEmail != null ||
+                                  widget.email != null ||
+                                  (_user != null && _user!.email != null)
+                              ? Icons.email
                               : _registeredPhoneNumber != null
                                   ? Icons.person
-                                  : Icons.email,
-                          size: 30,
+                                  : Icons.add,
+                          size: 23,
                           color: kprimaryColor,
                         ),
                         const SizedBox(width: 3),
@@ -118,7 +118,7 @@ class _ProfileState extends State<Profile> {
                             ? Text(
                                 widget.email!,
                                 style: const TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 14,
                                   color: kprimaryColor,
                                   fontStyle: FontStyle.italic,
                                 ),
@@ -151,7 +151,7 @@ class _ProfileState extends State<Profile> {
                                         : const Text(
                                             "No user signed in",
                                             style: TextStyle(
-                                              fontSize: 16,
+                                              fontSize: 14,
                                               color: kprimaryColor,
                                               fontStyle: FontStyle.italic,
                                             ),
@@ -183,7 +183,6 @@ class _ProfileState extends State<Profile> {
                 ),
               ),
               const SizedBox(height: 20),
-              // If no email or phone is registered, show Login/Signup button
               if (_registeredEmail == null &&
                   _registeredPhoneNumber == null &&
                   _user == null)
