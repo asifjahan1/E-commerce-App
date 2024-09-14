@@ -22,6 +22,8 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
       _selectedMethod = method;
     });
 
+    print("Selected method: $method");
+
     // Navigate to the respective checkout page
     switch (method) {
       case 'bkash':

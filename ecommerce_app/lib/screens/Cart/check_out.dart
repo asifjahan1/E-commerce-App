@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:ecommerce_app/Provider/add_to_cart_provider.dart';
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/screens/Payment/payment_method_screen.dart';
@@ -19,6 +17,7 @@ class _CheckOutBoxState extends State<CheckOutBox> {
   double _discountPercentage = 0.0;
   String _appliedCode = '';
 
+  // Discount codes and percentages
   final Map<String, double> discountCodes = {
     'ASIF275': 0.25,
     'SAVE10': 0.10,
@@ -26,10 +25,10 @@ class _CheckOutBoxState extends State<CheckOutBox> {
     'NUSRAT25': 0.25,
     'NASRIN50': 0.50,
     'TUTUL25': 0.50,
-    'FLAT99': 0.99,
-    // add more if needed
+    'FLAT99': 0.999,
   };
 
+  // Function to apply the discount code
   void _applyDiscount() {
     final code = _discountController.text;
     if (discountCodes.containsKey(code)) {
@@ -54,12 +53,18 @@ class _CheckOutBoxState extends State<CheckOutBox> {
     }
   }
 
+  // Function to handle the checkout process
   void _handleCheckout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? registeredPhoneNumber = prefs.getString('registeredPhoneNumber');
+    String? registeredEmail = prefs.getString('registeredEmail');
 
-    if (registeredPhoneNumber != null && registeredPhoneNumber.isNotEmpty) {
-      // User is registered, navigate to PaymentMethodScreen
+    print("Stored phone number: $registeredPhoneNumber");
+    print("Stored email: $registeredEmail");
+
+    if ((registeredPhoneNumber != null && registeredPhoneNumber.isNotEmpty) ||
+        (registeredEmail != null && registeredEmail.isNotEmpty)) {
+      // User is logged in, navigate to the PaymentMethodScreen
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -68,7 +73,7 @@ class _CheckOutBoxState extends State<CheckOutBox> {
         ),
       );
     } else {
-      // User is not registered, navigate to RegisterMobile
+      // User is not logged in, show login screen
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -78,6 +83,7 @@ class _CheckOutBoxState extends State<CheckOutBox> {
     }
   }
 
+  // Function to calculate the total amount after applying the discount
   double _getTotalAmount() {
     final provider = CartProvider.of(context);
     final totalPrice = provider.totalPrice();
@@ -103,6 +109,7 @@ class _CheckOutBoxState extends State<CheckOutBox> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Discount code input field
             TextField(
               controller: _discountController,
               decoration: InputDecoration(
@@ -136,6 +143,7 @@ class _CheckOutBoxState extends State<CheckOutBox> {
               ),
             ),
             const SizedBox(height: 20),
+            // Subtotal section
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -156,6 +164,7 @@ class _CheckOutBoxState extends State<CheckOutBox> {
                 )
               ],
             ),
+            // Discount display section
             if (_appliedCode.isNotEmpty) ...[
               const SizedBox(height: 10),
               Row(
@@ -183,6 +192,7 @@ class _CheckOutBoxState extends State<CheckOutBox> {
             const SizedBox(height: 10),
             const Divider(),
             const SizedBox(height: 10),
+            // Total section
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -205,6 +215,7 @@ class _CheckOutBoxState extends State<CheckOutBox> {
               ],
             ),
             const SizedBox(height: 20),
+            // Checkout button
             Expanded(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
