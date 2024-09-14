@@ -136,7 +136,7 @@ class _ProfileState extends State<Profile> {
                                     ? Text(
                                         _registeredPhoneNumber!,
                                         style: const TextStyle(
-                                          fontSize: 16,
+                                          fontSize: 14,
                                           color: kprimaryColor,
                                         ),
                                       )
