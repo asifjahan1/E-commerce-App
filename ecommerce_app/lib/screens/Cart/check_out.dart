@@ -26,6 +26,7 @@ class _CheckOutBoxState extends State<CheckOutBox> {
     'NUSRAT25': 0.25,
     'NASRIN50': 0.50,
     'TUTUL25': 0.50,
+    'FLAT99': 0.99,
     // add more if needed
   };
 
