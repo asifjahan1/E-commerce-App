@@ -16,6 +16,7 @@ class CardCheckout extends StatefulWidget {
 }
 
 class _CardCheckoutState extends State<CardCheckout> {
+  bool _isLoading = false;
   Map<String, dynamic>? paymentIntent;
 
   @override
@@ -56,23 +57,37 @@ class _CardCheckoutState extends State<CardCheckout> {
             Expanded(
               child: Center(
                 child: ElevatedButton(
-                  onPressed: () async {
-                    await makePayment(context);
-                  },
+                  onPressed: _isLoading
+                      ? null
+                      : () async {
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          await makePayment(context);
+                          setState(() {
+                            _isLoading = false;
+                          });
+                        },
                   style: ElevatedButton.styleFrom(
                     elevation: 2,
                     backgroundColor: const Color(0xffff660e),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 30, vertical: 15),
+                      horizontal: 30,
+                      vertical: 15,
+                    ),
                     textStyle: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  child: const Text(
-                    'Make Payment',
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  child: _isLoading
+                      ? const CircularProgressIndicator(
+                          color: Colors.white,
+                        )
+                      : const Text(
+                          'Make Payment',
+                          style: TextStyle(color: Colors.white),
+                        ),
                 ),
               ),
             ),
