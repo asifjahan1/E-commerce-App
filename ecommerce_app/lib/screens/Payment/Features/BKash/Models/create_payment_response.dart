@@ -87,22 +87,43 @@ class CreatePaymentResponse {
     };
   }
 
+  // below this code is also acceptable when some fields might be null
+  // factory CreatePaymentResponse.fromMap(Map<String, dynamic> map) {
+  //   return CreatePaymentResponse(
+  //     paymentID: map['paymentID'] as String?,
+  //     paymentCreateTime: map['paymentCreateTime'] as String?,
+  //     transactionStatus: map['transactionStatus'] as String?,
+  //     amount: map['amount'] as String?,
+  //     currency: map['currency'] as String?,
+  //     intent: map['intent'] as String?,
+  //     merchantInvoiceNumber: map['merchantInvoiceNumber'] as String?,
+  //     bkashURL: map['bkashURL'] as String?,
+  //     callbackURL: map['callbackURL'] as String?,
+  //     successCallbackURL: map['successCallbackURL'] as String?,
+  //     failureCallbackURL: map['failureCallbackURL'] as String?,
+  //     cancelledCallbackURL: map['cancelledCallbackURL'] as String?,
+  //     statusCode: map['statusCode'] as String?,
+  //     statusMessage: map['statusMessage'] as String?,
+  //   );
+  // }
+
+  // If all fields are required so I use this
   factory CreatePaymentResponse.fromMap(Map<String, dynamic> map) {
     return CreatePaymentResponse(
-      paymentID: map['paymentID'] as String,
-      paymentCreateTime: map['paymentCreateTime'] as String,
-      transactionStatus: map['transactionStatus'] as String,
-      amount: map['amount'] as String,
-      currency: map['currency'] as String,
-      intent: map['intent'] as String,
-      merchantInvoiceNumber: map['merchantInvoiceNumber'] as String,
-      bkashURL: map['bkashURL'] as String,
-      callbackURL: map['callbackURL'] as String,
-      successCallbackURL: map['successCallbackURL'] as String,
-      failureCallbackURL: map['failureCallbackURL'] as String,
-      cancelledCallbackURL: map['cancelledCallbackURL'] as String,
-      statusCode: map['statusCode'] as String,
-      statusMessage: map['statusMessage'] as String,
+      paymentID: map['paymentID'] as String? ?? '',
+      paymentCreateTime: map['paymentCreateTime'] as String? ?? '',
+      transactionStatus: map['transactionStatus'] as String? ?? '',
+      amount: map['amount'] as String? ?? '',
+      currency: map['currency'] as String? ?? '',
+      intent: map['intent'] as String? ?? '',
+      merchantInvoiceNumber: map['merchantInvoiceNumber'] as String? ?? '',
+      bkashURL: map['bkashURL'] as String? ?? '',
+      callbackURL: map['callbackURL'] as String? ?? '',
+      successCallbackURL: map['successCallbackURL'] as String? ?? '',
+      failureCallbackURL: map['failureCallbackURL'] as String? ?? '',
+      cancelledCallbackURL: map['cancelledCallbackURL'] as String? ?? '',
+      statusCode: map['statusCode'] as String? ?? '',
+      statusMessage: map['statusMessage'] as String? ?? '',
     );
   }
 

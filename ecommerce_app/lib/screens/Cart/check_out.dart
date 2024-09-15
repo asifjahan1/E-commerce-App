@@ -4,6 +4,7 @@ import 'package:ecommerce_app/screens/Payment/payment_method_screen.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/register_mobile.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // For Google/Apple login check
 
 class CheckOutBox extends StatefulWidget {
   const CheckOutBox({super.key});
@@ -53,17 +54,26 @@ class _CheckOutBoxState extends State<CheckOutBox> {
     }
   }
 
-  // Function to handle the checkout process
-  void _handleCheckout() async {
+  // Function to check if the user is logged in
+  Future<bool> _isUserLoggedIn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? registeredPhoneNumber = prefs.getString('registeredPhoneNumber');
     String? registeredEmail = prefs.getString('registeredEmail');
+    // Google/Apple login
+    User? firebaseUser = FirebaseAuth.instance.currentUser;
 
-    print("Stored phone number: $registeredPhoneNumber");
-    print("Stored email: $registeredEmail");
+    // Check if the user is logged in (via phone number or email)
+    return (registeredPhoneNumber != null &&
+            registeredPhoneNumber.isNotEmpty) ||
+        (registeredEmail != null && registeredEmail.isNotEmpty) ||
+        firebaseUser != null;
+  }
 
-    if ((registeredPhoneNumber != null && registeredPhoneNumber.isNotEmpty) ||
-        (registeredEmail != null && registeredEmail.isNotEmpty)) {
+  // Function to handle the checkout process
+  Future<void> _handleCheckout() async {
+    bool isLoggedIn = await _isUserLoggedIn();
+
+    if (isLoggedIn) {
       // User is logged in, navigate to the PaymentMethodScreen
       Navigator.push(
         context,
@@ -73,7 +83,7 @@ class _CheckOutBoxState extends State<CheckOutBox> {
         ),
       );
     } else {
-      // User is not logged in, show login screen
+      // User is not logged in, navigate to the RegisterMobile screen
       Navigator.push(
         context,
         MaterialPageRoute(

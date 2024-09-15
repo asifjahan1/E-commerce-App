@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:ecommerce_app/constants.dart';
+import 'package:ecommerce_app/screens/Payment/payment_method_screen.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/Email%20RegLog/apple_sign_in.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/mobile_login.dart';
 import 'package:ecommerce_app/screens/nav_bar_screen.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class RegisterMobile extends StatefulWidget {
   const RegisterMobile({super.key});
@@ -46,39 +48,57 @@ class _RegisterMobileState extends State<RegisterMobile> {
   Future<void> _loginWithGoogle() async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
-    // Ensure the user is signed out before prompting account selection
-    await googleSignIn.signOut();
+    try {
+      // Ensure the user is signed out before prompting account selection
+      await googleSignIn.signOut();
 
-    // Now prompt the user to select a Google account
-    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      // Now prompt the user to select a Google account
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
-    if (googleUser == null) {
-      // User canceled the sign-in process
-      if (kDebugMode) {
-        print('User canceled the login process');
+      if (googleUser == null) {
+        // User canceled the sign-in process
+        if (kDebugMode) {
+          print('User canceled the login process');
+        }
+        return;
       }
-      return;
+
+      // Obtain the authentication details from the selected Google account
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      // Create a new credential using the GoogleAuthProvider
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Sign in to Firebase with the Google credentials
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      // Check if the sign-in was successful
+      final User? firebaseUser = userCredential.user;
+      if (firebaseUser != null) {
+        // Navigate to PaymentMethodScreen after successful sign-in
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) =>
+                PaymentMethodScreen(totalAmount: _getTotalAmount()),
+          ),
+        );
+      }
+    } catch (e) {
+      // Handle sign-in errors
+      if (kDebugMode) {
+        print('Google sign-in failed: $e');
+      }
     }
+  }
 
-    // Obtain the authentication details from the selected Google account
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
-
-    // Create a new credential using the GoogleAuthProvider
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-
-    // Sign in to Firebase with the Google credentials
-    await FirebaseAuth.instance.signInWithCredential(credential);
-
-    // Navigate to Home screen with the email address
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => const BottomNavBar(initialIndex: 4),
-      ),
-    );
+  double _getTotalAmount() {
+    // Implement your logic to get the total amount here
+    return 100.0; // Replace with actual total amount
   }
 
   @override
@@ -239,7 +259,26 @@ class _RegisterMobileState extends State<RegisterMobile> {
                       const SizedBox(width: 30),
                       GestureDetector(
                         onTap: () {
-                          AuthMethods().signInWithApple();
+                          AuthMethods().signInWithApple(
+                            scopes: [
+                              AppleIDAuthorizationScopes.email,
+                              AppleIDAuthorizationScopes.fullName
+                            ],
+                          ).then((user) {
+                            if (user != null) {
+                              // Navigate to PaymentMethodScreen after successful sign-in
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) => PaymentMethodScreen(
+                                      totalAmount: _getTotalAmount()),
+                                ),
+                              );
+                            }
+                          }).catchError((e) {
+                            if (kDebugMode) {
+                              print('Apple sign-in failed: $e');
+                            }
+                          });
                         },
                         child: Container(
                           height: 60,
@@ -269,7 +308,7 @@ class _RegisterMobileState extends State<RegisterMobile> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
-                        "Already have account?",
+                        "Already have an account?",
                         style: TextStyle(
                           color: Colors.white,
                           fontStyle: FontStyle.italic,
