@@ -2,16 +2,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class Home extends StatefulWidget {
+class Google extends StatefulWidget {
   final String? email;
 
-  const Home({super.key, this.email});
+  const Google({super.key, this.email});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<Google> createState() => _GoogleState();
 }
 
-class _HomeState extends State<Home> {
+class _GoogleState extends State<Google> {
   User? _user;
 
   @override
