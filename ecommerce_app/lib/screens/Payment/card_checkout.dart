@@ -16,8 +16,16 @@ class CardCheckout extends StatefulWidget {
 }
 
 class _CardCheckoutState extends State<CardCheckout> {
+  TextEditingController amountController = TextEditingController();
+
   bool _isLoading = false;
   Map<String, dynamic>? paymentIntent;
+
+  @override
+  void initState() {
+    super.initState();
+    amountController.text = widget.totalAmount.toString();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +33,8 @@ class _CardCheckoutState extends State<CardCheckout> {
       backgroundColor: const Color(0xffF5F5F5),
       body: SafeArea(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
               padding: const EdgeInsets.all(8),
@@ -56,38 +66,62 @@ class _CardCheckoutState extends State<CardCheckout> {
             ),
             Expanded(
               child: Center(
-                child: ElevatedButton(
-                  onPressed: _isLoading
-                      ? null
-                      : () async {
-                          setState(() {
-                            _isLoading = true;
-                          });
-                          await makePayment(context);
-                          setState(() {
-                            _isLoading = false;
-                          });
-                        },
-                  style: ElevatedButton.styleFrom(
-                    elevation: 2,
-                    backgroundColor: const Color(0xffff660e),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 30,
-                      vertical: 15,
-                    ),
-                    textStyle: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  child: _isLoading
-                      ? const CircularProgressIndicator(
-                          color: Colors.white,
-                        )
-                      : const Text(
-                          'Make Payment',
-                          style: TextStyle(color: Colors.white),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // const Text(
+                    //   "Total Amount",
+                    //   style: TextStyle(color: Colors.black38),
+                    // ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: TextField(
+                        readOnly: true,
+                        controller: amountController,
+                        decoration: InputDecoration(
+                          hintText: "Amount",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
                         ),
+                        keyboardType: TextInputType.number,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: _isLoading
+                          ? null
+                          : () async {
+                              setState(() {
+                                _isLoading = true;
+                              });
+                              await makePayment(context);
+                              setState(() {
+                                _isLoading = false;
+                              });
+                            },
+                      style: ElevatedButton.styleFrom(
+                        elevation: 2,
+                        backgroundColor: const Color(0xffff660e),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 30,
+                          vertical: 15,
+                        ),
+                        textStyle: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      child: _isLoading
+                          ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                          : const Text(
+                              'Make Payment',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                    ),
+                  ],
                 ),
               ),
             ),
