@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>We will use your Apple Music account for...</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We will use the camera for...</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>We need your location to show the current location.</string>
 	<key>NSLocationAlwaysUsageDescription</key>

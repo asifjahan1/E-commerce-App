@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:ecommerce_app/constants.dart';
+import 'package:ecommerce_app/screens/Profile/Widgets/Email%20RegLog/apple_sign_in.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/mobile_login.dart';
 import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/registration_screen.dart';
@@ -237,8 +238,9 @@ class _RegisterMobileState extends State<RegisterMobile> {
                       ),
                       const SizedBox(width: 30),
                       GestureDetector(
-                        // for Apple Login
-                        onTap: () {},
+                        onTap: () {
+                          AuthMethods().signInWithApple();
+                        },
                         child: Container(
                           height: 60,
                           width: 60,
