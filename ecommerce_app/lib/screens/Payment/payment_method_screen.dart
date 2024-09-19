@@ -79,7 +79,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                     ),
                   ),
                   const Text(
-                    "Choose Payment Method",
+                    "Payment Methods",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 25,
