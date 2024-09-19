@@ -1,22 +1,36 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce_app/constants.dart';
 import 'package:flutter/material.dart';
 
-class ReviewsAndRatingsPage extends StatelessWidget {
+class ReviewsAndRatingsPage extends StatefulWidget {
   final String productId;
 
   const ReviewsAndRatingsPage({super.key, required this.productId});
 
   @override
+  State<ReviewsAndRatingsPage> createState() => _ReviewsAndRatingsPageState();
+}
+
+class _ReviewsAndRatingsPageState extends State<ReviewsAndRatingsPage> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: kcontentColor,
       appBar: AppBar(
+        backgroundColor: kcontentColor,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: const Icon(Icons.arrow_back_ios_outlined),
+        ),
         title: const Text("Reviews and Ratings"),
         centerTitle: true,
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('products')
-            .doc(productId)
+            .doc(widget.productId)
             .collection('reviews')
             .snapshots(),
         builder: (context, snapshot) {
@@ -69,9 +83,7 @@ class ReviewsAndRatingsPage extends StatelessWidget {
                         ),
                         const SizedBox(width: 5),
                         IconButton(
-                          onPressed: () {
-                            // Add action for the next arrow if needed
-                          },
+                          onPressed: () {},
                           icon: const Icon(Icons.arrow_forward_ios),
                         ),
                       ],

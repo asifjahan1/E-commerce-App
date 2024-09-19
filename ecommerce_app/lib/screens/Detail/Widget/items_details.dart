@@ -4,18 +4,23 @@ import 'package:ecommerce_app/models/product_model.dart';
 import 'package:ecommerce_app/screens/Detail/Widget/review_rating.dart';
 import 'package:flutter/material.dart';
 
-class ItemsDetails extends StatelessWidget {
+class ItemsDetails extends StatefulWidget {
   final Product product;
 
   const ItemsDetails({super.key, required this.product});
 
+  @override
+  State<ItemsDetails> createState() => _ItemsDetailsState();
+}
+
+class _ItemsDetailsState extends State<ItemsDetails> {
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          product.title,
+          widget.product.title,
           style: const TextStyle(
             fontWeight: FontWeight.w800,
             fontSize: 25,
@@ -27,7 +32,7 @@ class ItemsDetails extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "\$${product.price}",
+                  "\$${widget.product.price}",
                   style: const TextStyle(
                     fontWeight: FontWeight.w800,
                     fontSize: 25,
@@ -41,7 +46,7 @@ class ItemsDetails extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                            ReviewsAndRatingsPage(productId: product.id),
+                            ReviewsAndRatingsPage(productId: widget.product.id),
                       ),
                     );
                   },
@@ -51,7 +56,7 @@ class ItemsDetails extends StatelessWidget {
                       StreamBuilder<QuerySnapshot>(
                         stream: FirebaseFirestore.instance
                             .collection('products')
-                            .doc(product.id) // Product's ID
+                            .doc(widget.product.id) // Product's ID
                             .collection('reviews')
                             .snapshots(),
                         builder: (context, snapshot) {
