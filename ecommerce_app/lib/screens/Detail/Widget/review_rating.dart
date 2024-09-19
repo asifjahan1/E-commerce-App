@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -21,6 +22,14 @@ class _ReviewsAndRatingsPageState extends State<ReviewsAndRatingsPage> {
   List<Map<String, dynamic>> reviews = []; // List to store reviews locally
   double _userRating = 5.0; // Default rating
 
+  // Fetch the current user's display name or email
+  Future<String> _getCurrentUserName() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    return user != null
+        ? user.displayName ?? user.email ?? 'Anonymous'
+        : 'Anonymous';
+  }
+
   Future<void> _pickImage() async {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -34,13 +43,14 @@ class _ReviewsAndRatingsPageState extends State<ReviewsAndRatingsPage> {
   Future<void> _submitReview() async {
     if (_commentController.text.isNotEmpty || _selectedImage != null) {
       String reviewText = _commentController.text;
-      double rating = _userRating; // Using the selected rating
-      String userName =
-          "Asif Jahan"; // Placeholder user name (you can fetch it from the logged-in user)
+      double rating = _userRating;
+
+      // Get the current user's name
+      String userName = await _getCurrentUserName();
 
       // Create the new review data
       var newReview = {
-        'user': userName, // Include the user's name
+        'user': userName,
         'review': reviewText,
         'rating': rating,
         'image': _selectedImage?.path,
@@ -308,12 +318,7 @@ class _ReviewsAndRatingsPageState extends State<ReviewsAndRatingsPage> {
                                                 child: Text(
                                                   "OK",
                                                   style: TextStyle(
-                                                    color: Colors
-                                                        .white, // Text color
-                                                    fontSize: 16, // Font size
-                                                    fontWeight: FontWeight
-                                                        .bold, // Font weight
-                                                  ),
+                                                      color: Colors.white),
                                                 ),
                                               ),
                                             ),
@@ -326,8 +331,21 @@ class _ReviewsAndRatingsPageState extends State<ReviewsAndRatingsPage> {
                               );
                             },
                           ),
+                          // if (_selectedImage != null)
+                          //   IconButton(
+                          //     icon: const Icon(Icons.photo),
+                          //     onPressed: () {
+                          //       // Handle image preview or removal
+                          //       setState(() {
+                          //         _selectedImage = null;
+                          //       });
+                          //     },
+                          //   ),
                           IconButton(
-                            icon: const Icon(Icons.photo),
+                            icon: Icon(
+                              Icons.photo,
+                              color: Colors.black.withOpacity(0.5),
+                            ),
                             onPressed: _pickImage,
                           ),
                           IconButton(
