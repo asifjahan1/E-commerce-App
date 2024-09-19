@@ -125,42 +125,48 @@ class _ReviewsAndRatingsPageState extends State<ReviewsAndRatingsPage> {
                   child: Column(
                     children: [
                       // Total Rating and Reviews Row
-                      SizedBox(
-                        height: 60,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  reviews.isNotEmpty
-                                      ? (reviews
-                                                  .map((r) => r['rating'])
-                                                  .reduce((a, b) => a + b) /
-                                              reviews.length)
-                                          .toStringAsFixed(1)
-                                      : '0',
-                                  style: const TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                      Container(
+                        color: Colors.grey.withOpacity(0.1),
+                        child: SizedBox(
+                          height: 60,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      reviews.isNotEmpty
+                                          ? (reviews
+                                                      .map((r) => r['rating'])
+                                                      .reduce((a, b) => a + b) /
+                                                  reviews.length)
+                                              .toStringAsFixed(1)
+                                          : '0',
+                                      style: const TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 5),
+                                    const Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                      size: 24,
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(width: 5),
-                                const Icon(
-                                  Icons.star,
-                                  color: Colors.amber,
-                                  size: 24,
-                                ),
-                              ],
-                            ),
-                            Text(
-                              "${reviews.length} reviews",
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
                               ),
-                            ),
-                          ],
+                              Text(
+                                "${reviews.length} reviews",
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -279,10 +285,37 @@ class _ReviewsAndRatingsPageState extends State<ReviewsAndRatingsPage> {
                                             onPressed: () {
                                               Navigator.of(context).pop();
                                             },
-                                            child: const SizedBox(
-                                              height: 10,
-                                              width: 10,
-                                              child: Text("OK"),
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 16,
+                                                      vertical: 8),
+                                              decoration: BoxDecoration(
+                                                color: Colors.deepPurple
+                                                    .withOpacity(0.7),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.black
+                                                        .withOpacity(0.3),
+                                                    blurRadius: 4,
+                                                    offset: const Offset(0, 2),
+                                                  ),
+                                                ],
+                                              ),
+                                              child: const Center(
+                                                child: Text(
+                                                  "OK",
+                                                  style: TextStyle(
+                                                    color: Colors
+                                                        .white, // Text color
+                                                    fontSize: 16, // Font size
+                                                    fontWeight: FontWeight
+                                                        .bold, // Font weight
+                                                  ),
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ],
