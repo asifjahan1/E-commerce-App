@@ -30,20 +30,20 @@ class _DescriptionState extends State<Description> {
               },
             ),
             _buildTabButton(
-              title: "Specifications",
-              isSelected: selectedTab == "Specifications",
+              title: "Specification",
+              isSelected: selectedTab == "Specification",
               onPressed: () {
                 setState(() {
-                  selectedTab = "Specifications";
+                  selectedTab = "Specification";
                 });
               },
             ),
             _buildTabButton(
-              title: "Reviews",
-              isSelected: selectedTab == "Reviews",
+              title: "Review",
+              isSelected: selectedTab == "Review",
               onPressed: () {
                 setState(() {
-                  selectedTab = "Reviews";
+                  selectedTab = "Review";
                 });
               },
             ),
@@ -60,7 +60,7 @@ class _DescriptionState extends State<Description> {
       {required String title,
       required bool isSelected,
       required VoidCallback onPressed}) {
-    return Expanded(
+    return Flexible(
       child: Container(
         height: 40,
         decoration: BoxDecoration(
@@ -69,12 +69,15 @@ class _DescriptionState extends State<Description> {
         ),
         child: TextButton(
           onPressed: onPressed,
-          child: Text(
-            title,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: isSelected ? Colors.white : Colors.black,
-              fontSize: 16,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              title,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: isSelected ? Colors.white : Colors.black,
+                fontSize: 16,
+              ),
             ),
           ),
         ),
@@ -84,7 +87,7 @@ class _DescriptionState extends State<Description> {
 
   Widget _buildTabContent() {
     switch (selectedTab) {
-      case "Specifications":
+      case "Specification":
         return const Text(
           "Here are the product specifications...",
           style: TextStyle(
@@ -92,7 +95,7 @@ class _DescriptionState extends State<Description> {
             color: Colors.grey,
           ),
         );
-      case "Reviews":
+      case "Review":
         return const Text(
           "Here are the product reviews...",
           style: TextStyle(
