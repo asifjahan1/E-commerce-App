@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 import '../../models/category.dart';
 import 'Widget/home_app_bar.dart';
-import 'Widget/image_slider.dart';
+import 'Widget/home_image_slider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
