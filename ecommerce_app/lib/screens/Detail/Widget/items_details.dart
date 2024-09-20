@@ -76,17 +76,17 @@ class _ItemsDetailsState extends State<ItemsDetails> {
                                   alignment: Alignment.center,
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: 5),
-                                  child: Row(
+                                  child: const Row(
                                     children: [
-                                      const Icon(
+                                      Icon(
                                         Icons.star,
                                         size: 15,
                                         color: Colors.white,
                                       ),
-                                      const SizedBox(width: 3),
+                                      SizedBox(width: 3),
                                       Text(
                                         '0.0',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
                                           fontSize: 14,
