@@ -21,8 +21,18 @@ class MyImageSlider extends StatelessWidget {
         onPageChanged: onChange,
         itemCount: 5, // Ensure only one image is displayed
         itemBuilder: (context, index) {
+          // nicher ei code dile kono multiple hero kno use korechi tar error ashe na but Hero transition hoy na
+          // return Hero(
+          //   tag: '${image}_$index',
+          //   child: Image.asset(
+          //     image,
+          //     fit: BoxFit.contain,
+          //   ),
+          // );
+
           return Hero(
             tag: image,
+            // tag: 'image_${widget.product.id}',
             child: Image.asset(
               image,
               fit: BoxFit.contain,
