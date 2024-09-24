@@ -6,7 +6,7 @@
 
 | Home Page | Details Screen | Cart Screen |
 |------|-------|-------|
-|<img src="" width="250">|<img src="" width="250">|<img src="" width="250">|
+|<img src="" width="250">|<img src="" width="250">|<img src="" width="270">|
 
 | Payment Method Screen | bKash Payment  | Card Payment |
 |------|-------|-------|
