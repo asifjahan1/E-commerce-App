@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/models/product_model.dart';
 import 'package:ecommerce_app/screens/Home/Widget/product_cart.dart';
 import 'package:ecommerce_app/screens/Home/Widget/search_bar.dart';
@@ -52,71 +53,90 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  // refresh action
+  Future<void> _refreshProducts() async {
+    await Future.delayed(const Duration(seconds: 2));
+    setState(() {
+      // can perform any refresh actions here (e.g., reloading data)
+      _filteredProducts = selectcategories[selectedIndex];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 35),
-              // custom appbar
-              CustomAppBar(onAvatarTap: _onAvatarTap),
-              const SizedBox(height: 20),
-              // search bar
-              MySearchBAR(onSearch: _filterProducts),
-              const SizedBox(height: 20),
-              ImageSlider(
-                currentSlide: currentSlider,
-                onChange: (value) {
-                  setState(() {
-                    currentSlider = value;
-                  });
-                },
-              ),
-              const SizedBox(height: 20),
-              // for category selection
-              categoryItems(),
-              const SizedBox(height: 20),
-              if (selectedIndex == 0)
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Special For You",
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    Text(
-                      "See all",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16,
-                        color: Colors.black54,
-                      ),
-                    ),
-                  ],
+      body: RefreshIndicator(
+        onRefresh: _refreshProducts,
+        triggerMode: RefreshIndicatorTriggerMode.onEdge,
+        edgeOffset: 1.0,
+        // backgroundColor: Colors.transparent,
+        displacement: 40,
+        color: kprimaryColor,
+        strokeWidth: 3,
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 35),
+                // custom appbar
+                CustomAppBar(onAvatarTap: _onAvatarTap),
+                const SizedBox(height: 20),
+                // search bar
+                MySearchBAR(onSearch: _filterProducts),
+                const SizedBox(height: 20),
+                ImageSlider(
+                  currentSlide: currentSlider,
+                  onChange: (value) {
+                    setState(() {
+                      currentSlider = value;
+                    });
+                  },
                 ),
-              // for shopping items
-              const SizedBox(height: 10),
-              Wrap(
-                spacing: 20,
-                runSpacing: 20,
-                children: _filteredProducts.map((product) {
-                  return SizedBox(
-                    width: (MediaQuery.of(context).size.width - 60) / 2,
-                    child: ProductCard(
-                      product: product,
-                    ),
-                  );
-                }).toList(),
-              ),
-            ],
+                const SizedBox(height: 20),
+                // for category selection
+                categoryItems(),
+                const SizedBox(height: 20),
+                if (selectedIndex == 0)
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Special For You",
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      Text(
+                        "See all",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ],
+                  ),
+                // for shopping items
+                const SizedBox(height: 10),
+                Wrap(
+                  spacing: 20,
+                  runSpacing: 20,
+                  children: _filteredProducts.map((product) {
+                    return SizedBox(
+                      width: (MediaQuery.of(context).size.width - 60) / 2,
+                      child: ProductCard(
+                        product: product,
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -137,8 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 // Prevent out of bounds error
                 if (index < selectcategories.length) {
                   selectedIndex = index;
-                  _filteredProducts = selectcategories[
-                      selectedIndex]; // Update products based on selected category
+                  _filteredProducts = selectcategories[selectedIndex];
                 }
               });
             },
