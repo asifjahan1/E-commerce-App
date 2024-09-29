@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print, library_private_types_in_public_api, use_build_context_synchronously
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:ecommerce_app/Provider/add_to_cart_provider.dart';
 import 'package:ecommerce_app/Provider/favorite_provider.dart';
 import 'package:ecommerce_app/constants.dart';
@@ -54,7 +55,6 @@ class MyApp extends StatelessWidget {
       );
 }
 
-// splash_screen.dart file
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -70,7 +70,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   _navigateToHome() async {
-    await Future.delayed(const Duration(milliseconds: 1500), () {});
+    await Future.delayed(const Duration(milliseconds: 4000));
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => const BottomNavBar(initialIndex: 2),
@@ -83,16 +83,42 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: kprimaryColor,
       body: Center(
-        child: Image.asset(
-          'images/Noor Al-Sana.jpg',
-          height: 100,
-          fit: BoxFit.contain,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'images/Noor Al-Sana.jpg',
+              height: 100,
+              fit: BoxFit.contain,
+            ),
+            const SizedBox(height: 20.0),
+            AnimatedTextKit(
+              animatedTexts: [
+                RotateAnimatedText(
+                  'Commitment is',
+                  textStyle: const TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                RotateAnimatedText(
+                  'Our excellence',
+                  textStyle: const TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
   }
 }
-
+// 
 // Testing
 
 // import 'dart:convert';
