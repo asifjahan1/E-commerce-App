@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, unused_element
+// ignore_for_file: unused_element, use_build_context_synchronously
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -58,10 +58,6 @@ class _ProfileState extends State<Profile> {
     setState(() {
       _registeredEmail = prefs.getString('registeredEmail');
       _registeredPhoneNumber = prefs.getString('registeredPhoneNumber');
-      if (kDebugMode) {
-        print('Loaded Email: $_registeredEmail');
-        print('Loaded Phone Number: $_registeredPhoneNumber');
-      }
     });
   }
 
@@ -81,137 +77,155 @@ class _ProfileState extends State<Profile> {
     );
   }
 
+  // refresh action for user profile
+  Future<void> _refreshProducts() async {
+    await Future.delayed(const Duration(seconds: 2));
+    await _loadUser();
+    await _loadRegisteredInfo();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          _registeredEmail != null ||
-                                  widget.email != null ||
-                                  (_user != null && _user!.email != null)
-                              ? Icons.email
-                              : _registeredPhoneNumber != null
-                                  ? Icons.person
-                                  : Icons.add,
-                          size: 23,
+      body: RefreshIndicator(
+        onRefresh: _refreshProducts,
+        triggerMode: RefreshIndicatorTriggerMode.onEdge,
+        color: kprimaryColor,
+        displacement: 40,
+        edgeOffset: 0.0,
+        strokeWidth: 3,
+        child: SafeArea(
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 25,
+                        backgroundColor: kprimaryColor.withOpacity(0.1),
+                        child: const Icon(
+                          Icons.person,
+                          size: 30,
                           color: kprimaryColor,
                         ),
-                        const SizedBox(width: 3),
-                        widget.email != null
-                            ? Text(
-                                widget.email!,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: kprimaryColor,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                              )
-                            : _registeredEmail != null
-                                ? Text(
-                                    _registeredEmail!,
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      color: kprimaryColor,
-                                    ),
-                                  )
-                                : _registeredPhoneNumber != null
-                                    ? Text(
-                                        _registeredPhoneNumber!,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: kprimaryColor,
-                                        ),
-                                      )
-                                    : _user != null
-                                        ? Text(
-                                            _user!.email ?? '',
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              color: kprimaryColor,
-                                              fontStyle: FontStyle.italic,
-                                            ),
-                                          )
-                                        : const Text(
-                                            "No user signed in",
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              color: kprimaryColor,
-                                              fontStyle: FontStyle.italic,
-                                            ),
-                                          ),
-                      ],
-                    ),
-
-                    // Settings Icon Button
-                    IconButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => SettingsScreen(
-                              onLogout: _logout,
-                              isLoggedIn: _registeredEmail != null ||
-                                  _registeredPhoneNumber != null ||
-                                  _user != null,
-                            ),
-                          ),
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.settings,
-                        size: 30,
-                        color: kprimaryColor,
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              if (_registeredEmail == null &&
-                  _registeredPhoneNumber == null &&
-                  _user == null)
-                Center(
-                  child: Column(
-                    children: [
-                      MaterialButton(
+                      const SizedBox(width: 15),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          widget.email != null
+                              ? Text(
+                                  widget.email!,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: kprimaryColor,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                )
+                              : _registeredEmail != null
+                                  ? Text(
+                                      _registeredEmail!,
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: kprimaryColor,
+                                      ),
+                                    )
+                                  : _registeredPhoneNumber != null
+                                      ? Text(
+                                          _registeredPhoneNumber!,
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            color: kprimaryColor,
+                                          ),
+                                        )
+                                      : _user != null
+                                          ? Text(
+                                              _user!.email ?? '',
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                color: kprimaryColor,
+                                                fontStyle: FontStyle.italic,
+                                              ),
+                                            )
+                                          : const Text(
+                                              "No user signed in",
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                color: kprimaryColor,
+                                                fontStyle: FontStyle.italic,
+                                              ),
+                                            ),
+                        ],
+                      ),
+                      const Spacer(),
+                      IconButton(
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => const RegisterMobile(),
+                              builder: (context) => SettingsScreen(
+                                onLogout: _logout,
+                                isLoggedIn: _registeredEmail != null ||
+                                    _registeredPhoneNumber != null ||
+                                    _user != null,
+                              ),
                             ),
                           );
                         },
-                        color: kprimaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 15),
-                        child: const Text(
-                          "Login / SignUp",
-                          style: TextStyle(color: Colors.white),
+                        icon: const Icon(
+                          Icons.settings,
+                          size: 30,
+                          color: kprimaryColor,
                         ),
                       ),
                     ],
                   ),
                 ),
-            ],
+                const SizedBox(height: 20),
+                // Show "Login / SignUp" button if no user is signed in
+                if (_registeredEmail == null &&
+                    _registeredPhoneNumber == null &&
+                    _user == null)
+                  Center(
+                    child: Column(
+                      children: [
+                        MaterialButton(
+                          onPressed: () async {
+                            // Navigate to RegisterMobile and wait for the result
+                            await Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const RegisterMobile(),
+                              ),
+                            );
+                            // Once logged in, refresh user data
+                            _refreshProducts();
+                          },
+                          color: kprimaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 15,
+                          ),
+                          child: const Text(
+                            "Login / SignUp",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),
