@@ -100,7 +100,7 @@ class _SplashScreenState extends State<SplashScreen> {
               children: <Widget>[
                 const SizedBox(height: 150),
                 AnimatedTextKit(
-                  repeatForever: true,
+                  repeatForever: false,
                   animatedTexts: [
                     RotateAnimatedText(
                       'Commitment is',
