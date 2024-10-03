@@ -6,6 +6,7 @@ import 'package:ecommerce_app/Provider/favorite_provider.dart';
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/screens/Payment/Features/BKash/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logging/logging.dart';
@@ -82,38 +83,48 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kprimaryColor,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
+      body: Stack(
+        children: [
+          Align(
+            alignment: Alignment.center,
+            child: Image.asset(
               'images/Noor Al-Sana.jpg',
               height: 100,
               fit: BoxFit.contain,
             ),
-            const SizedBox(height: 20.0),
-            AnimatedTextKit(
-              animatedTexts: [
-                RotateAnimatedText(
-                  'Commitment is',
-                  textStyle: const TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                RotateAnimatedText(
-                  'Our excellence',
-                  textStyle: const TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                const SizedBox(height: 150),
+                AnimatedTextKit(
+                  repeatForever: true,
+                  animatedTexts: [
+                    RotateAnimatedText(
+                      'Commitment is',
+                      textStyle: const TextStyle(
+                        fontSize: 30.0,
+                        color: Colors.white,
+                      ),
+                      duration: const Duration(milliseconds: 2000),
+                    ),
+                    RotateAnimatedText(
+                      'Our excellence',
+                      textStyle: const TextStyle(
+                        fontSize: 30.0,
+                        color: Colors.white,
+                      ),
+                      duration: const Duration(milliseconds: 2000),
+                    ),
+                  ],
+                  pause: const Duration(milliseconds: 500),
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
