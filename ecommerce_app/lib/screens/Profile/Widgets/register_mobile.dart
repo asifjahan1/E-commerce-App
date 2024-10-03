@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 // import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/screens/Payment/payment_method_screen.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/Email%20RegLog/apple_sign_in.dart';
@@ -168,14 +169,22 @@ class _RegisterMobileState extends State<RegisterMobile> {
                   // ),
 
                   const SizedBox(height: 40),
-                  const Text(
-                    "Register or Login with Mobile Number",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontStyle: FontStyle.italic,
-                      fontSize: 14,
-                    ),
+                  AnimatedTextKit(
+                    animatedTexts: [
+                      TypewriterAnimatedText(
+                        "Register or Login with Mobile Number",
+                        textStyle: const TextStyle(
+                          color: Colors.white,
+                          fontStyle: FontStyle.italic,
+                          fontSize: 14,
+                        ),
+                        speed: const Duration(milliseconds: 100),
+                      ),
+                    ],
+                    repeatForever: true,
+                    isRepeatingAnimation: true,
                   ),
+
                   const SizedBox(height: 10),
                   Container(
                     decoration: BoxDecoration(
