@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+// import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/screens/Payment/payment_method_screen.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/Email%20RegLog/apple_sign_in.dart';
@@ -11,6 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
+import 'Email RegLog/Animate Text/liquid_text.dart';
 
 class RegisterMobile extends StatefulWidget {
   const RegisterMobile({super.key});
@@ -140,16 +143,30 @@ class _RegisterMobileState extends State<RegisterMobile> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Text(
-                    "Commitment is\nOur Excellence",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
+                  const LiquidText(
+                    text: 'COMMITMENT IS\nOUR EXCELLENCE',
+                    textStyle: TextStyle(
                       color: Colors.white,
+                      fontSize: 20.0,
                       fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.italic,
-                      fontSize: 18,
                     ),
                   ),
+                  // TextLiquidFill(
+                  //   text: 'COMMITMENT IS\nOUR EXCELLENCE',
+                  //   waveColor: Colors.blueAccent, // Color of the wave animation
+                  //   boxBackgroundColor:
+                  //       kprimaryColor, // Use the same background color as your screen
+                  //   textStyle: const TextStyle(
+                  //     color: Colors.white, // Text color when filled
+                  //     fontSize: 20.0,
+                  //     fontWeight: FontWeight.bold,
+                  //   ),
+                  //   boxHeight: 58, // Height of the text box
+                  //   waveDuration: const Duration(
+                  //       seconds: 2), // Duration of the wave effect
+                  //   textAlign: TextAlign.center, // Align the text to the center
+                  // ),
+
                   const SizedBox(height: 40),
                   const Text(
                     "Register or Login with Mobile Number",
@@ -211,7 +228,7 @@ class _RegisterMobileState extends State<RegisterMobile> {
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 8.0),
                           child: Text(
-                            "Or continue with",
+                            "Or Login with",
                             style: TextStyle(
                               color: Colors.white,
                               fontStyle: FontStyle.italic,
