@@ -19,10 +19,11 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen> {
   int currentImage = 0;
-  int currentColor = 1;
+  int currentColor = 1; // Assuming initial color selection
   late Timer _timer;
   final PageController _pageController = PageController();
-  int cartItemCount = 0;
+  int cartItemCount = 0; // State variable for cart count
+  bool isInCart = false; // State variable for shopping cart icon
 
   @override
   void initState() {
@@ -61,6 +62,14 @@ class _DetailScreenState extends State<DetailScreen> {
   void updateCartItemCount(int count) {
     setState(() {
       cartItemCount = count;
+      isInCart = count > 0;
+    });
+  }
+
+  // Function to update selected color
+  void updateSelectedColor(int index) {
+    setState(() {
+      currentColor = index;
     });
   }
 
@@ -126,9 +135,7 @@ class _DetailScreenState extends State<DetailScreen> {
                       children: [
                         ItemsDetails(product: widget.product),
                         const SizedBox(height: 20),
-                        //
-                        //
-                        //
+                        // Color selection
                         const Text(
                           "Color",
                           style: TextStyle(
@@ -142,9 +149,7 @@ class _DetailScreenState extends State<DetailScreen> {
                             widget.product.colors.length,
                             (index) => GestureDetector(
                               onTap: () {
-                                setState(() {
-                                  currentColor = index;
-                                });
+                                updateSelectedColor(index);
                               },
                               child: AnimatedContainer(
                                 duration: const Duration(milliseconds: 1000),
@@ -177,9 +182,7 @@ class _DetailScreenState extends State<DetailScreen> {
                             ),
                           ),
                         ),
-                        //
-                        //
-                        //
+                        // ... other code
                         const SizedBox(height: 25),
                         Description(description: widget.product.description),
                       ],
