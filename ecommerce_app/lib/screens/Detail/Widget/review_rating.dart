@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
@@ -19,10 +17,9 @@ class ReviewsAndRatingsPage extends StatefulWidget {
 class _ReviewsAndRatingsPageState extends State<ReviewsAndRatingsPage> {
   final TextEditingController _commentController = TextEditingController();
   File? _selectedImage;
-  List<Map<String, dynamic>> reviews = []; // List to store reviews locally
-  double _userRating = 5.0; // Default rating
+  List<Map<String, dynamic>> reviews = [];
+  double _userRating = 5.0;
 
-  // Fetch the current user's display name or email
   Future<String> _getCurrentUserName() async {
     User? user = FirebaseAuth.instance.currentUser;
     return user != null
@@ -57,7 +54,7 @@ class _ReviewsAndRatingsPageState extends State<ReviewsAndRatingsPage> {
         'timestamp': FieldValue.serverTimestamp(),
       };
 
-      // Add the new review locally
+      // added new review locally
       setState(() {
         reviews.insert(0, {
           'user': userName,
@@ -67,18 +64,17 @@ class _ReviewsAndRatingsPageState extends State<ReviewsAndRatingsPage> {
         });
       });
 
-      // Add the new review to Firestore
+      // Added new review to Firestore
       await FirebaseFirestore.instance
           .collection('products')
           .doc(widget.productId)
           .collection('reviews')
           .add(newReview);
 
-      // Clear the text field and selected image after submission
       _commentController.clear();
       setState(() {
         _selectedImage = null;
-        _userRating = 5.0; // Reset the rating to the default value
+        _userRating = 0.0;
       });
     }
   }
@@ -261,11 +257,9 @@ class _ReviewsAndRatingsPageState extends State<ReviewsAndRatingsPage> {
                             icon: const Icon(Icons.star),
                             color: Colors.amber,
                             onPressed: () {
-                              // Show dialog to allow the user to set the rating
                               showDialog(
                                 context: context,
                                 builder: (context) {
-                                  // Use StatefulBuilder to manage the state within the dialog
                                   return StatefulBuilder(
                                     builder: (context, setState) {
                                       return AlertDialog(
@@ -280,7 +274,6 @@ class _ReviewsAndRatingsPageState extends State<ReviewsAndRatingsPage> {
                                               divisions: 4,
                                               label: _userRating.toString(),
                                               onChanged: (value) {
-                                                // Update the rating in the dialog
                                                 setState(() {
                                                   _userRating = value;
                                                 });
@@ -349,7 +342,10 @@ class _ReviewsAndRatingsPageState extends State<ReviewsAndRatingsPage> {
                             onPressed: _pickImage,
                           ),
                           IconButton(
-                            icon: const Icon(Icons.send),
+                            icon: const Icon(
+                              Icons.send,
+                              color: Colors.blueAccent,
+                            ),
                             onPressed: _submitReview,
                           ),
                         ],

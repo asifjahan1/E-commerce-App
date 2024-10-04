@@ -1,4 +1,8 @@
+// ignore_for_file: unused_local_variable, library_private_types_in_public_api
+
 import 'dart:async';
+import 'package:ecommerce_app/Provider/add_to_cart_provider.dart';
+import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/models/product_model.dart';
@@ -7,6 +11,8 @@ import 'package:ecommerce_app/screens/Detail/Widget/addto_cart.dart';
 import 'package:ecommerce_app/screens/Detail/Widget/description.dart';
 import 'package:ecommerce_app/screens/Detail/Widget/detail_app_bar.dart';
 import 'package:ecommerce_app/screens/Detail/Widget/items_details.dart';
+import 'package:badges/badges.dart' as badges;
+import 'package:provider/provider.dart';
 
 class DetailScreen extends StatefulWidget {
   final Product product;
@@ -19,11 +25,11 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen> {
   int currentImage = 0;
-  int currentColor = 1; // Assuming initial color selection
+  int currentColor = 1;
   late Timer _timer;
   final PageController _pageController = PageController();
-  int cartItemCount = 0; // State variable for cart count
-  bool isInCart = false; // State variable for shopping cart icon
+  int cartItemCount = 0;
+  bool isInCart = false;
 
   @override
   void initState() {
@@ -58,7 +64,6 @@ class _DetailScreenState extends State<DetailScreen> {
     });
   }
 
-  // Function to update cart item count
   void updateCartItemCount(int count) {
     setState(() {
       cartItemCount = count;
@@ -66,14 +71,12 @@ class _DetailScreenState extends State<DetailScreen> {
     });
   }
 
-  // Function to update selected color
   void updateSelectedColor(int index) {
     setState(() {
       currentColor = index;
     });
   }
 
-  // refresh action
   Future<void> _refreshProducts() async {
     await Future.delayed(const Duration(seconds: 2));
     setState(() {});
@@ -81,6 +84,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cartProvider = CartProvider.of(context, listen: false);
     return Scaffold(
       backgroundColor: kcontentColor,
       body: SafeArea(
@@ -127,7 +131,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     left: 20,
                     right: 20,
                     top: 20,
-                    bottom: 100, // Adjusted for AddToCart button
+                    bottom: 100,
                   ),
                   child: SingleChildScrollView(
                     child: Column(
@@ -194,17 +198,91 @@ class _DetailScreenState extends State<DetailScreen> {
           ),
         ),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 20),
-        child: SizedBox(
-          width: double.infinity,
-          child: AddToCart(
-            product: widget.product,
-            updateCartCount: updateCartItemCount,
+      // Adding Stack to handle multiple FABs
+      floatingActionButton: Stack(
+        children: [
+          Positioned(
+            bottom: 20,
+            left: 20,
+            right: -5,
+            child: Center(
+              child: SizedBox(
+                width: double.infinity,
+                child: AddToCart(
+                  product: widget.product,
+                  updateCartCount: updateCartItemCount,
+                ),
+              ),
+            ),
           ),
-        ),
+          // Shopping cart FAB at the bottom-right corner
+          Positioned(
+            bottom: 462,
+            right: 0,
+            child: FloatingActionButton(
+              backgroundColor: Colors.white.withOpacity(0.6),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const BottomNavBar(initialIndex: 3),
+                  ),
+                );
+              },
+              child: Stack(
+                alignment: Alignment.topRight,
+                children: [
+                  Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Icon(
+                      Icons.shopping_cart_outlined,
+                      color: Colors.black.withOpacity(0.5),
+                      size: 40,
+                    ),
+                  ),
+                  Consumer<CartProvider>(
+                    builder: (context, cartProvider, child) {
+                      return Positioned(
+                        top: -3,
+                        right: 0,
+                        child: badges.Badge(
+                          badgeAnimation: const badges.BadgeAnimation.scale(
+                            animationDuration: Duration(seconds: 1),
+                            colorChangeAnimationDuration: Duration(seconds: 1),
+                            loopAnimation: false,
+                            curve: Curves.fastOutSlowIn,
+                            colorChangeAnimationCurve: Curves.easeInCubic,
+                          ),
+                          badgeStyle: badges.BadgeStyle(
+                            badgeColor: Colors.red,
+                            padding: const EdgeInsets.all(5),
+                            shape: badges.BadgeShape.circle,
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide:
+                                const BorderSide(color: Colors.red, width: 1),
+                          ),
+                          position:
+                              badges.BadgePosition.topEnd(top: -8, end: -8),
+                          badgeContent: Text(
+                            '${cartProvider.cart.length}', // Displaying the cart count
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          showBadge: cartProvider.cart.isNotEmpty,
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
