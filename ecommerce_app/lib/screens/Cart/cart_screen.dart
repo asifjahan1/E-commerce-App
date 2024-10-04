@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/screens/Detail/details_screen.dart';
-import 'package:ecommerce_app/screens/nav_bar_screen.dart';
+// import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:ecommerce_app/Provider/add_to_cart_provider.dart';
 import 'package:ecommerce_app/screens/Cart/check_out.dart';
 import 'package:ecommerce_app/constants.dart';
@@ -181,37 +181,38 @@ class _CartScreenState extends State<CartScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8),
+            const Padding(
+              padding: EdgeInsets.all(8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButton(
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      padding: const EdgeInsets.all(15),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              const BottomNavBar(initialIndex: 2),
-                        ),
-                        (route) => false,
-                      );
-                    },
-                    icon: const Icon(
-                      Icons.arrow_back_ios,
-                    ),
-                  ),
-                  const Text(
+                  SizedBox(width: 25),
+                  // IconButton(
+                  //   style: IconButton.styleFrom(
+                  //     backgroundColor: Colors.white,
+                  //     padding: const EdgeInsets.all(15),
+                  //   ),
+                  //   onPressed: () {
+                  //     Navigator.of(context).pushAndRemoveUntil(
+                  //       MaterialPageRoute(
+                  //         builder: (context) =>
+                  //             const BottomNavBar(initialIndex: 2),
+                  //       ),
+                  //       (route) => false,
+                  //     );
+                  //   },
+                  //   icon: const Icon(
+                  //     Icons.arrow_back_ios,
+                  //   ),
+                  // ),
+                  Text(
                     "My Cart",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 25,
                     ),
                   ),
-                  const SizedBox(),
+                  SizedBox(),
                 ],
               ),
             ),
