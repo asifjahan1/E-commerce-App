@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/register_mobile.dart';
@@ -13,17 +15,24 @@ class ForgotPassword extends StatefulWidget {
 class _ForgotPasswordState extends State<ForgotPassword> {
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    _phoneNumberController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   void _resetPassword() {
-    String phoneNumber = _phoneNumberController.text;
-    String newPassword = _passwordController.text;
+    if (_formKey.currentState?.validate() ?? false) {
+      String phoneNumber = _phoneNumberController.text;
+      String newPassword = _passwordController.text;
 
-    // Implement your validation logic here, for example, checking if the phone number is valid
-    if (_isValidPhoneNumber(phoneNumber) && _isValidPassword(newPassword)) {
       // update password in database or authentication service
       _showSnackbar('Password changed successfully');
 
-      // Proceed to login screen
+      // Navigate back to login screen
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (context) => const LoginScreen(),
@@ -31,20 +40,20 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         (Route<dynamic> route) => false,
       );
     } else {
-      _showSnackbar('Invalid phone number or password');
+      _showSnackbar('Please correct the errors');
     }
   }
 
   bool _isValidPhoneNumber(String phoneNumber) {
-    // validation logic
-    // For now, just check if it's not empty
-    return phoneNumber.isNotEmpty;
+    // Example validation for phone number using a basic regular expression
+    final phoneRegExp =
+        RegExp(r'^\+\d{1,3}\d{9,13}$'); // Matches numbers like +8801234567890
+    return phoneRegExp.hasMatch(phoneNumber);
   }
 
   bool _isValidPassword(String password) {
-    // validation logic
-    // For now, just check if it's not empty
-    return password.isNotEmpty;
+    // Basic password validation: at least 6 characters
+    return password.length >= 6;
   }
 
   void _showSnackbar(String message) {
@@ -56,7 +65,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: kcontentColor,
       appBar: AppBar(
         backgroundColor: Colors.white,
         leading: IconButton(
@@ -90,61 +98,82 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           height: double.infinity,
           color: Colors.white,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextField(
-                controller: _phoneNumberController,
-                decoration: InputDecoration(
-                  hintText: "Enter Mobile Number",
-                  helperText: "e.g: +8801234567890",
-                  helperStyle: const TextStyle(
-                    color: Colors.grey,
-                  ),
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextFormField(
+                  controller: _phoneNumberController,
+                  decoration: InputDecoration(
+                    hintText: "Enter Mobile Number",
+                    helperText: "e.g: +8801234567890",
+                    helperStyle: const TextStyle(
                       color: Colors.grey,
-                      width: 1.5,
                     ),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  filled: true,
-                  fillColor: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: _passwordController,
-                decoration: InputDecoration(
-                  hintText: "Make a New Password",
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.5,
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.grey,
+                        width: 1.5,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
-                    borderRadius: BorderRadius.circular(10.0),
+                    filled: true,
+                    fillColor: Colors.white,
                   ),
-                  filled: true,
-                  fillColor: Colors.white,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your phone number';
+                    } else if (!_isValidPhoneNumber(value)) {
+                      return 'Invalid phone number format';
+                    }
+                    return null;
+                  },
                 ),
-                obscureText: true,
-              ),
-              const SizedBox(height: 20),
-              MaterialButton(
-                onPressed: _resetPassword,
-                color: kprimaryColor,
-                textColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+                const SizedBox(height: 20),
+                TextFormField(
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                    hintText: "Make a New Password",
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.grey,
+                        width: 1.5,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                  obscureText: true,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a new password';
+                    } else if (!_isValidPassword(value)) {
+                      return 'Password must be at least 6 characters';
+                    }
+                    return null;
+                  },
                 ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-                child: const Text(
-                  "Confirm",
-                  style: TextStyle(fontSize: 16),
+                const SizedBox(height: 20),
+                MaterialButton(
+                  onPressed: _resetPassword,
+                  color: kprimaryColor,
+                  textColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 40,
+                    vertical: 16,
+                  ),
+                  child: const Text(
+                    "Confirm",
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

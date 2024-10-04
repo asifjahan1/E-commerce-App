@@ -17,37 +17,69 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
+  bool _isValidInput = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _phoneNumberController.addListener(_validateInput);
+    _passwordController.addListener(_validateInput);
+  }
+
+  @override
+  void dispose() {
+    _phoneNumberController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _validateInput() {
+    setState(() {
+      _isValidInput = _phoneNumberController.text.isNotEmpty &&
+          _passwordController.text.isNotEmpty &&
+          _isValidPhoneNumber(_phoneNumberController.text);
+    });
+  }
+
+  bool _isValidPhoneNumber(String phoneNumber) {
+    final bangladeshPattern = RegExp(r'^\+880\d{10}$');
+    final uaePattern = RegExp(r'^\+971\d{9}$');
+    return bangladeshPattern.hasMatch(phoneNumber) ||
+        uaePattern.hasMatch(phoneNumber);
+  }
 
   Future<void> _login() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isLoading = true;
+    });
 
-    // Fetch the registered phone number and password from SharedPreferences
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     String? registeredPhoneNumber = prefs.getString('registeredPhoneNumber');
     String? storedPassword = prefs.getString('password');
 
-    // Check if the entered phone number and password match the saved values
     if (registeredPhoneNumber == _phoneNumberController.text &&
         storedPassword == _passwordController.text) {
-      // If match, save the login state and login time for 30 days
       await prefs.setBool('isLoggedIn', true);
       await prefs.setString('loginTime', DateTime.now().toIso8601String());
 
-      // Navigate to the Profile screen (BottomNavBar with index 4)
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => const BottomNavBar(initialIndex: 4),
         ),
       );
     } else {
-      // If the phone number or password is incorrect, show an error message
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Invalid phone number or password')),
       );
     }
+
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   void _resetPassword() async {
-    // Navigate to ForgotPassword screen if user clicks on "Forget Password?"
     await Navigator.push(
       context,
       MaterialPageRoute(
@@ -84,9 +116,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         centerTitle: true,
-        actions: const [
-          SizedBox(),
-        ],
       ),
       body: SafeArea(
         child: Container(
@@ -95,86 +124,90 @@ class _LoginScreenState extends State<LoginScreen> {
           color: kcontentColor,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // TextField for phone number input
-              TextField(
-                controller: _phoneNumberController,
-                decoration: InputDecoration(
-                  hintText: "Enter your mobile number",
-                  helperText: "e.g: +8801234567890, +971 2 1234567",
-                  helperStyle: const TextStyle(
-                    color: Colors.grey,
-                  ),
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: kprimaryColor,
-                      width: 1.5,
-                    ),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  filled: true,
-                  fillColor: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // TextField for password input
-              TextField(
-                controller: _passwordController,
-                decoration: InputDecoration(
-                  hintText: "Enter your password",
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: kprimaryColor,
-                      width: 1.5,
-                    ),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  filled: true,
-                  fillColor: Colors.white,
-                ),
-                obscureText: true,
-              ),
-              const SizedBox(height: 2),
-
-              // Forget password button
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: _resetPassword,
-                    child: const Text(
-                      "Forget Password?",
-                      style: TextStyle(
-                        color: kprimaryColor,
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic,
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextField(
+                      controller: _phoneNumberController,
+                      decoration: InputDecoration(
+                        hintText: "Enter your mobile number",
+                        helperText: "e.g: +8801234567890, +97121234567",
+                        helperStyle: const TextStyle(
+                          color: Colors.grey,
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: kprimaryColor,
+                            width: 1.5,
+                          ),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
                       ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-
-              // Login button
-              MaterialButton(
-                onPressed: _login,
-                color: kprimaryColor,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.horizontal(
-                    left: Radius.circular(10),
-                    right: Radius.circular(10),
-                  ),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: const Text(
-                  "Login",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                  ),
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: _passwordController,
+                      decoration: InputDecoration(
+                        hintText: "Enter your password",
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: kprimaryColor,
+                            width: 1.5,
+                          ),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
+                      obscureText: true,
+                    ),
+                    const SizedBox(height: 2),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: _resetPassword,
+                          child: const Text(
+                            "Forgot Password?",
+                            style: TextStyle(
+                              color: kprimaryColor,
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    MaterialButton(
+                      onPressed: _isValidInput && !_isLoading ? _login : null,
+                      color: kprimaryColor,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.horizontal(
+                          left: Radius.circular(10),
+                          right: Radius.circular(10),
+                        ),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: _isLoading
+                          ? const CircularProgressIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.white),
+                            )
+                          : const Text(
+                              "Login",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                    ),
+                  ],
                 ),
               ),
             ],

@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously, unused_element
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,28 +22,43 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final TextEditingController _codeController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String? _verificationId;
-  bool _isLoading = false; // Add a flag for loading state
+  bool _isLoading = false;
 
-  bool _isPhoneNumberRegistered(String phoneNumber) {
-    // Replace with your logic to check if the phone number is registered
-    // For now, let's assume it's not registered
-    return false;
+  @override
+  void initState() {
+    super.initState();
+    _checkIfRegistered();
+    _phoneNumberController.text = widget.phoneNumber;
+  }
+
+  Future<void> _checkIfRegistered() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? registeredPhoneNumber = prefs.getString('registeredPhoneNumber');
+
+    if (registeredPhoneNumber != null &&
+        registeredPhoneNumber == widget.phoneNumber) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Phone number already registered. Please log in.')),
+      );
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
+    }
   }
 
   void _sendCode() async {
     String phoneNumber = _phoneNumberController.text;
 
-    if (_isPhoneNumberRegistered(phoneNumber)) {
+    if (phoneNumber.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('This phone number is already registered'),
-        ),
+        const SnackBar(content: Text('Please enter a valid phone number.')),
       );
       return;
     }
 
     setState(() {
-      _isLoading = true; // Show loading indicator
+      _isLoading = true;
     });
 
     await FirebaseAuth.instance.verifyPhoneNumber(
@@ -55,9 +70,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         setState(() {
           _isLoading = false;
         });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to verify phone number.')),
+        );
         if (kDebugMode) {
-          print('Failed to verify phone number');
-          // print('Failed to verify phone number: ${e.message}');
+          print('Failed to verify phone number: $e');
         }
       },
       codeSent: (String verificationId, int? resendToken) {
@@ -65,6 +82,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           _verificationId = verificationId;
           _isLoading = false;
         });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Code sent successfully.')),
+        );
       },
       codeAutoRetrievalTimeout: (String verificationId) {
         setState(() {
@@ -79,40 +99,54 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     String code = _codeController.text;
     String password = _passwordController.text;
 
-    if (_verificationId != null) {
+    if (_verificationId == null || code.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Please enter both the code and a password.')),
+      );
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
         verificationId: _verificationId!,
         smsCode: code,
       );
 
-      try {
-        await FirebaseAuth.instance.signInWithCredential(credential);
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString(
-          'registeredPhoneNumber',
-          _phoneNumberController.text,
-        );
-        await prefs.setString('password', password); // Save password
+      await FirebaseAuth.instance.signInWithCredential(credential);
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Mobile Number Confirmed')),
-        );
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString(
+          'registeredPhoneNumber', _phoneNumberController.text);
+      await prefs.setString('password', password);
 
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => const LoginScreen(),
-          ),
-        );
-      } catch (e) {
-        if (kDebugMode) {
-          print("Invalid code");
-        }
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Mobile number confirmed.')),
+      );
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const LoginScreen(),
+        ),
+      );
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Invalid code or verification failed.')),
+      );
+      if (kDebugMode) {
+        print('Error during verification: $e');
       }
     }
   }
 
   void _resetPassword() async {
-    // Navigate to ForgotPassword screen
     await Navigator.push(
       context,
       MaterialPageRoute(
@@ -122,7 +156,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   void _navigateToLoginScreen() {
-    Navigator.of(context).push(
+    Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => const LoginScreen(),
       ),
@@ -153,7 +187,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           style: TextStyle(
             color: kprimaryColor,
             fontWeight: FontWeight.bold,
-            // fontStyle: FontStyle.italic,
           ),
         ),
         centerTitle: true,
@@ -221,7 +254,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 TextField(
                   controller: _passwordController,
                   decoration: InputDecoration(
-                    hintText: "Make a Password",
+                    hintText: "Create a Password",
                     border: OutlineInputBorder(
                       borderSide: const BorderSide(
                         color: kprimaryColor,
@@ -234,23 +267,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                   obscureText: true,
                 ),
-                // const SizedBox(height: 2),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.end,
-                //   children: [
-                //     TextButton(
-                //       onPressed: _resetPassword,
-                //       child: const Text(
-                //         "Forget Password?",
-                //         style: TextStyle(
-                //           color: kprimaryColor,
-                //           fontWeight: FontWeight.bold,
-                //           fontStyle: FontStyle.italic,
-                //         ),
-                //       ),
-                //     ),
-                //   ],
-                // ),
                 const SizedBox(height: 22),
                 MaterialButton(
                   onPressed: _verifyCode,
@@ -259,16 +275,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     borderRadius: BorderRadius.circular(50),
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: const Text(
-                    "Submit",
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  child: _isLoading
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : const Text(
+                          "Submit",
+                          style: TextStyle(color: Colors.white),
+                        ),
                 ),
                 const SizedBox(height: 10),
                 TextButton(
                   onPressed: _navigateToLoginScreen,
                   child: const Text(
-                    "Already have Account? Login",
+                    "Already have an Account? Login",
                     style: TextStyle(
                       color: kprimaryColor,
                       fontWeight: FontWeight.bold,
