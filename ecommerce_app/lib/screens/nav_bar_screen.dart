@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:ecommerce_app/screens/Category/category_items.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:ecommerce_app/constants.dart';
@@ -31,7 +32,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   }
 
   List screens = const [
-    Scaffold(),
+    Category(),
     Favorite(),
     HomeScreen(),
     CartScreen(),
