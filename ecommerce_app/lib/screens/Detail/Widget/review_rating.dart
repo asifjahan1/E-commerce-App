@@ -42,10 +42,8 @@ class _ReviewsAndRatingsPageState extends State<ReviewsAndRatingsPage> {
       String reviewText = _commentController.text;
       double rating = _userRating;
 
-      // Get the current user's name
       String userName = await _getCurrentUserName();
 
-      // Create the new review data
       var newReview = {
         'user': userName,
         'review': reviewText,
@@ -54,27 +52,16 @@ class _ReviewsAndRatingsPageState extends State<ReviewsAndRatingsPage> {
         'timestamp': FieldValue.serverTimestamp(),
       };
 
-      // added new review locally
-      setState(() {
-        reviews.insert(0, {
-          'user': userName,
-          'review': reviewText,
-          'rating': rating,
-          'image': _selectedImage?.path,
-        });
-      });
-
-      // Added new review to Firestore
       await FirebaseFirestore.instance
           .collection('products')
           .doc(widget.productId)
           .collection('reviews')
           .add(newReview);
 
-      _commentController.clear();
       setState(() {
+        _commentController.clear();
         _selectedImage = null;
-        _userRating = 0.0;
+        _userRating = 5.0; // Resetting to maximum rating
       });
     }
   }
@@ -94,39 +81,36 @@ class _ReviewsAndRatingsPageState extends State<ReviewsAndRatingsPage> {
         title: const Text("Reviews and Ratings"),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection('products')
-                .doc(widget.productId)
-                .collection('reviews')
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
-
-              if (snapshot.hasData) {
-                var fetchedReviews = snapshot.data!.docs.map((doc) {
-                  return {
-                    'user': doc['user'],
-                    'review': doc['review'],
-                    'rating': doc['rating'],
-                    'image': doc['image'],
-                  };
-                }).toList();
-
-                // Add fetched reviews only if not already added
-                if (reviews.length < fetchedReviews.length) {
-                  setState(() {
-                    reviews = fetchedReviews;
-                  });
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('products')
+                  .doc(widget.productId)
+                  .collection('reviews')
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
                 }
-              }
 
-              return Expanded(
-                child: Padding(
+                if (snapshot.hasData) {
+                  var fetchedReviews = snapshot.data!.docs.map((doc) {
+                    return {
+                      'user': doc['user'],
+                      'review': doc['review'],
+                      'rating': doc['rating'],
+                      'image': doc['image'],
+                    };
+                  }).toList();
+
+                  if (reviews.length != fetchedReviews.length) {
+                    reviews = fetchedReviews;
+                  }
+                }
+
+                return Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
@@ -177,186 +161,178 @@ class _ReviewsAndRatingsPageState extends State<ReviewsAndRatingsPage> {
                       ),
                       const SizedBox(height: 20),
                       // Reviews List
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: reviews.length,
-                          itemBuilder: (context, index) {
-                            var review = reviews[index];
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  review['user'] ?? 'Unknown',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: reviews.length,
+                        itemBuilder: (context, index) {
+                          var review = reviews[index];
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                review['user'] ?? 'Unknown',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Rating: ${review['rating'].toStringAsFixed(1)}",
+                                        style: const TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 5),
+                                      const Icon(
+                                        Icons.star,
+                                        color: Colors.amber,
+                                        size: 16,
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(review['review']),
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                              if (review['image'] != null)
+                                Center(
+                                  child: Image.file(
+                                    File(review['image']),
+                                    width: 100,
+                                    height: 100,
                                   ),
                                 ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "Rating: ${review['rating'].toStringAsFixed(1)}",
-                                          style: const TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 5),
-                                        const Icon(
-                                          Icons.star,
-                                          color: Colors.amber,
-                                          size: 16,
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Text(review['review']),
-                                  ],
-                                ),
-                                const SizedBox(height: 10),
-                                if (review['image'] != null)
-                                  Center(
-                                    child: Image.file(
-                                      File(review['image']),
-                                      width: 100,
-                                      height: 100,
-                                    ),
-                                  ),
-                                const Divider(),
-                              ],
-                            );
-                          },
-                        ),
+                              const Divider(),
+                            ],
+                          );
+                        },
                       ),
                     ],
                   ),
-                ),
-              );
-            },
-          ),
-          // Comment and Image Upload Section
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _commentController,
-                    decoration: InputDecoration(
-                      hintText: "Write a comment...",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      suffixIcon: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.star),
-                            color: Colors.amber,
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return StatefulBuilder(
-                                    builder: (context, setState) {
-                                      return AlertDialog(
-                                        title: const Text("Rate this product"),
-                                        content: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Slider(
-                                              value: _userRating,
-                                              min: 1.0,
-                                              max: 5.0,
-                                              divisions: 4,
-                                              label: _userRating.toString(),
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  _userRating = value;
-                                                });
-                                              },
-                                            ),
-                                            Text(
-                                                "Rating: ${_userRating.toStringAsFixed(1)}"),
-                                          ],
-                                        ),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 16,
-                                                      vertical: 8),
-                                              decoration: BoxDecoration(
-                                                color: Colors.deepPurple
-                                                    .withOpacity(0.7),
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.black
-                                                        .withOpacity(0.3),
-                                                    blurRadius: 4,
-                                                    offset: const Offset(0, 2),
-                                                  ),
-                                                ],
+                );
+              },
+            ),
+            // Comment and Image Upload Section
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _commentController,
+                      decoration: InputDecoration(
+                        hintText: "Write a comment...",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        suffixIcon: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.star),
+                              color: Colors.amber,
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return StatefulBuilder(
+                                      builder: (context, setState) {
+                                        return AlertDialog(
+                                          title:
+                                              const Text("Rate this product"),
+                                          content: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Slider(
+                                                value: _userRating,
+                                                min: 1.0,
+                                                max: 5.0,
+                                                divisions: 4,
+                                                label: _userRating.toString(),
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    _userRating = value;
+                                                  });
+                                                },
                                               ),
-                                              child: const Center(
-                                                child: Text(
-                                                  "OK",
-                                                  style: TextStyle(
-                                                      color: Colors.white),
+                                              Text(
+                                                  "Rating: ${_userRating.toStringAsFixed(1)}"),
+                                            ],
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 16,
+                                                        vertical: 8),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.deepPurple
+                                                      .withOpacity(0.7),
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.black
+                                                          .withOpacity(0.3),
+                                                      blurRadius: 4,
+                                                      offset:
+                                                          const Offset(0, 2),
+                                                    ),
+                                                  ],
+                                                ),
+                                                child: const Center(
+                                                  child: Text(
+                                                    "OK",
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                          // if (_selectedImage != null)
-                          //   IconButton(
-                          //     icon: const Icon(Icons.photo),
-                          //     onPressed: () {
-                          //       // Handle image preview or removal
-                          //       setState(() {
-                          //         _selectedImage = null;
-                          //       });
-                          //     },
-                          //   ),
-                          IconButton(
-                            icon: Icon(
-                              Icons.photo,
-                              color: Colors.black.withOpacity(0.5),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                );
+                              },
                             ),
-                            onPressed: _pickImage,
-                          ),
-                          IconButton(
-                            icon: const Icon(
-                              Icons.send,
-                              color: Colors.blueAccent,
+                            IconButton(
+                              icon: Icon(
+                                Icons.photo,
+                                color: Colors.black.withOpacity(0.5),
+                              ),
+                              onPressed: _pickImage,
                             ),
-                            onPressed: _submitReview,
-                          ),
-                        ],
+                            IconButton(
+                              icon: const Icon(
+                                Icons.send,
+                                color: Colors.deepPurple,
+                              ),
+                              onPressed: _submitReview,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
