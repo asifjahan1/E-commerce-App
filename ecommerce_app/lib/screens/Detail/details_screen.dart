@@ -215,7 +215,7 @@ class _DetailScreenState extends State<DetailScreen> {
             ),
           ),
           Positioned(
-            bottom: isTablet ? 482 : 462,
+            bottom: isTablet ? 482 : 350,
             right: 0,
             child: FloatingActionButton(
               backgroundColor: Colors.white.withOpacity(0.6),
@@ -234,7 +234,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     width: 60,
                     height: 60,
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.5),
+                      color: Colors.transparent,
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Icon(
