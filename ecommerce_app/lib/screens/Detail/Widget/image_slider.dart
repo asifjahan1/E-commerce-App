@@ -10,6 +10,7 @@ class MyImageSlider extends StatelessWidget {
     required this.image,
     required this.onChange,
     required this.pageController,
+    required double height,
   });
 
   @override

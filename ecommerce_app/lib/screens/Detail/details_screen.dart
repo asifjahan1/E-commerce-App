@@ -84,6 +84,9 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var screenSize = MediaQuery.of(context).size;
+    bool isTablet = screenSize.width > 600;
+
     final cartProvider = CartProvider.of(context, listen: false);
     return Scaffold(
       backgroundColor: kcontentColor,
@@ -115,8 +118,11 @@ class _DetailScreenState extends State<DetailScreen> {
                     });
                   },
                   pageController: _pageController,
+                  // Responsive height for different devices
+                  height: isTablet
+                      ? screenSize.height * 0.5
+                      : screenSize.height * 0.4,
                 ),
-                // Existing code...
                 const SizedBox(height: 20),
                 Container(
                   width: double.infinity,
@@ -127,70 +133,64 @@ class _DetailScreenState extends State<DetailScreen> {
                       topLeft: Radius.circular(40),
                     ),
                   ),
-                  padding: const EdgeInsets.only(
-                    left: 20,
-                    right: 20,
-                    top: 20,
-                    bottom: 100,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isTablet ? 40 : 20,
+                    vertical: isTablet ? 30 : 20,
                   ),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ItemsDetails(product: widget.product),
-                        const SizedBox(height: 20),
-                        // Color selection
-                        const Text(
-                          "Color",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22,
-                          ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ItemsDetails(product: widget.product),
+                      const SizedBox(height: 20),
+                      const Text(
+                        "Color",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22,
                         ),
-                        const SizedBox(height: 20),
-                        Row(
-                          children: List.generate(
-                            widget.product.colors.length,
-                            (index) => GestureDetector(
-                              onTap: () {
-                                updateSelectedColor(index);
-                              },
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 1000),
-                                width: 40,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: currentColor == index
-                                      ? Colors.white
-                                      : widget.product.colors[index],
-                                  border: currentColor == index
-                                      ? Border.all(
-                                          color: widget.product.colors[index],
-                                        )
-                                      : null,
-                                ),
-                                padding: currentColor == index
-                                    ? const EdgeInsets.all(2)
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        children: List.generate(
+                          widget.product.colors.length,
+                          (index) => GestureDetector(
+                            onTap: () {
+                              updateSelectedColor(index);
+                            },
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 1000),
+                              width: isTablet ? 50 : 40,
+                              height: isTablet ? 50 : 40,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: currentColor == index
+                                    ? Colors.white
+                                    : widget.product.colors[index],
+                                border: currentColor == index
+                                    ? Border.all(
+                                        color: widget.product.colors[index],
+                                      )
                                     : null,
-                                margin: const EdgeInsets.only(right: 10),
-                                child: Container(
-                                  width: 35,
-                                  height: 35,
-                                  decoration: BoxDecoration(
-                                    color: widget.product.colors[index],
-                                    shape: BoxShape.circle,
-                                  ),
+                              ),
+                              padding: currentColor == index
+                                  ? const EdgeInsets.all(2)
+                                  : null,
+                              margin: const EdgeInsets.only(right: 10),
+                              child: Container(
+                                width: isTablet ? 45 : 35,
+                                height: isTablet ? 45 : 35,
+                                decoration: BoxDecoration(
+                                  color: widget.product.colors[index],
+                                  shape: BoxShape.circle,
                                 ),
                               ),
                             ),
                           ),
                         ),
-                        // ... other code
-                        const SizedBox(height: 25),
-                        Description(description: widget.product.description),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 25),
+                      Description(description: widget.product.description),
+                    ],
                   ),
                 ),
               ],
@@ -198,7 +198,6 @@ class _DetailScreenState extends State<DetailScreen> {
           ),
         ),
       ),
-      // Adding Stack to handle multiple FABs
       floatingActionButton: Stack(
         children: [
           Positioned(
@@ -215,9 +214,8 @@ class _DetailScreenState extends State<DetailScreen> {
               ),
             ),
           ),
-          // Shopping cart FAB at the bottom-right corner
           Positioned(
-            bottom: 462,
+            bottom: isTablet ? 482 : 462,
             right: 0,
             child: FloatingActionButton(
               backgroundColor: Colors.white.withOpacity(0.6),
@@ -269,7 +267,7 @@ class _DetailScreenState extends State<DetailScreen> {
                           position:
                               badges.BadgePosition.topEnd(top: -8, end: -8),
                           badgeContent: Text(
-                            '${cartProvider.cart.length}', // Displaying the cart count
+                            '${cartProvider.cart.length}',
                             style: const TextStyle(color: Colors.white),
                           ),
                           showBadge: cartProvider.cart.isNotEmpty,
