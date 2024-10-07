@@ -56,7 +56,17 @@ class _ProductSearchScreenState extends State<ProductSearchScreen> {
                         title: Text(product.title),
                         subtitle: Text(product.description),
                         leading: Image.asset(product.image),
-                        trailing: Text('\$${product.price}'),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Assuming priceBDT and priceAED are non-nullable
+                            Text('৳${product.priceBDT.toStringAsFixed(2)}'),
+                            if (product.priceAED >
+                                0) // Assuming priceAED is not nullable and > 0
+                              Text(
+                                  ' د.إ${product.priceAED.toStringAsFixed(2)}'),
+                          ],
+                        ),
                       );
                     },
                   ),

@@ -7,6 +7,8 @@ class CartProvider extends ChangeNotifier {
   final List<Product> _cart = [];
   List<Product> get cart => _cart;
 
+  String userLocationCurrency = 'BDT'; // Default currency
+
   void toggleFavorite(Product product) {
     if (_cart.contains(product)) {
       for (Product element in _cart) {
@@ -34,7 +36,10 @@ class CartProvider extends ChangeNotifier {
   double totalPrice() {
     double myTotal = 0.0;
     for (Product element in _cart) {
-      myTotal += element.price * element.quantity;
+      // Use the price based on the user's location currency
+      double price =
+          userLocationCurrency == 'AED' ? element.priceAED : element.priceBDT;
+      myTotal += price * element.quantity;
     }
     return myTotal;
   }
@@ -51,15 +56,20 @@ class CartProvider extends ChangeNotifier {
     );
   }
 
-  incrementQtn(int index) {
+  void incrementQtn(int index) {
     _cart[index].quantity++;
     notifyListeners();
   }
 
-  decrementQtn(int index) {
+  void decrementQtn(int index) {
     if (_cart[index].quantity > 1) {
       _cart[index].quantity--;
     }
+    notifyListeners();
+  }
+
+  void updateCurrency(String currency) {
+    userLocationCurrency = currency; // Update currency based on user location
     notifyListeners();
   }
 }

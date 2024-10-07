@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/models/product_model.dart';
@@ -32,7 +34,9 @@ class _ItemsDetailsState extends State<ItemsDetails> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "\$${widget.product.price}",
+                  widget.product.priceBDT != null
+                      ? "৳${widget.product.priceBDT.toStringAsFixed(2)}"
+                      : "د.إ${widget.product.priceAED.toStringAsFixed(2)}",
                   style: const TextStyle(
                     fontWeight: FontWeight.w800,
                     fontSize: 25,
@@ -41,7 +45,6 @@ class _ItemsDetailsState extends State<ItemsDetails> {
                 const SizedBox(height: 10),
                 GestureDetector(
                   onTap: () {
-                    // Navigate to ReviewsAndRatingsPage
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -56,7 +59,7 @@ class _ItemsDetailsState extends State<ItemsDetails> {
                       StreamBuilder<QuerySnapshot>(
                         stream: FirebaseFirestore.instance
                             .collection('products')
-                            .doc(widget.product.id) // Product's ID
+                            .doc(widget.product.id)
                             .collection('reviews')
                             .snapshots(),
                         builder: (context, snapshot) {

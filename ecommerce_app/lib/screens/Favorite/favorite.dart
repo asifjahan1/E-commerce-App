@@ -1,7 +1,10 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:ecommerce_app/Provider/favorite_provider.dart';
 import 'package:ecommerce_app/screens/Detail/details_screen.dart';
 import 'package:flutter/material.dart';
 import '../../constants.dart';
+import 'package:ecommerce_app/models/product_model.dart';
 
 class Favorite extends StatefulWidget {
   const Favorite({super.key});
@@ -11,7 +14,7 @@ class Favorite extends StatefulWidget {
 }
 
 class _FavoriteState extends State<Favorite> {
-  // refresh action
+  // Refresh action
   Future<void> _refreshProducts() async {
     await Future.delayed(const Duration(seconds: 2));
     setState(() {});
@@ -20,7 +23,7 @@ class _FavoriteState extends State<Favorite> {
   @override
   Widget build(BuildContext context) {
     final provider = FavoriteProvider.of(context);
-    final finalList = provider.favorites;
+    final List<Product> finalList = provider.favorites;
     return Scaffold(
       backgroundColor: kcontentColor,
       appBar: AppBar(
@@ -30,6 +33,7 @@ class _FavoriteState extends State<Favorite> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
+        automaticallyImplyLeading: false,
       ),
       body: RefreshIndicator(
         onRefresh: _refreshProducts,
@@ -44,7 +48,7 @@ class _FavoriteState extends State<Favorite> {
               child: ListView.builder(
                 itemCount: finalList.length,
                 itemBuilder: (context, index) {
-                  final favoriteItems = finalList[index];
+                  final Product favoriteItems = finalList[index];
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -103,7 +107,9 @@ class _FavoriteState extends State<Favorite> {
                                     ),
                                     const SizedBox(height: 10),
                                     Text(
-                                      "\$${favoriteItems.price}",
+                                      favoriteItems.priceBDT != null
+                                          ? "৳${favoriteItems.priceBDT.toStringAsFixed(2)}"
+                                          : "د.إ${favoriteItems.priceAED.toStringAsFixed(2)}",
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 14,
@@ -115,13 +121,12 @@ class _FavoriteState extends State<Favorite> {
                             ),
                           ),
                         ),
-                        // for delete button
                         Positioned(
                           top: 50,
                           right: 35,
                           child: GestureDetector(
                             onTap: () {
-                              finalList.removeAt(index);
+                              provider.toggleFavorite(favoriteItems);
                               setState(() {});
                             },
                             child: const Icon(

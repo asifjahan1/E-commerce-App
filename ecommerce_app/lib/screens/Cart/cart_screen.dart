@@ -1,9 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:ecommerce_app/screens/Detail/details_screen.dart';
-// import 'package:ecommerce_app/screens/nav_bar_screen.dart';
+// ignore_for_file: unused_field
+
 import 'package:ecommerce_app/Provider/add_to_cart_provider.dart';
-import 'package:ecommerce_app/screens/Cart/check_out.dart';
 import 'package:ecommerce_app/constants.dart';
+import 'package:ecommerce_app/screens/Cart/check_out.dart';
+import 'package:ecommerce_app/screens/Detail/details_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -13,7 +15,52 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  // Function to build quantity buttons
+  String _currency = 'BDT';
+  double _conversionRate = 0.0;
+  final CurrencyConverter _currencyConverter = CurrencyConverter();
+
+  @override
+  void initState() {
+    super.initState();
+    _determinePosition();
+  }
+
+  Future<void> _determinePosition() async {
+    Position position;
+    try {
+      position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      _setCurrencyBasedOnLocation(position.latitude, position.longitude);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _setCurrencyBasedOnLocation(double latitude, double longitude) async {
+    if (latitude >= 20.0 &&
+        latitude <= 27.0 &&
+        longitude >= 88.0 &&
+        longitude <= 93.0) {
+      setState(() {
+        _currency = 'BDT';
+        _conversionRate = 1.0;
+      });
+    } else if (latitude >= 22.0 &&
+        latitude <= 26.0 &&
+        longitude >= 54.0 &&
+        longitude <= 56.0) {
+      setState(() {
+        _currency = 'AED';
+      });
+      _conversionRate = await _currencyConverter.getRate('BDT');
+    } else {
+      setState(() {
+        _currency = 'USD';
+        _conversionRate = 1.0;
+      });
+    }
+  }
+
   Widget _buildQuantityButton(IconData icon, void Function() onPressed) {
     return GestureDetector(
       onTap: onPressed,
@@ -37,6 +84,16 @@ class _CartScreenState extends State<CartScreen> {
 
     Widget buildCartItem(BuildContext context, int index) {
       final cartItem = finalList[index];
+
+      String priceText;
+      if (_currency == 'BDT') {
+        priceText = "BDT ${cartItem.priceBDT.toStringAsFixed(2)}";
+      } else if (_currency == 'AED') {
+        double priceInAED = cartItem.priceAED;
+        priceText = "AED ${priceInAED.toStringAsFixed(2)}";
+      } else {
+        priceText = "USD ${cartItem.priceBDT.toStringAsFixed(2)}";
+      }
 
       return GestureDetector(
         onTap: () {
@@ -94,28 +151,12 @@ class _CartScreenState extends State<CartScreen> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          Column(
-                            // amake show korte hobe jokhon location a BD thakbe tokhon BDT show korbe
-                            // otherwise AED show korbe or other country
-                            // jodi other country show kore tahole amake rate onujayi hisheb korte hobe
-                            children: [
-                              Text(
-                                "BDT ${cartItem.price}",
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),
-                              ),
-                              const SizedBox(height: 5),
-                              Text(
-                                "AED ${cartItem.price}",
-                                style: const TextStyle(
-                                  color: Colors.black54,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
+                          Text(
+                            priceText,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
                           ),
                         ],
                       ),
@@ -187,26 +228,8 @@ class _CartScreenState extends State<CartScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(width: 25),
-                  // IconButton(
-                  //   style: IconButton.styleFrom(
-                  //     backgroundColor: Colors.white,
-                  //     padding: const EdgeInsets.all(15),
-                  //   ),
-                  //   onPressed: () {
-                  //     Navigator.of(context).pushAndRemoveUntil(
-                  //       MaterialPageRoute(
-                  //         builder: (context) =>
-                  //             const BottomNavBar(initialIndex: 2),
-                  //       ),
-                  //       (route) => false,
-                  //     );
-                  //   },
-                  //   icon: const Icon(
-                  //     Icons.arrow_back_ios,
-                  //   ),
-                  // ),
                   Text(
-                    "My Cart",
+                    "Cart",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 25,

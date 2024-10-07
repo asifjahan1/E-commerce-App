@@ -20,6 +20,7 @@ class _CategoryState extends State<Category> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
+        automaticallyImplyLeading: false,
       ),
     );
   }
