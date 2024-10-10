@@ -30,11 +30,11 @@ class _DescriptionState extends State<Description> {
               },
             ),
             _buildTabButton(
-              title: "Specification",
-              isSelected: selectedTab == "Specification",
+              title: "Terms & Conditions",
+              isSelected: selectedTab == "Terms & Conditions",
               onPressed: () {
                 setState(() {
-                  selectedTab = "Specification";
+                  selectedTab = "Terms & Conditions";
                 });
               },
             ),
@@ -87,11 +87,20 @@ class _DescriptionState extends State<Description> {
 
   Widget _buildTabContent() {
     switch (selectedTab) {
-      case "Specification":
+      case "Terms & Conditions":
         return const Text(
-          "Here are the product specifications...",
+          "Dear Customer, we try our best from our end to provide you the best customer experience.\n\n"
+          "The delivery of your order is subjected to availability of stock.\n\n"
+          "Check and receive your product in front of the delivery man. If your product is damaged, defective, incorrect or has any mismatch in size or pricing issue at the time of delivery, please return it immediately to the delivery person.\n\n"
+          "For any assistance, you can call our customer service at 01874392463. (9.00am to 9.00pm except Govt. holidays) But in case if you couldn't reach the customer service, you can provide your issue details after selecting the proper issue section in our Report Issue Section.\n\n"
+          "Ordering Policy\n"
+          "Service is only available for articles (products) which are shown in stock on our website. "
+          "The delivery of your order is subjected to availability of stock. Only one product should be booked in one order, in case of any customer needs to order multiple products or same products in multiple quantity, customers will need to place multiple separate orders. "
+          "Currently, each order will be shipped only to a single destination address. If customers wish to ship products to different addresses, customers will need to place multiple separate orders. Orders that are paid for cannot be cancelled. "
+          "For Order related queries, please kindly contact our Customer Service at 01874392463. (9.00am to 9.00pm except Govt. holidays).\n\n",
+          // Continue adding more terms as needed...
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 18,
             color: Colors.grey,
           ),
         );
