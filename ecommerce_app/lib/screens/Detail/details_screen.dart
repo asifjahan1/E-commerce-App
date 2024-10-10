@@ -189,7 +189,10 @@ class _DetailScreenState extends State<DetailScreen> {
                         ),
                       ),
                       const SizedBox(height: 25),
-                      Description(description: widget.product.description),
+                      Description(
+                        description: widget.product.description,
+                        // productId: widget.product.id,
+                      ),
                     ],
                   ),
                 ),

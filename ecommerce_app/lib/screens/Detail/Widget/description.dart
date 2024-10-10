@@ -1,10 +1,18 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:ecommerce_app/constants.dart';
+// import 'package:ecommerce_app/screens/Detail/Widget/review_rating.dart';
 import 'package:flutter/material.dart';
 
 class Description extends StatefulWidget {
   final String description;
+  // final String productId;
 
-  const Description({super.key, required this.description});
+  const Description({
+    super.key,
+    required this.description,
+    // required this.productId,
+  });
 
   @override
   _DescriptionState createState() => _DescriptionState();
@@ -114,12 +122,18 @@ class _DescriptionState extends State<Description> {
 
       case "Review":
         return const Text(
-          "Here are the product reviews...",
+          "Add ReviewsAndRatingsPage section, I need to implement their name, ratings, comment and photo.",
           style: TextStyle(
-            fontSize: 16,
             color: Colors.grey,
+            fontSize: 14,
           ),
         );
+      // return SizedBox(
+      //   height: 400,
+      //   child: ReviewsAndRatingsPage(
+      //     productId: widget.productId,
+      //   ),
+      // );
       default:
         return Text(
           widget.description,
