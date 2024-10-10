@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'package:ecommerce_app/Provider/add_to_cart_provider.dart';
 import 'package:ecommerce_app/screens/nav_bar_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/models/product_model.dart';
@@ -12,6 +13,7 @@ import 'package:ecommerce_app/screens/Detail/Widget/description.dart';
 import 'package:ecommerce_app/screens/Detail/Widget/detail_app_bar.dart';
 import 'package:ecommerce_app/screens/Detail/Widget/items_details.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 class DetailScreen extends StatefulWidget {
@@ -98,106 +100,101 @@ class _DetailScreenState extends State<DetailScreen> {
           color: kprimaryColor,
           strokeWidth: 3,
           displacement: 40,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Builder(
-                  builder: (BuildContext context) {
-                    return DetailAppBar(
-                      product: widget.product,
-                      updateCartCount: updateCartItemCount,
-                    );
-                  },
-                ),
-                MyImageSlider(
-                  image: widget.product.image,
-                  onChange: (index) {
-                    setState(() {
-                      currentImage = index;
-                    });
-                  },
-                  pageController: _pageController,
-                  // Responsive height for different devices
-                  height: isTablet
-                      ? screenSize.height * 0.5
-                      : screenSize.height * 0.4,
-                ),
-                const SizedBox(height: 20),
-                Container(
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(40),
-                      topLeft: Radius.circular(40),
-                    ),
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: isTablet ? 40 : 20,
-                    vertical: isTablet ? 30 : 20,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ItemsDetails(product: widget.product),
-                      const SizedBox(height: 20),
-                      const Text(
-                        "Color",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22,
-                        ),
+          child: Column(
+            children: [
+              DetailAppBar(
+                product: widget.product,
+                updateCartCount: updateCartItemCount,
+              ),
+              MyImageSlider(
+                image: widget.product.image,
+                onChange: (index) {
+                  setState(() {
+                    currentImage = index;
+                  });
+                },
+                pageController: _pageController,
+                height: isTablet
+                    ? screenSize.height * 0.5
+                    : screenSize.height * 0.4,
+              ),
+              const SizedBox(height: 20),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Container(
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(40),
+                        topLeft: Radius.circular(40),
                       ),
-                      const SizedBox(height: 20),
-                      Row(
-                        children: List.generate(
-                          widget.product.colors.length,
-                          (index) => GestureDetector(
-                            onTap: () {
-                              updateSelectedColor(index);
-                            },
-                            child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 1000),
-                              width: isTablet ? 50 : 40,
-                              height: isTablet ? 50 : 40,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: currentColor == index
-                                    ? Colors.white
-                                    : widget.product.colors[index],
-                                border: currentColor == index
-                                    ? Border.all(
-                                        color: widget.product.colors[index],
-                                      )
-                                    : null,
-                              ),
-                              padding: currentColor == index
-                                  ? const EdgeInsets.all(2)
-                                  : null,
-                              margin: const EdgeInsets.only(right: 10),
-                              child: Container(
-                                width: isTablet ? 45 : 35,
-                                height: isTablet ? 45 : 35,
+                    ),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isTablet ? 40 : 20,
+                      vertical: isTablet ? 30 : 20,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ItemsDetails(product: widget.product),
+                        const SizedBox(height: 20),
+                        const Text(
+                          "Color",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          children: List.generate(
+                            widget.product.colors.length,
+                            (index) => GestureDetector(
+                              onTap: () {
+                                updateSelectedColor(index);
+                              },
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 1000),
+                                width: isTablet ? 50 : 40,
+                                height: isTablet ? 50 : 40,
                                 decoration: BoxDecoration(
-                                  color: widget.product.colors[index],
                                   shape: BoxShape.circle,
+                                  color: currentColor == index
+                                      ? Colors.white
+                                      : widget.product.colors[index],
+                                  border: currentColor == index
+                                      ? Border.all(
+                                          color: widget.product.colors[index],
+                                        )
+                                      : null,
+                                ),
+                                padding: currentColor == index
+                                    ? const EdgeInsets.all(2)
+                                    : null,
+                                margin: const EdgeInsets.only(right: 10),
+                                child: Container(
+                                  width: isTablet ? 45 : 35,
+                                  height: isTablet ? 45 : 35,
+                                  decoration: BoxDecoration(
+                                    color: widget.product.colors[index],
+                                    shape: BoxShape.circle,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 25),
-                      Description(
-                        description: widget.product.description,
-                        // productId: widget.product.id,
-                      ),
-                    ],
+                        const SizedBox(height: 25),
+                        Description(
+                          description: widget.product.description,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
