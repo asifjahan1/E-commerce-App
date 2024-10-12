@@ -119,52 +119,59 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                       const SizedBox(width: 15),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          widget.email != null
-                              ? Text(
-                                  widget.email!,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    color: kprimaryColor,
-                                    fontStyle: FontStyle.italic,
-                                  ),
-                                )
-                              : _registeredEmail != null
-                                  ? Text(
-                                      _registeredEmail!,
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        color: kprimaryColor,
-                                      ),
-                                    )
-                                  : _registeredPhoneNumber != null
-                                      ? Text(
-                                          _registeredPhoneNumber!,
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                            color: kprimaryColor,
-                                          ),
-                                        )
-                                      : _user != null
-                                          ? Text(
-                                              _user!.email ?? '',
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                                color: kprimaryColor,
-                                                fontStyle: FontStyle.italic,
-                                              ),
-                                            )
-                                          : const Text(
-                                              "No user signed in",
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                color: kprimaryColor,
-                                                fontStyle: FontStyle.italic,
-                                              ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            widget.email != null
+                                ? Text(
+                                    widget.email!,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: kprimaryColor,
+                                      fontStyle: FontStyle.italic,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  )
+                                : _registeredEmail != null
+                                    ? Text(
+                                        _registeredEmail!,
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color: kprimaryColor,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      )
+                                    : _registeredPhoneNumber != null
+                                        ? Text(
+                                            _registeredPhoneNumber!,
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              color: kprimaryColor,
                                             ),
-                        ],
+                                            overflow: TextOverflow.ellipsis,
+                                          )
+                                        : _user != null
+                                            ? Text(
+                                                _user!.email ?? '',
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: kprimaryColor,
+                                                  fontStyle: FontStyle.italic,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                              )
+                                            : const Text(
+                                                "No user signed in",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: kprimaryColor,
+                                                  fontStyle: FontStyle.italic,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                          ],
+                        ),
                       ),
                       const Spacer(),
                       IconButton(
