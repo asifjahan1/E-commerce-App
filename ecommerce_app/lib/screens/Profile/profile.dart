@@ -1,6 +1,7 @@
 // ignore_for_file: unused_element, use_build_context_synchronously
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -119,7 +120,8 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                       const SizedBox(width: 15),
-                      Expanded(
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.5,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -132,6 +134,8 @@ class _ProfileState extends State<Profile> {
                                       fontStyle: FontStyle.italic,
                                     ),
                                     overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    softWrap: false,
                                   )
                                 : _registeredEmail != null
                                     ? Text(
@@ -141,6 +145,8 @@ class _ProfileState extends State<Profile> {
                                           color: kprimaryColor,
                                         ),
                                         overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        softWrap: false,
                                       )
                                     : _registeredPhoneNumber != null
                                         ? Text(
@@ -150,6 +156,7 @@ class _ProfileState extends State<Profile> {
                                               color: kprimaryColor,
                                             ),
                                             overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
                                           )
                                         : _user != null
                                             ? Text(
@@ -160,6 +167,8 @@ class _ProfileState extends State<Profile> {
                                                   fontStyle: FontStyle.italic,
                                                 ),
                                                 overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                                softWrap: false,
                                               )
                                             : const Text(
                                                 "No user signed in",
@@ -169,6 +178,8 @@ class _ProfileState extends State<Profile> {
                                                   fontStyle: FontStyle.italic,
                                                 ),
                                                 overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                                softWrap: false,
                                               ),
                           ],
                         ),
