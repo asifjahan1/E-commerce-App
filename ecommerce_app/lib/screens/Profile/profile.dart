@@ -1,13 +1,12 @@
-// ignore_for_file: unused_element, use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+import 'dart:async'; // For Timer
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ecommerce_app/constants.dart';
-import 'package:ecommerce_app/screens/Profile/Widgets/settings.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/register_mobile.dart';
+import 'package:ecommerce_app/screens/Profile/Widgets/settings.dart';
 import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 
 class Profile extends StatefulWidget {
@@ -22,6 +21,8 @@ class _ProfileState extends State<Profile> {
   User? _user;
   String? _registeredEmail;
   String? _registeredPhoneNumber;
+  OverlayEntry? _overlayEntry;
+  Timer? _overlayTimer;
 
   @override
   void initState() {
@@ -30,28 +31,11 @@ class _ProfileState extends State<Profile> {
     _loadRegisteredInfo();
   }
 
-  // Load current Firebase user
   Future<void> _loadUser() async {
     User? user = FirebaseAuth.instance.currentUser;
     setState(() {
       _user = user;
     });
-  }
-
-  Future<void> _storeEmail(String email) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('registeredEmail', email);
-    if (kDebugMode) {
-      print('Stored Email: $email');
-    }
-  }
-
-  Future<void> _storePhoneNumber(String phoneNumber) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('registeredPhoneNumber', phoneNumber);
-    if (kDebugMode) {
-      print('Stored Phone Number: $phoneNumber');
-    }
   }
 
   Future<void> _loadRegisteredInfo() async {
@@ -78,11 +62,48 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  // refresh action for user profile
-  Future<void> _refreshProducts() async {
-    await Future.delayed(const Duration(seconds: 2));
-    await _loadUser();
-    await _loadRegisteredInfo();
+  void _showEmailOverlay(BuildContext context, String email, Offset position) {
+    _removeOverlay();
+
+    _overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        left: position.dx,
+        top: position.dy - 30,
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.horizontal(),
+            ),
+            child: Text(
+              email,
+              style: const TextStyle(
+                color: Colors.black87,
+                fontSize: 12,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    Overlay.of(context).insert(_overlayEntry!);
+    _overlayTimer = Timer(const Duration(milliseconds: 1200), _removeOverlay);
+  }
+
+  void _removeOverlay() {
+    _overlayTimer?.cancel();
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+  }
+
+  @override
+  void dispose() {
+    _overlayTimer?.cancel();
+    super.dispose();
   }
 
   @override
@@ -122,66 +143,41 @@ class _ProfileState extends State<Profile> {
                       const SizedBox(width: 15),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.5,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            widget.email != null
-                                ? Text(
-                                    widget.email!,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      color: kprimaryColor,
-                                      fontStyle: FontStyle.italic,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    softWrap: false,
-                                  )
-                                : _registeredEmail != null
-                                    ? Text(
-                                        _registeredEmail!,
-                                        style: const TextStyle(
-                                          fontSize: 12,
-                                          color: kprimaryColor,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                        softWrap: false,
-                                      )
-                                    : _registeredPhoneNumber != null
-                                        ? Text(
-                                            _registeredPhoneNumber!,
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              color: kprimaryColor,
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                          )
-                                        : _user != null
-                                            ? Text(
-                                                _user!.email ?? '',
-                                                style: const TextStyle(
-                                                  fontSize: 14,
-                                                  color: kprimaryColor,
-                                                  fontStyle: FontStyle.italic,
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 1,
-                                                softWrap: false,
-                                              )
-                                            : const Text(
-                                                "No user signed in",
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: kprimaryColor,
-                                                  fontStyle: FontStyle.italic,
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 1,
-                                                softWrap: false,
-                                              ),
-                          ],
+                        child: GestureDetector(
+                          onTapDown: (TapDownDetails details) {
+                            final emailToShow = widget.email ??
+                                _registeredEmail ??
+                                _registeredPhoneNumber ??
+                                _user?.email;
+
+                            if (emailToShow != null && emailToShow.isNotEmpty) {
+                              _showEmailOverlay(
+                                context,
+                                emailToShow,
+                                details.globalPosition,
+                              );
+                            }
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.email ??
+                                    _registeredEmail ??
+                                    _registeredPhoneNumber ??
+                                    _user?.email ??
+                                    "No user signed in",
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: kprimaryColor,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                softWrap: false,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       const Spacer(),
@@ -208,7 +204,6 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                // Show "Login / SignUp" button if no user is signed in
                 if (_registeredEmail == null &&
                     _registeredPhoneNumber == null &&
                     _user == null)
@@ -217,13 +212,11 @@ class _ProfileState extends State<Profile> {
                       children: [
                         MaterialButton(
                           onPressed: () async {
-                            // Navigate to RegisterMobile and wait for the result
                             await Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => const RegisterMobile(),
                               ),
                             );
-                            // Once logged in, refresh user data
                             _refreshProducts();
                           },
                           color: kprimaryColor,
@@ -248,5 +241,11 @@ class _ProfileState extends State<Profile> {
         ),
       ),
     );
+  }
+
+  Future<void> _refreshProducts() async {
+    await Future.delayed(const Duration(seconds: 2));
+    await _loadUser();
+    await _loadRegisteredInfo();
   }
 }
