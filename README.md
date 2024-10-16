@@ -6,7 +6,7 @@
 
 | Home Page | Details Screen | Cart Screen |
 |------|-------|-------|
-|<img src="https://github.com/user-attachments/assets/68a4780e-afa3-4daa-bbd6-152aac4cad38" width="250">|<img src="https://github.com/user-attachments/assets/8522a717-a1b9-4dfa-b736-7e8346700fd8" width="250">|<img src="https://github.com/user-attachments/assets/6b2f845a-c64d-45a4-b0fd-9b2a80c0b8a2" width="250">|
+|<img src="https://github.com/user-attachments/assets/68a4780e-afa3-4daa-bbd6-152aac4cad38" width="250">|<img src="https://github.com/user-attachments/assets/b7a37681-140d-4058-afd2-4bc6a7345a8a" width="250">|<img src="https://github.com/user-attachments/assets/6b2f845a-c64d-45a4-b0fd-9b2a80c0b8a2" width="250">|
 
 | Payment Method Screen | bKash Payment  | Card Payment |
 |------|-------|-------|
