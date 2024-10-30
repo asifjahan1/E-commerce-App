@@ -1,3 +1,13 @@
 {
-    "cmake.configureOnOpen": false
+    "cmake.configureOnOpen": false,
+    "[dart]": {
+        "editor.formatOnSave": false,
+        "editor.formatOnType": false,
+        "editor.formatOnPaste": false
+    },
+    "html.format.enable": false,
+    "githubPullRequests.ignoredPullRequestBranches": [
+        "master"
+    ],
+    "files.trimTrailingWhitespace": true
 }

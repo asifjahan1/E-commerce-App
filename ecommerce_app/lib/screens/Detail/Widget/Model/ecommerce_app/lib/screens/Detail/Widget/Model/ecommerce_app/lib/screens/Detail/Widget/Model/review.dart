@@ -39,6 +39,7 @@
 //     );
 //   }
 // }
+<<<<<<< HEAD:review.dart
 //
 //
 //
@@ -76,3 +77,5 @@ class Product {
     this.reviews = const [],
   });
 }
+=======
+>>>>>>> 270886c742815687970fe022d773a05d4dbb759f:ecommerce_app/lib/screens/Detail/Widget/Model/ecommerce_app/lib/screens/Detail/Widget/Model/review.dart

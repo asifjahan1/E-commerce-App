@@ -39,3 +39,40 @@
 //     );
 //   }
 // }
+//
+//
+//
+//
+class Review {
+  final String userName;
+  final double rating;
+  final String comment;
+  final String? photoUrl;
+
+  Review({
+    required this.userName,
+    required this.rating,
+    required this.comment,
+    this.photoUrl,
+  });
+}
+
+class Product {
+  final String id;
+  final String title;
+  final String description;
+  final List<String> colors;
+  final List<String> images;
+  final double price;
+  final List<Review> reviews;
+
+  Product({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.colors,
+    required this.images,
+    required this.price,
+    this.reviews = const [],
+  });
+}
