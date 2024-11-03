@@ -4,6 +4,7 @@ import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/mobile_forgot_password.dart';
+import 'package:rive/rive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/register_mobile.dart';
 
@@ -15,10 +16,17 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  StateMachineController? controller;
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
   bool _isValidInput = false;
+
+  // Rive animation state machine inputs
+  SMIInput<bool>? isChecking;
+  SMIInput<bool>? isHandsUp;
+  SMIInput<bool>? trigSuccess;
+  SMIInput<bool>? trigFail;
 
   @override
   void initState() {
@@ -39,6 +47,13 @@ class _LoginScreenState extends State<LoginScreen> {
       _isValidInput = _phoneNumberController.text.isNotEmpty &&
           _passwordController.text.isNotEmpty &&
           _isValidPhoneNumber(_phoneNumberController.text);
+
+      if (isChecking != null) {
+        isChecking?.change(!_isValidInput);
+      }
+      if (isHandsUp != null) {
+        isHandsUp?.change(_isValidInput);
+      }
     });
   }
 
@@ -63,12 +78,15 @@ class _LoginScreenState extends State<LoginScreen> {
       await prefs.setBool('isLoggedIn', true);
       await prefs.setString('loginTime', DateTime.now().toIso8601String());
 
+      if (trigSuccess != null) trigSuccess?.change(true);
+
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => const BottomNavBar(initialIndex: 4),
         ),
       );
     } else {
+      if (trigFail != null) trigFail?.change(true);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Invalid phone number or password')),
       );
@@ -90,6 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kcontentColor,
@@ -117,100 +136,138 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         centerTitle: true,
       ),
-      body: SafeArea(
-        child: Container(
-          width: double.infinity,
-          height: double.infinity,
-          color: kcontentColor,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-          child: Column(
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextField(
-                      controller: _phoneNumberController,
-                      decoration: InputDecoration(
-                        hintText: "Enter your mobile number",
-                        helperText: "e.g: +8801234567890, +97121234567",
-                        helperStyle: const TextStyle(
-                          color: Colors.grey,
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: kprimaryColor,
-                            width: 1.5,
-                          ),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                      ),
+      body: SingleChildScrollView(
+        child: SizedBox(
+          width: size.width,
+          height: size.height,
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                    // Rive animation
+                    SizedBox(
+                    width: size.width,
+                    height: 200,
+                    child: RiveAnimation.asset(
+                      "images/animated_login_character.riv",
+                      stateMachines: const ["Login Machine"],
+                      onInit: (artboard) {
+                        controller = StateMachineController.fromArtboard(artboard, "Login Machine");
+                        if (controller == null) return;
+
+                        artboard.addController(controller!);
+                        isChecking = controller?.findInput("isChecking");
+                        isHandsUp = controller?.findInput("isHandsUp");
+                        trigSuccess = controller?.findInput("trigSuccess");
+                        trigFail = controller?.findInput("trigFail");
+                      },
                     ),
-                    const SizedBox(height: 20),
-                    TextField(
-                      controller: _passwordController,
-                      decoration: InputDecoration(
-                        hintText: "Enter your password",
-                        border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: kprimaryColor,
-                            width: 1.5,
+                  ),
+                  const SizedBox(height: 10),
+                      TextField(
+                        onChanged: (value) {
+                      if (isHandsUp != null) {
+                        isHandsUp!.change(false);
+                      }
+                      if (isChecking == null) return;
+
+                      isChecking!.change(true);
+                    },
+                    keyboardType: TextInputType.emailAddress,
+                        controller: _phoneNumberController,
+                        decoration: InputDecoration(
+                          hintText: "Enter your mobile number",
+                          helperText: "e.g: +8801234567890, +97121234567",
+                          helperStyle: const TextStyle(
+                            color: Colors.grey,
                           ),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                      ),
-                      obscureText: true,
-                    ),
-                    const SizedBox(height: 2),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          onPressed: _resetPassword,
-                          child: const Text(
-                            "Forgot Password?",
-                            style: TextStyle(
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
                               color: kprimaryColor,
-                              fontWeight: FontWeight.bold,
-                              fontStyle: FontStyle.italic,
+                              width: 1.5,
                             ),
+                            borderRadius: BorderRadius.circular(10.0),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    MaterialButton(
-                      onPressed: _isValidInput && !_isLoading ? _login : null,
-                      color: kprimaryColor,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.horizontal(
-                          left: Radius.circular(10),
-                          right: Radius.circular(10),
+                          filled: true,
+                          fillColor: Colors.white,
                         ),
                       ),
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: _isLoading
-                          ? const CircularProgressIndicator(
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(Colors.white),
-                            )
-                          : const Text(
-                              "Login",
+                      const SizedBox(height: 20),
+                      TextField(
+                        onChanged: (value) {
+                      if (isChecking != null) {
+                        isChecking!.change(false);
+                      }
+                      if (isHandsUp == null) return;
+
+                      isHandsUp!.change(true);
+                    },
+                        controller: _passwordController,
+                        decoration: InputDecoration(
+                          hintText: "Enter your password",
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: kprimaryColor,
+                              width: 1.5,
+                              ),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                        obscureText: true,
+                      ),
+                      const SizedBox(height: 2),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            onPressed: _resetPassword,
+                            child: const Text(
+                              "Forgot Password?",
                               style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 17,
+                                color: kprimaryColor,
                                 fontWeight: FontWeight.bold,
+                                fontStyle: FontStyle.italic,
                               ),
                             ),
-                    ),
-                  ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      MaterialButton(
+                        onPressed: _isValidInput && !_isLoading ? _login : null,
+                        color: kprimaryColor,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.horizontal(
+                            left: Radius.circular(10),
+                            right: Radius.circular(10),
+                          ),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: _isLoading
+                            ? const CircularProgressIndicator(
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
+                              )
+                            : const Text(
+                                "Login",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
