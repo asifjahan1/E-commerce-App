@@ -26,7 +26,7 @@ class _AddToCartState extends State<AddToCart> {
   int currentIndex = 1;
   bool isAddedToCart = false;
   bool isAnimating = false;
-  Key gifKey = UniqueKey(); // Key to reset the GIF
+  Key gifKey = UniqueKey();
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +52,7 @@ class _AddToCartState extends State<AddToCart> {
       child: SizedBox(
         height: 100,
         width: 290,
-        key: gifKey, // Assigning the key here
+        key: gifKey,
         child: Image.asset(
           'images/final order.gif',
           fit: BoxFit.contain,
@@ -125,19 +125,17 @@ class _AddToCartState extends State<AddToCart> {
                 provider.toggleFavorite(widget.product);
 
                 setState(() {
-                  isAnimating = false; // Set to false to remove GIF
+                  isAnimating = false;
                 });
 
-                // Delay to let the widget tree update, then restart the GIF
                 Future.delayed(const Duration(milliseconds: 50), () {
                   setState(() {
-                    gifKey = UniqueKey(); // Update key to reset GIF
+                    gifKey = UniqueKey();
                     isAnimating = true;
                     isAddedToCart = true;
                   });
                 });
 
-                // Reset the animation after 8 seconds
                 Timer(const Duration(seconds: 8), () {
                   setState(() {
                     isAnimating = false;
