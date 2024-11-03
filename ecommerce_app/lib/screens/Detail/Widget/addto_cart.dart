@@ -26,6 +26,7 @@ class _AddToCartState extends State<AddToCart> {
   int currentIndex = 1;
   bool isAddedToCart = false;
   bool isAnimating = false;
+  Key gifKey = UniqueKey(); // Key to reset the GIF
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +52,7 @@ class _AddToCartState extends State<AddToCart> {
       child: SizedBox(
         height: 100,
         width: 290,
+        key: gifKey, // Assigning the key here
         child: Image.asset(
           'images/final order.gif',
           fit: BoxFit.contain,
@@ -122,27 +124,20 @@ class _AddToCartState extends State<AddToCart> {
                 widget.product.quantity = currentIndex;
                 provider.toggleFavorite(widget.product);
 
-                //
-                // ScaffoldMessenger.of(context).showSnackBar(
-                //   const SnackBar(
-                //     backgroundColor: kprimaryColor,
-                //     content: Text(
-                //       "Successfully added!",
-                //       style: TextStyle(
-                //         fontWeight: FontWeight.bold,
-                //         fontSize: 18,
-                //         color: Colors.white,
-                //       ),
-                //     ),
-                //     duration: Duration(seconds: 1),
-                //   ),
-                // );
-
                 setState(() {
-                  isAnimating = true;
-                  isAddedToCart = true;
+                  isAnimating = false; // Set to false to remove GIF
                 });
 
+                // Delay to let the widget tree update, then restart the GIF
+                Future.delayed(const Duration(milliseconds: 50), () {
+                  setState(() {
+                    gifKey = UniqueKey(); // Update key to reset GIF
+                    isAnimating = true;
+                    isAddedToCart = true;
+                  });
+                });
+
+                // Reset the animation after 8 seconds
                 Timer(const Duration(seconds: 8), () {
                   setState(() {
                     isAnimating = false;
