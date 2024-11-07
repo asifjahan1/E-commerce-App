@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/constants.dart';
@@ -27,6 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
   SMIInput<bool>? isHandsUp;
   SMIInput<bool>? trigSuccess;
   SMIInput<bool>? trigFail;
+  SMIInput<double>? eyeMovement;
 
   @override
   void initState() {
@@ -53,6 +52,12 @@ class _LoginScreenState extends State<LoginScreen> {
       }
       if (isHandsUp != null) {
         isHandsUp?.change(_isValidInput);
+      }
+
+      // Update eye movement based on the cursor position
+      if (eyeMovement != null) {
+        double eyePosition = _phoneNumberController.text.length % 10 * 0.1;
+        eyeMovement?.change(eyePosition);
       }
     });
   }
@@ -108,8 +113,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: const Color(0xffD6E2EA),
       appBar: AppBar(
         backgroundColor: kcontentColor,
         leading: IconButton(
@@ -137,134 +142,127 @@ class _LoginScreenState extends State<LoginScreen> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        child: SizedBox(
-          width: size.width,
-          height: size.height,
+        child: Center(
           child: Padding(
             padding: const EdgeInsets.all(12.0),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                    // Rive animation
-                    SizedBox(
-                    width: size.width,
-                    height: 200,
-                    child: RiveAnimation.asset(
-                      "images/animated_login_character.riv",
-                      stateMachines: const ["Login Machine"],
-                      onInit: (artboard) {
-                        controller = StateMachineController.fromArtboard(artboard, "Login Machine");
-                        if (controller == null) return;
+                // Rive animation
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: 200,
+                  child: RiveAnimation.asset(
+                    "images/animated_login_character.riv",
+                    stateMachines: const ["Login Machine"],
+                    onInit: (artboard) {
+                      controller = StateMachineController.fromArtboard(artboard, "Login Machine");
+                      if (controller == null) return;
 
-                        artboard.addController(controller!);
-                        isChecking = controller?.findInput("isChecking");
-                        isHandsUp = controller?.findInput("isHandsUp");
-                        trigSuccess = controller?.findInput("trigSuccess");
-                        trigFail = controller?.findInput("trigFail");
-                      },
+                      artboard.addController(controller!);
+                      isChecking = controller?.findInput("isChecking");
+                      isHandsUp = controller?.findInput("isHandsUp");
+                      trigSuccess = controller?.findInput("trigSuccess");
+                      trigFail = controller?.findInput("trigFail");
+                      eyeMovement = controller?.findInput("eyeMovement");
+                    },
+                  ),
+                ),
+                const SizedBox(height: 10),
+                TextField(
+                  onChanged: (value) {
+                    if (isHandsUp != null) {
+                      isHandsUp!.change(false);
+                    }
+                    if (isChecking == null) return;
+
+                    isChecking!.change(true);
+                  },
+                  keyboardType: TextInputType.emailAddress,
+                  controller: _phoneNumberController,
+                  decoration: InputDecoration(
+                    hintText: "Enter your mobile number",
+                    helperText: "e.g: +8801234567890, +97121234567",
+                    helperStyle: const TextStyle(
+                      color: Colors.grey,
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: kprimaryColor,
+                        width: 1.5,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                TextField(
+                  onChanged: (value) {
+                    if (isChecking != null) {
+                      isChecking!.change(false);
+                    }
+                    if (isHandsUp == null) return;
+
+                    isHandsUp!.change(true);
+                  },
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                    hintText: "Enter your password",
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: kprimaryColor,
+                        width: 1.5,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                  obscureText: true,
+                ),
+                const SizedBox(height: 2),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: _resetPassword,
+                      child: const Text(
+                        "Forgot Password?",
+                        style: TextStyle(
+                          color: kprimaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                MaterialButton(
+                  onPressed: _isValidInput && !_isLoading ? _login : null,
+                  color: kprimaryColor,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.horizontal(
+                      left: Radius.circular(10),
+                      right: Radius.circular(10),
                     ),
                   ),
-                  const SizedBox(height: 10),
-                      TextField(
-                        onChanged: (value) {
-                      if (isHandsUp != null) {
-                        isHandsUp!.change(false);
-                      }
-                      if (isChecking == null) return;
-
-                      isChecking!.change(true);
-                    },
-                    keyboardType: TextInputType.emailAddress,
-                        controller: _phoneNumberController,
-                        decoration: InputDecoration(
-                          hintText: "Enter your mobile number",
-                          helperText: "e.g: +8801234567890, +97121234567",
-                          helperStyle: const TextStyle(
-                            color: Colors.grey,
-                          ),
-                          border: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: kprimaryColor,
-                              width: 1.5,
-                            ),
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          filled: true,
-                          fillColor: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      TextField(
-                        onChanged: (value) {
-                      if (isChecking != null) {
-                        isChecking!.change(false);
-                      }
-                      if (isHandsUp == null) return;
-
-                      isHandsUp!.change(true);
-                    },
-                        controller: _passwordController,
-                        decoration: InputDecoration(
-                          hintText: "Enter your password",
-                          border: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: kprimaryColor,
-                              width: 1.5,
-                              ),
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          filled: true,
-                          fillColor: Colors.white,
-                        ),
-                        obscureText: true,
-                      ),
-                      const SizedBox(height: 2),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            onPressed: _resetPassword,
-                            child: const Text(
-                              "Forgot Password?",
-                              style: TextStyle(
-                                color: kprimaryColor,
-                                fontWeight: FontWeight.bold,
-                                fontStyle: FontStyle.italic,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      MaterialButton(
-                        onPressed: _isValidInput && !_isLoading ? _login : null,
-                        color: kprimaryColor,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.horizontal(
-                            left: Radius.circular(10),
-                            right: Radius.circular(10),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: _isLoading
+                      ? const CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
+                        )
+                      : const Text(
+                          "Login",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: _isLoading
-                            ? const CircularProgressIndicator(
-                                valueColor:
-                                    AlwaysStoppedAnimation<Color>(Colors.white),
-                              )
-                            : const Text(
-                                "Login",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                      ),
-                    ],
-                  ),
                 ),
               ],
             ),
