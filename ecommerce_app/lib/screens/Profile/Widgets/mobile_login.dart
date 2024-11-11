@@ -25,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
   SMIInput<bool>? isHandsUp;
   SMIInput<bool>? trigSuccess;
   SMIInput<bool>? trigFail;
-  SMIInput<double>? eyeMovement;
+  // SMIInput<double>? eyeMovement;
 
   @override
   void initState() {
@@ -50,15 +50,10 @@ class _LoginScreenState extends State<LoginScreen> {
       if (isChecking != null) {
         isChecking?.change(!_isValidInput);
       }
-      if (isHandsUp != null) {
-        isHandsUp?.change(_isValidInput);
-      }
-
-      // Update eye movement based on the cursor position
-      if (eyeMovement != null) {
-        double eyePosition = _phoneNumberController.text.length % 10 * 0.1;
-        eyeMovement?.change(eyePosition);
-      }
+      // if (eyeMovement != null) {
+      //   double eyePosition = _phoneNumberController.text.length % 10 * 0.1;
+      //   eyeMovement?.change(eyePosition);
+      // }
     });
   }
 
@@ -164,12 +159,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       isHandsUp = controller?.findInput("isHandsUp");
                       trigSuccess = controller?.findInput("trigSuccess");
                       trigFail = controller?.findInput("trigFail");
-                      eyeMovement = controller?.findInput("eyeMovement");
+                      // eyeMovement = controller?.findInput("eyeMovement");
                     },
                   ),
                 ),
                 const SizedBox(height: 10),
                 TextField(
+                  onTap: () {
+                    if (isHandsUp != null) {
+                      isHandsUp!.change(false);
+                    }
+                  },
                   onChanged: (value) {
                     if (isHandsUp != null) {
                       isHandsUp!.change(false);
@@ -199,6 +199,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 20),
                 TextField(
+                  onTap: () {
+                    if (isHandsUp != null) {
+                      isHandsUp!.change(true);
+                    }
+                  },
                   onChanged: (value) {
                     if (isChecking != null) {
                       isChecking!.change(false);
