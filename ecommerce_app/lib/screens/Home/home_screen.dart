@@ -32,9 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
     groceries
   ];
 
-  // Callback method to handle avatar tap
   void _onAvatarTap() {
-    // Navigate to the profile screen, which is index 4
     setState(() {
       BottomNavBar.of(context)?.updateIndex(4);
     });
@@ -42,23 +40,37 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Method to handle search
   void _filterProducts(String query) {
-    setState(() {
-      if (query.isEmpty) {
-        _filteredProducts = selectcategories[selectedIndex];
-      } else {
-        _filteredProducts = selectcategories[selectedIndex]
+  setState(() {
+    if (query.isEmpty) {
+      _filteredProducts = selectcategories[selectedIndex];
+    } else {
+      bool matchFound = false;
+      for (int i = 0; i < selectcategories.length; i++) {
+        final matchingProducts = selectcategories[i]
             .where((product) =>
                 product.title.toLowerCase().contains(query.toLowerCase()))
             .toList();
-      }
-    });
-  }
 
-  // refresh action
+        if (matchingProducts.isNotEmpty) {
+          selectedIndex = i;
+          _filteredProducts = matchingProducts;
+          matchFound = true;
+          break;
+        }
+      }
+
+      if (!matchFound) {
+        _filteredProducts = [];
+      }
+    }
+  });
+}
+
+  // Refresh action
   Future<void> _refreshProducts() async {
     await Future.delayed(const Duration(seconds: 2));
     setState(() {
-      // can perform any refresh actions here (e.g., reloading data)
+      // performing refresh actions here (e.g., reloading data)
       _filteredProducts = selectcategories[selectedIndex];
     });
   }
@@ -71,7 +83,6 @@ class _HomeScreenState extends State<HomeScreen> {
         onRefresh: _refreshProducts,
         triggerMode: RefreshIndicatorTriggerMode.onEdge,
         edgeOffset: 1.0,
-        // backgroundColor: Colors.transparent,
         displacement: 40,
         color: kprimaryColor,
         strokeWidth: 3,
@@ -83,10 +94,10 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 35),
-                // custom appbar
+                // Custom appbar
                 CustomAppBar(onAvatarTap: _onAvatarTap),
                 const SizedBox(height: 20),
-                // search bar
+                // Search bar
                 MySearchBAR(onSearch: _filterProducts),
                 const SizedBox(height: 20),
                 ImageSlider(
@@ -98,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
                 const SizedBox(height: 20),
-                // for category selection
+                // For category selection
                 categoryItems(),
                 const SizedBox(height: 20),
                 if (selectedIndex == 0)
@@ -122,20 +133,34 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                // for shopping items
                 const SizedBox(height: 10),
-                Wrap(
-                  spacing: 20,
-                  runSpacing: 20,
-                  children: _filteredProducts.map((product) {
-                    return SizedBox(
-                      width: (MediaQuery.of(context).size.width - 60) / 2,
-                      child: ProductCard(
-                        product: product,
+                if (_filteredProducts.isEmpty)
+                  const Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      child: Text(
+                        "* There is no product here *",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black54,
+                        ),
                       ),
-                    );
-                  }).toList(),
-                ),
+                    ),
+                  )
+                else
+                  Wrap(
+                    spacing: 20,
+                    runSpacing: 20,
+                    children: _filteredProducts.map((product) {
+                      return SizedBox(
+                        width: (MediaQuery.of(context).size.width - 60) / 2,
+                        child: ProductCard(
+                          product: product,
+                        ),
+                      );
+                    }).toList(),
+                  ),
               ],
             ),
           ),
@@ -155,7 +180,6 @@ class _HomeScreenState extends State<HomeScreen> {
           return GestureDetector(
             onTap: () {
               setState(() {
-                // Prevent out of bounds error
                 if (index < selectcategories.length) {
                   selectedIndex = index;
                   _filteredProducts = selectcategories[selectedIndex];
