@@ -19,9 +19,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int currentSlider = 0;
   int selectedIndex = 0;
-  List<Product> _filteredProducts = all; // Initial product list is all products
+  List<Product> _filteredProducts = all;
 
-  // Define selectcategories at the class level so it is accessible throughout the class
   List<List<Product>> selectcategories = [
     all,
     shoes,
