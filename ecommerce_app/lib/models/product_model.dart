@@ -817,3 +817,7 @@ final List<Product> menFashion = [
     id: '30',
   ),
 ];
+
+final List<Product> groceries = [
+  // Product(id: id, title: title, description: description, image: image, priceBDT: priceBDT, priceAED: priceAED, colors: colors, category: category, quantity: quantity)
+];

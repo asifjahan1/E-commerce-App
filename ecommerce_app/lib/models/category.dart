@@ -33,4 +33,8 @@ final List<Category> categoriesList = [
     title: "Men's\nFashion",
     image: "images/men.png",
   ),
+  Category(
+    title: "Groceries",
+    image: "images/groceries.png",
+  ),
 ];

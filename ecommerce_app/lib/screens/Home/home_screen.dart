@@ -28,7 +28,8 @@ class _HomeScreenState extends State<HomeScreen> {
     beauty,
     womenFashion,
     jewelry,
-    menFashion
+    menFashion,
+    groceries
   ];
 
   // Callback method to handle avatar tap
