@@ -66,10 +66,12 @@ class _CategoryItemsScreenState extends State<CategoryItemsScreen> {
 
     // If there are products
     return Scaffold(
+      backgroundColor: kcontentColor,
       appBar: AppBar(
+        backgroundColor: kcontentColor,
         leading: IconButton(
           style: IconButton.styleFrom(
-            backgroundColor: Colors.white,
+            // backgroundColor: Colors.white,
             padding: const EdgeInsets.all(15),
           ),
           onPressed: () {
@@ -104,12 +106,12 @@ class _CategoryItemsScreenState extends State<CategoryItemsScreen> {
                 );
               },
               child: Card(
-                // color: Colors.white,
-                color: kprimaryColor,
+                color: Colors.white,
+                // color: kcontentColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                elevation: 5,
+                elevation: 0,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -124,14 +126,14 @@ class _CategoryItemsScreenState extends State<CategoryItemsScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         product.title,
-                        style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                        style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
                         'Price: ${product.priceBDT} BDT',
-                        style: const TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.black),
                       ),
                     ),
                   ],
