@@ -1,6 +1,7 @@
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/screens/Detail/details_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import '../../../models/product_model.dart';
 import '../../../models/category.dart';
 
@@ -113,11 +114,14 @@ class _CategoryItemsScreenState extends State<CategoryItemsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 15),
-                    Image.asset(
-                      product.image,
-                      width: double.infinity,
-                      height: 100,
-                      fit: BoxFit.contain,
+                    Hero(
+                      tag: product.id,
+                      child: Image.asset(
+                        product.image,
+                        width: double.infinity,
+                        height: 100,
+                        fit: BoxFit.contain,
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
