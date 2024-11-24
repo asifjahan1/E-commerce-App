@@ -83,7 +83,7 @@ class _CategoryItemsScreenState extends State<CategoryItemsScreen> {
         centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(10.0),
         child: GridView.builder(
           itemCount: filteredProducts.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -114,14 +114,11 @@ class _CategoryItemsScreenState extends State<CategoryItemsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 15),
-                    Hero(
-                      tag: product.id,
-                      child: Image.asset(
-                        product.image,
-                        width: double.infinity,
-                        height: 100,
-                        fit: BoxFit.contain,
-                      ),
+                    Image.asset(
+                      product.image,
+                      width: double.infinity,
+                      height: 100,
+                      fit: BoxFit.contain,
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
