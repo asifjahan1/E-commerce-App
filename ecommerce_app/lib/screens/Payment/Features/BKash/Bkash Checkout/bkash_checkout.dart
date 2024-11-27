@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
-
+import 'package:ecommerce_app/responsive.dart';
 import 'package:ecommerce_app/screens/Payment/Features/BKash/Models/create_payment_response.dart';
 import 'package:ecommerce_app/screens/Payment/Features/BKash/Models/grant_token_response.dart';
 import 'package:flutter/foundation.dart';
@@ -171,38 +171,46 @@ class _BkashCheckoutState extends State<BkashCheckout> {
         foregroundColor: Colors.white,
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.symmetric(
+          horizontal: Responsive.isDesktop(context) ? 40 : 16,
+        ),
         child: Column(
           children: [
             const SizedBox(height: 20),
             if (bKashURL == null) ...[
-              TextField(
-                readOnly: true,
-                controller: amountController,
-                decoration: InputDecoration(
-                  hintText: "Amount",
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Color(0xffEE1284),
-                      width: 1.5,
+              SizedBox(
+                width: Responsive.isDesktop(context) ? 500 : double.infinity,
+                child: TextField(
+                  readOnly: true,
+                  controller: amountController,
+                  decoration: InputDecoration(
+                    hintText: "Amount",
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Color(0xffEE1284),
+                        width: 1.5,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
-                    borderRadius: BorderRadius.circular(10.0),
                   ),
+                  keyboardType: TextInputType.number,
                 ),
-                keyboardType: TextInputType.number,
               ),
               const SizedBox(height: 16),
-              TextField(
-                controller: invoiceNumberController,
-                readOnly: true,
-                decoration: InputDecoration(
-                  hintText: "Invoice Number",
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Color(0xffEE1284),
-                      width: 1.5,
+              SizedBox(
+                width: Responsive.isDesktop(context) ? 500 : double.infinity,
+                child: TextField(
+                  controller: invoiceNumberController,
+                  readOnly: true,
+                  decoration: InputDecoration(
+                    hintText: "Invoice Number",
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Color(0xffEE1284),
+                        width: 1.5,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
-                    borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
               ),
