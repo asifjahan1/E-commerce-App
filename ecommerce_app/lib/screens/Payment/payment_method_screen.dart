@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:ecommerce_app/responsive.dart';
 import 'package:ecommerce_app/screens/Payment/Features/BKash/Bkash%20Checkout/bkash_checkout.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/constants.dart';
@@ -59,250 +60,307 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
     return Scaffold(
       backgroundColor: kcontentColor,
       body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      padding: const EdgeInsets.all(15),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    icon: const Icon(
-                      Icons.arrow_back_ios,
-                    ),
-                  ),
-                  const Text(
-                    "Payment Methods",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25,
-                    ),
-                  ),
-                  const SizedBox(),
-                ],
+        child: Responsive(
+          mobile: _buildMobileLayout(),
+          tablet: _buildTabletLayout(),
+          desktop: _buildDesktopLayout(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMobileLayout() {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                style: IconButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  padding: const EdgeInsets.all(15),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(
+                  Icons.arrow_back_ios,
+                ),
               ),
+              const Text(
+                "Payment Methods",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20, // Adjusted for mobile
+                ),
+              ),
+              const SizedBox(),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: _buildPaymentOptions(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTabletLayout() {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                style: IconButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  padding: const EdgeInsets.all(18),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(
+                  Icons.arrow_back_ios,
+                ),
+              ),
+              const Text(
+                "Payment Methods",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25, // Adjusted for tablet
+                ),
+              ),
+              const SizedBox(),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(30.0),
+            child: _buildPaymentOptions(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDesktopLayout() {
+    return Row(
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(40.0),
+            child: _buildPaymentOptions(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPaymentOptions() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        OutlinedButton(
+          onPressed: () {
+            _selectMethod('bkash');
+          },
+          style: OutlinedButton.styleFrom(
+            side: const BorderSide(color: kprimaryColor, width: 2),
+            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  border: Border.all(color: kprimaryColor, width: 2),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: _selectedMethod == 'bkash'
+                    ? const Icon(Icons.check, color: kprimaryColor, size: 18)
+                    : null,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    OutlinedButton(
-                      onPressed: () {
-                        _selectMethod('bkash');
-                      },
-                      style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: kprimaryColor, width: 2),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 15, horizontal: 20),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 24,
-                            height: 24,
-                            decoration: BoxDecoration(
-                              border:
-                                  Border.all(color: kprimaryColor, width: 2),
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: _selectedMethod == 'bkash'
-                                ? const Icon(Icons.check,
-                                    color: kprimaryColor, size: 18)
-                                : null,
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  "Pay with Bkash",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: kprimaryColor,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(height: 5),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    SizedBox(
-                                      width: 50,
-                                      height: 40,
-                                      child: Image.asset(
-                                        'images/bkash.jpg',
-                                        fit: BoxFit.contain,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                    const Text(
+                      "Pay with Bkash",
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: kprimaryColor,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    OutlinedButton(
-                      onPressed: () {
-                        _selectMethod('card');
-                      },
-                      style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: kprimaryColor, width: 2),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 15, horizontal: 20),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+                    const SizedBox(height: 5),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SizedBox(
+                          width: 50,
+                          height: 40,
+                          child: Image.asset(
+                            'images/bkash.jpg',
+                            fit: BoxFit.contain,
+                          ),
                         ),
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 24,
-                            height: 24,
-                            decoration: BoxDecoration(
-                              border:
-                                  Border.all(color: kprimaryColor, width: 2),
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: _selectedMethod == 'card'
-                                ? const Icon(Icons.check,
-                                    color: kprimaryColor, size: 18)
-                                : null,
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  "Pay with Card",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: kprimaryColor,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(height: 1),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    SizedBox(
-                                      width: 40,
-                                      height: 40,
-                                      child: Image.asset(
-                                        'images/mastercard.jpg',
-                                        fit: BoxFit.contain,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 40,
-                                      height: 40,
-                                      child: Image.asset(
-                                        'images/visa.jpg',
-                                        fit: BoxFit.contain,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 30,
-                                      height: 30,
-                                      child: Image.asset(
-                                        'images/amex.png',
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    OutlinedButton(
-                      onPressed: () {
-                        _selectMethod('cod');
-                      },
-                      style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: kprimaryColor, width: 2),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 15, horizontal: 20),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 24,
-                            height: 24,
-                            decoration: BoxDecoration(
-                              border:
-                                  Border.all(color: kprimaryColor, width: 2),
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: _selectedMethod == 'cod'
-                                ? const Icon(Icons.check,
-                                    color: kprimaryColor, size: 18)
-                                : null,
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  "Cash on Delivery",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: kprimaryColor,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(height: 5),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    SizedBox(
-                                      width: 50,
-                                      height: 40,
-                                      child: Image.asset(
-                                        'images/cod.jpg',
-                                        fit: BoxFit.contain,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                      ],
                     ),
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
+        const SizedBox(height: 20),
+        OutlinedButton(
+          onPressed: () {
+            _selectMethod('card');
+          },
+          style: OutlinedButton.styleFrom(
+            side: const BorderSide(color: kprimaryColor, width: 2),
+            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  border: Border.all(color: kprimaryColor, width: 2),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: _selectedMethod == 'card'
+                    ? const Icon(Icons.check, color: kprimaryColor, size: 18)
+                    : null,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Pay with Card",
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: kprimaryColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 1),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SizedBox(
+                          width: 40,
+                          height: 40,
+                          child: Image.asset(
+                            'images/mastercard.jpg',
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 40,
+                          height: 40,
+                          child: Image.asset(
+                            'images/visa.jpg',
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: Image.asset(
+                            'images/amex.png',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 20),
+        OutlinedButton(
+          onPressed: () {
+            _selectMethod('cod');
+          },
+          style: OutlinedButton.styleFrom(
+            side: const BorderSide(color: kprimaryColor, width: 2),
+            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  border: Border.all(color: kprimaryColor, width: 2),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: _selectedMethod == 'cod'
+                    ? const Icon(Icons.check, color: kprimaryColor, size: 18)
+                    : null,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Cash on Delivery",
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: kprimaryColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SizedBox(
+                          width: 50,
+                          height: 40,
+                          child: Image.asset(
+                            'images/cod.jpg',
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
