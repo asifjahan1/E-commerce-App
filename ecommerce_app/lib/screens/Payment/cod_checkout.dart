@@ -87,7 +87,7 @@ class _CodCheckoutState extends State<CodCheckout> {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  "Total Amount: BDT ${widget.totalAmount.toStringAsFixed(2)}",
+                  "Total Amount: BDT ${widget.totalAmount.toStringAsFixed(0)}",
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -96,7 +96,7 @@ class _CodCheckoutState extends State<CodCheckout> {
                 const SizedBox(height: 20),
                 const Text(
                   "Delivery Address",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green),
                 ),
                 const SizedBox(height: 10),
                 TextField(
@@ -107,23 +107,21 @@ class _CodCheckoutState extends State<CodCheckout> {
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     suffixIcon: IconButton(
-                      icon: Icon(
-                        _isEditingAddress ? Icons.check : Icons.edit,
+                      icon: const Icon(
+                  Icons.check,
                         color: kprimaryColor,
                       ),
                       onPressed: () {
                         setState(() {
                           if (_isEditingAddress) {
-                            // Save the address when check icon is clicked
                             _saveNewAddress();
                           } else {
-                            // Switch to editing mode
                             _isEditingAddress = true;
                           }
                         });
                       },
                     ),
-                  ),
+                    ),
                 ),
                 const SizedBox(height: 10),
                 InkWell(

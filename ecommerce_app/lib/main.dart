@@ -1,12 +1,9 @@
-// ignore_for_file: avoid_print, library_private_types_in_public_api, use_build_context_synchronously
-
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:ecommerce_app/Provider/add_to_cart_provider.dart';
 import 'package:ecommerce_app/Provider/favorite_provider.dart';
 import 'package:ecommerce_app/constants.dart';
-import 'package:ecommerce_app/screens/Payment/Features/BKash/auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logging/logging.dart';
@@ -14,11 +11,10 @@ import 'screens/nav_bar_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'responsive.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // store secret api keys
-  await storeAndRetrieveApiKey();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -31,7 +27,9 @@ void main() async {
 void _setupLogging() {
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((LogRecord rec) {
-    print('${rec.level.name}: ${rec.time}: ${rec.message}');
+    if (kDebugMode) {
+      print('${rec.level.name}: ${rec.time}: ${rec.message}');
+    }
   });
 }
 
@@ -41,9 +39,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MultiProvider(
         providers: [
-          // for add to cart
           ChangeNotifierProvider(create: (_) => CartProvider()),
-          // for favorite
           ChangeNotifierProvider(create: (_) => FavoriteProvider()),
         ],
         child: MaterialApp(
@@ -83,53 +79,63 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kprimaryColor,
-      body: Stack(
-        children: [
-          Align(
-            alignment: Alignment.center,
-            child: Image.asset(
-              'images/Noor Al-Sana.jpg',
-              height: 100,
-              fit: BoxFit.contain,
-            ),
-          ),
-          Align(
-            alignment: Alignment.center,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                const SizedBox(height: 150),
-                AnimatedTextKit(
-                  repeatForever: false,
-                  animatedTexts: [
-                    RotateAnimatedText(
-                      'Commitment is',
-                      textStyle: const TextStyle(
-                        fontSize: 30.0,
-                        color: Colors.white,
-                      ),
-                      duration: const Duration(milliseconds: 2000),
-                    ),
-                    RotateAnimatedText(
-                      'Our excellence',
-                      textStyle: const TextStyle(
-                        fontSize: 30.0,
-                        color: Colors.white,
-                      ),
-                      duration: const Duration(milliseconds: 2000),
-                    ),
-                  ],
-                  pause: const Duration(milliseconds: 500),
-                ),
-              ],
-            ),
-          ),
-        ],
+      body: Responsive(
+        mobile: _buildStackLayout(imageSize: 80, fontSize: 20),
+        tablet: _buildStackLayout(imageSize: 120, fontSize: 25),
+        desktop: _buildStackLayout(imageSize: 150, fontSize: 30),
       ),
     );
   }
+
+  Widget _buildStackLayout({
+    required double imageSize,
+    required double fontSize,
+  }) {
+    return Stack(
+      children: [
+        Align(
+          alignment: Alignment.center,
+          child: Image.asset(
+            'images/Noor Al-Sana.jpg',
+            height: imageSize,
+            fit: BoxFit.contain,
+          ),
+        ),
+        Align(
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(height: imageSize + 40),
+              _buildAnimatedText(fontSize: fontSize),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAnimatedText({required double fontSize}) {
+    return AnimatedTextKit(
+      repeatForever: false,
+      animatedTexts: [
+        RotateAnimatedText(
+          'Commitment is',
+          textStyle: TextStyle(fontSize: fontSize, color: Colors.white),
+          duration: const Duration(milliseconds: 2000),
+        ),
+        RotateAnimatedText(
+          'Our excellence',
+          textStyle: TextStyle(fontSize: fontSize, color: Colors.white),
+          duration: const Duration(milliseconds: 2000),
+        ),
+      ],
+      pause: const Duration(milliseconds: 500),
+    );
+  }
 }
-// 
+
+//
 // Testing
 
 // import 'dart:convert';
