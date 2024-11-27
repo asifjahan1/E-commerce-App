@@ -8,6 +8,7 @@ import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/register_mobile.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/settings.dart';
 import 'package:ecommerce_app/screens/nav_bar_screen.dart';
+import 'package:ecommerce_app/responsive.dart'; // Import responsive logic
 
 class Profile extends StatefulWidget {
   final String? email;
@@ -79,9 +80,9 @@ class _ProfileState extends State<Profile> {
             ),
             child: Text(
               email,
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.black87,
-                fontSize: 12,
+                fontSize: Responsive.isDesktop(context) ? 14 : 12,
                 fontStyle: FontStyle.italic,
               ),
             ),
@@ -117,126 +118,130 @@ class _ProfileState extends State<Profile> {
         edgeOffset: 0.0,
         strokeWidth: 3,
         child: SafeArea(
-          child: Container(
-            padding: const EdgeInsets.all(20),
+          child: Padding(
+            padding: EdgeInsets.all(
+              Responsive.isDesktop(context) ? 40 : 20,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 25,
-                        backgroundColor: kprimaryColor.withOpacity(0.1),
-                        child: const Icon(
-                          Icons.person,
-                          size: 30,
-                          color: kprimaryColor,
-                        ),
-                      ),
-                      const SizedBox(width: 15),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        child: GestureDetector(
-                          onTapDown: (TapDownDetails details) {
-                            final emailToShow = widget.email ??
-                                _registeredEmail ??
-                                _registeredPhoneNumber ??
-                                _user?.email;
-
-                            if (emailToShow != null && emailToShow.isNotEmpty) {
-                              _showEmailOverlay(
-                                context,
-                                emailToShow,
-                                details.globalPosition,
-                              );
-                            }
-                          },
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                widget.email ??
-                                    _registeredEmail ??
-                                    _registeredPhoneNumber ??
-                                    _user?.email ??
-                                    "No user signed in",
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: kprimaryColor,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                softWrap: false,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const Spacer(),
-                      IconButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => SettingsScreen(
-                                onLogout: _logout,
-                                isLoggedIn: _registeredEmail != null ||
-                                    _registeredPhoneNumber != null ||
-                                    _user != null,
-                              ),
-                            ),
-                          );
-                        },
-                        icon: const Icon(
-                          Icons.settings,
-                          size: 30,
-                          color: kprimaryColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                _buildProfileCard(context),
                 const SizedBox(height: 20),
                 if (_registeredEmail == null &&
                     _registeredPhoneNumber == null &&
                     _user == null)
-                  Center(
-                    child: Column(
-                      children: [
-                        MaterialButton(
-                          onPressed: () async {
-                            await Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const RegisterMobile(),
-                              ),
-                            );
-                            _refreshProducts();
-                          },
-                          color: kprimaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 15,
-                          ),
-                          child: const Text(
-                            "Login / SignUp",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  _buildLoginButton(context),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfileCard(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(
+        Responsive.isDesktop(context) ? 20 : 15,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.grey.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: Responsive.isDesktop(context) ? 35 : 25,
+            backgroundColor: kprimaryColor.withOpacity(0.1),
+            child: Icon(
+              Icons.person,
+              size: Responsive.isDesktop(context) ? 40 : 30,
+              color: kprimaryColor,
+            ),
+          ),
+          const SizedBox(width: 15),
+          Expanded(
+            child: GestureDetector(
+              onTapDown: (TapDownDetails details) {
+                final emailToShow = widget.email ??
+                    _registeredEmail ??
+                    _registeredPhoneNumber ??
+                    _user?.email;
+
+                if (emailToShow != null && emailToShow.isNotEmpty) {
+                  _showEmailOverlay(
+                    context,
+                    emailToShow,
+                    details.globalPosition,
+                  );
+                }
+              },
+              child: Text(
+                widget.email ??
+                    _registeredEmail ??
+                    _registeredPhoneNumber ??
+                    _user?.email ??
+                    "No user signed in",
+                style: TextStyle(
+                  fontSize: Responsive.isDesktop(context) ? 16 : 14,
+                  color: kprimaryColor,
+                  fontStyle: FontStyle.italic,
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                softWrap: false,
+              ),
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => SettingsScreen(
+                    onLogout: _logout,
+                    isLoggedIn: _registeredEmail != null ||
+                        _registeredPhoneNumber != null ||
+                        _user != null,
+                  ),
+                ),
+              );
+            },
+            icon: Icon(
+              Icons.settings,
+              size: Responsive.isDesktop(context) ? 35 : 30,
+              color: kprimaryColor,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLoginButton(BuildContext context) {
+    return Center(
+      child: MaterialButton(
+        onPressed: () async {
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const RegisterMobile(),
+            ),
+          );
+          _refreshProducts();
+        },
+        color: kprimaryColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50),
+        ),
+        padding: EdgeInsets.symmetric(
+          horizontal: Responsive.isTablet(context) ? 30 : 20,
+          vertical: 15,
+        ),
+        child: Text(
+          "Login / SignUp",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: Responsive.isDesktop(context) ? 18 : 16,
           ),
         ),
       ),
