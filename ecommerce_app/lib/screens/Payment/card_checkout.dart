@@ -1,6 +1,7 @@
-// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
 
 import 'dart:convert';
+import 'package:ecommerce_app/responsive.dart';
 import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -32,100 +33,101 @@ class _CardCheckoutState extends State<CardCheckout> {
     return Scaffold(
       backgroundColor: const Color(0xffF5F5F5),
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      padding: const EdgeInsets.all(15),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    icon: const Icon(
-                      Icons.arrow_back_ios,
-                    ),
-                  ),
-                  const Text(
-                    "Pay with Card",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25,
-                    ),
-                  ),
-                  const SizedBox(),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+        child: Padding(
+          padding: EdgeInsets.all(Responsive.isDesktop(context) ? 40 : 16.0), // Adjust padding based on platform
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // const Text(
-                    //   "Total Amount",
-                    //   style: TextStyle(color: Colors.black38),
-                    // ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: TextField(
-                        readOnly: true,
-                        controller: amountController,
-                        decoration: InputDecoration(
-                          hintText: "Amount",
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                        keyboardType: TextInputType.number,
+                    IconButton(
+                      style: IconButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        padding: const EdgeInsets.all(15),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back_ios,
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: _isLoading
-                          ? null
-                          : () async {
-                              setState(() {
-                                _isLoading = true;
-                              });
-                              await makePayment(context);
-                              setState(() {
-                                _isLoading = false;
-                              });
-                            },
-                      style: ElevatedButton.styleFrom(
-                        elevation: 2,
-                        backgroundColor: const Color(0xffff660e),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 30,
-                          vertical: 15,
-                        ),
-                        textStyle: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    const Text(
+                      "Pay with Card",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25,
                       ),
-                      child: _isLoading
-                          ? const CircularProgressIndicator(
-                              color: Colors.white,
-                            )
-                          : const Text(
-                              'Make Payment',
-                              style: TextStyle(color: Colors.white),
-                            ),
                     ),
+                    const SizedBox(),
                   ],
                 ),
               ),
-            ),
-          ],
+              Expanded(
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Amount display
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: Responsive.isDesktop(context) ? 40 : 16),
+                        child: TextField(
+                          readOnly: true,
+                          controller: amountController,
+                          decoration: InputDecoration(
+                            hintText: "Amount",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                          keyboardType: TextInputType.number,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: _isLoading
+                            ? null
+                            : () async {
+                                setState(() {
+                                  _isLoading = true;
+                                });
+                                await makePayment(context);
+                                setState(() {
+                                  _isLoading = false;
+                                });
+                              },
+                        style: ElevatedButton.styleFrom(
+                          elevation: 2,
+                          backgroundColor: const Color(0xffff660e),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: Responsive.isDesktop(context) ? 50 : 30, // Adjust button padding
+                            vertical: Responsive.isDesktop(context) ? 20 : 15,
+                          ),
+                          textStyle: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        child: _isLoading
+                            ? const CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                            : const Text(
+                                'Make Payment',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
