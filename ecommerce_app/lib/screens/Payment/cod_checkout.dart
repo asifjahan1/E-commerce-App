@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/constants.dart';
+import 'package:ecommerce_app/responsive.dart';
 import 'package:flutter/material.dart';
 
 class CodCheckout extends StatefulWidget {
@@ -18,7 +19,6 @@ class _CodCheckoutState extends State<CodCheckout> {
   bool _isEditingAddress = false;
   bool _showNewAddressField = false;
 
-  // This function saves the new address and refreshes the page
   void _saveNewAddress() {
     setState(() {
       _addressController.text = _newAddressController.text;
@@ -42,7 +42,6 @@ class _CodCheckoutState extends State<CodCheckout> {
       );
       return;
     }
-    // Handle order confirmation logic
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text("Order confirmed for delivery to $address.")),
     );
@@ -51,7 +50,6 @@ class _CodCheckoutState extends State<CodCheckout> {
   @override
   void initState() {
     super.initState();
-    // Load initial address for the user if available
     _addressController.text = "123 Main St, City, Country"; // Example address
   }
 
@@ -61,7 +59,7 @@ class _CodCheckoutState extends State<CodCheckout> {
       backgroundColor: const Color(0xffF5F5F5),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(Responsive.isDesktop(context) ? 40 : 16.0),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,7 +106,7 @@ class _CodCheckoutState extends State<CodCheckout> {
                     ),
                     suffixIcon: IconButton(
                       icon: const Icon(
-                  Icons.check,
+                        Icons.check,
                         color: kprimaryColor,
                       ),
                       onPressed: () {
@@ -121,7 +119,7 @@ class _CodCheckoutState extends State<CodCheckout> {
                         });
                       },
                     ),
-                    ),
+                  ),
                 ),
                 const SizedBox(height: 10),
                 InkWell(
@@ -169,8 +167,9 @@ class _CodCheckoutState extends State<CodCheckout> {
                 Center(
                   child: MaterialButton(
                     color: kprimaryColor,
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 15, horizontal: 50,
+                    padding: EdgeInsets.symmetric(
+                      vertical: Responsive.isDesktop(context) ? 20 : 15,
+                      horizontal: Responsive.isDesktop(context) ? 80 : 50,
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
