@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:ecommerce_app/responsive.dart';
 import 'package:ecommerce_app/screens/Category/category_items.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
@@ -36,7 +37,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
     Favorite(),
     HomeScreen(),
     CartScreen(),
-    // Profile(phoneNumber: ''),
     Profile(),
   ];
 
@@ -78,30 +78,39 @@ class _BottomNavBarState extends State<BottomNavBar> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-        elevation: 5,
-        height: 70,
-        color: Colors.black,
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 8,
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            buildNavItem(0, Icons.grid_view_outlined, 'Category'),
-            buildNavItem(1, Icons.favorite_border, 'Favorite'),
-            const SizedBox(width: 8),
-            buildCartNavItem(3, Icons.shopping_cart_outlined, 'Cart'),
-            buildNavItem(4, Icons.person, 'Account'),
-          ],
-        ),
+      bottomNavigationBar: Responsive(
+        mobile: _buildBottomNavBar(context, 70, 30, 16),
+        tablet: _buildBottomNavBar(context, 90, 35, 18),
+        desktop: _buildBottomNavBar(context, 100, 40, 20),
       ),
       body: screens[currentIndex],
     );
   }
 
-  Widget buildNavItem(int index, IconData icon, String label) {
+  Widget _buildBottomNavBar(
+      BuildContext context, double height, double iconSize, double fontSize) {
+    return BottomAppBar(
+      elevation: 5,
+      height: height,
+      color: Colors.black,
+      shape: const CircularNotchedRectangle(),
+      notchMargin: 8,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          buildNavItem(0, Icons.grid_view_outlined, 'Category', iconSize, fontSize),
+          buildNavItem(1, Icons.favorite_border, 'Favorite', iconSize, fontSize),
+          const SizedBox(width: 8),
+          buildCartNavItem(3, Icons.shopping_cart_outlined, 'Cart', iconSize, fontSize),
+          buildNavItem(4, Icons.person, 'Account', iconSize, fontSize),
+        ],
+      ),
+    );
+  }
+
+  Widget buildNavItem(int index, IconData icon, String label, double iconSize, double fontSize) {
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -113,24 +122,22 @@ class _BottomNavBarState extends State<BottomNavBar> {
         child: currentIndex == index
             ? Text(
                 label,
-                style: const TextStyle(
+                style: TextStyle(
                   color: kprimaryColor,
                   fontWeight: FontWeight.bold,
-                  fontSize: 16, // Change this value to make the text bigger
+                  fontSize: fontSize,
                 ),
               )
             : Icon(
                 icon,
-                size: 30,
-                color: currentIndex == index
-                    ? kprimaryColor
-                    : Colors.grey.shade400,
+                size: iconSize,
+                color: currentIndex == index ? kprimaryColor : Colors.grey.shade400,
               ),
       ),
     );
   }
 
-  Widget buildCartNavItem(int index, IconData icon, String label) {
+  Widget buildCartNavItem(int index, IconData icon, String label, double iconSize, double fontSize) {
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -149,18 +156,16 @@ class _BottomNavBarState extends State<BottomNavBar> {
           child: currentIndex == index
               ? Text(
                   label,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: kprimaryColor,
                     fontWeight: FontWeight.bold,
-                    fontSize: 16, // Change this value to make the text bigger
+                    fontSize: fontSize,
                   ),
                 )
               : Icon(
                   icon,
-                  size: 30,
-                  color: currentIndex == index
-                      ? kprimaryColor
-                      : Colors.grey.shade400,
+                  size: iconSize,
+                  color: currentIndex == index ? kprimaryColor : Colors.grey.shade400,
                 ),
         ),
       ),
