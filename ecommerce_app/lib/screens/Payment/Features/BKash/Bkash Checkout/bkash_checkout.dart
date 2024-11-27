@@ -27,16 +27,13 @@ class _BkashCheckoutState extends State<BkashCheckout> {
   void initState() {
     super.initState();
     amountController.text = widget.totalAmount.toString();
-    // Generate and set the invoice number
     invoiceNumberController.text = generateInvoiceNumber();
   }
 
-  // Function to generate the invoice number in the format (T789XWYZ)
   String generateInvoiceNumber() {
     const String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     Random random = Random();
 
-    // Generate random 2-character prefix
     String prefix = String.fromCharCodes(
       Iterable.generate(
         2,
@@ -44,7 +41,6 @@ class _BkashCheckoutState extends State<BkashCheckout> {
       ),
     );
 
-    // Generate random 2-character suffix
     String suffix = String.fromCharCodes(
       Iterable.generate(
         2,
@@ -52,7 +48,6 @@ class _BkashCheckoutState extends State<BkashCheckout> {
       ),
     );
 
-    // Generate a random 3-digit number
     String randomDigits = (100 + random.nextInt(900)).toString();
 
     return "$prefix$randomDigits$suffix";
