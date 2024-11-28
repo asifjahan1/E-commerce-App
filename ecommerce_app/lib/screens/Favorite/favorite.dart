@@ -1,8 +1,11 @@
 // ignore_for_file: unnecessary_null_comparison
 
+import 'dart:ui';
 import 'package:ecommerce_app/Provider/favorite_provider.dart';
+import 'package:ecommerce_app/responsive.dart';
 import 'package:ecommerce_app/screens/Detail/details_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../constants.dart';
 import 'package:ecommerce_app/models/product_model.dart';
 
@@ -22,18 +25,32 @@ class _FavoriteState extends State<Favorite> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = FavoriteProvider.of(context);
+    // Corrected the provider access
+    final provider = Provider.of<FavoriteProvider>(context);
     final List<Product> finalList = provider.favorites;
+
     return Scaffold(
       backgroundColor: kcontentColor,
-      appBar: AppBar(
-        backgroundColor: kcontentColor,
-        title: const Text(
-          "Favorite",
-          style: TextStyle(fontWeight: FontWeight.bold),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
+        child: AppBar(
+          backgroundColor: Colors.transparent, // Make the background transparent
+          elevation: 0, // Remove the shadow
+          title: const Text(
+            "Favorite",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+          flexibleSpace: ClipRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0), // Apply blur effect
+              child: Container(
+                color: kcontentColor.withOpacity(0.5), // Semi-transparent background
+              ),
+            ),
+          ),
         ),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
       ),
       body: RefreshIndicator(
         onRefresh: _refreshProducts,
@@ -45,106 +62,118 @@ class _FavoriteState extends State<Favorite> {
         child: Column(
           children: [
             Expanded(
-              child: ListView.builder(
-                itemCount: finalList.length,
-                itemBuilder: (context, index) {
-                  final Product favoriteItems = finalList[index];
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              DetailScreen(product: favoriteItems),
-                        ),
-                      );
-                    },
-                    child: Stack(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(15),
-                          child: Container(
-                            padding: const EdgeInsets.all(10),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Colors.white,
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(10),
-                                  width: 85,
-                                  height: 85,
-                                  decoration: BoxDecoration(
-                                    color: kcontentColor,
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Hero(
-                                    tag: 'product-image-${favoriteItems.id}',
-                                    child: Image.asset(favoriteItems.image),
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      favoriteItems.title,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      favoriteItems.category,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.grey.shade400,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Text(
-                                      favoriteItems.priceBDT != null
-                                          ? "৳${favoriteItems.priceBDT.toStringAsFixed(2)}"
-                                          : "د.إ${favoriteItems.priceAED.toStringAsFixed(2)}",
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          top: 50,
-                          right: 35,
-                          child: GestureDetector(
-                            onTap: () {
-                              provider.toggleFavorite(favoriteItems);
-                              setState(() {});
-                            },
-                            child: const Icon(
-                              Icons.delete,
-                              color: Colors.red,
-                              size: 25,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
+              child: Responsive(
+                mobile: buildListView(finalList, context, 1, provider),
+                tablet: buildListView(finalList, context, 2, provider),
+                desktop: buildListView(finalList, context, 3, provider),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  // This method will build the list view based on the number of columns (for responsive design)
+  Widget buildListView(List<Product> finalList, BuildContext context, int columns, FavoriteProvider provider) {
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: columns,
+        childAspectRatio: 3.5,
+        crossAxisSpacing: 15,
+        mainAxisSpacing: 15,
+      ),
+      itemCount: finalList.length,
+      itemBuilder: (context, index) {
+        final Product favoriteItems = finalList[index];
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DetailScreen(product: favoriteItems),
+              ),
+            );
+          },
+          child: Stack(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.white,
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      width: Responsive.isMobile(context) ? 85 : 100,
+                      height: Responsive.isMobile(context) ? 85 : 100,
+                      decoration: BoxDecoration(
+                        color: kcontentColor,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Hero(
+                        tag: 'product-image-${favoriteItems.id}',
+                        child: Image.asset(favoriteItems.image),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            favoriteItems.title,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: Responsive.isMobile(context) ? 14 : 16,
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            favoriteItems.category,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey.shade400,
+                              fontSize: Responsive.isMobile(context) ? 14 : 16,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            favoriteItems.priceBDT != null
+                                ? "৳${favoriteItems.priceBDT.toStringAsFixed(2)}"
+                                : "د.إ${favoriteItems.priceAED.toStringAsFixed(2)}",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: Responsive.isMobile(context) ? 14 : 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Positioned(
+                top: 50,
+                right: 15,
+                child: GestureDetector(
+                  onTap: () {
+                    provider.toggleFavorite(favoriteItems);
+                    setState(() {});
+                  },
+                  child: const Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                    size: 25,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
