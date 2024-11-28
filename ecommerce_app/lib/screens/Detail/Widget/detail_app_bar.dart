@@ -2,6 +2,7 @@
 import 'package:ecommerce_app/Provider/favorite_provider.dart';
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/models/product_model.dart';
+import 'package:ecommerce_app/responsive.dart';
 import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:flutter/material.dart';
 // import 'package:badges/badges.dart' as badges;
@@ -30,22 +31,58 @@ class _DetailAppBarState extends State<DetailAppBar> {
       padding: const EdgeInsets.all(10),
       child: Row(
         children: [
-          IconButton(
-            style: IconButton.styleFrom(
-              backgroundColor: Colors.white,
-              padding: const EdgeInsets.all(15),
+          Responsive(
+            mobile: IconButton(
+              style: IconButton.styleFrom(
+                backgroundColor: Colors.white,
+                padding: const EdgeInsets.all(15),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+                // Update BottomNavBar index after navigating back
+                final bottomNavBarState = BottomNavBar.of(context);
+                if (bottomNavBarState != null) {
+                  bottomNavBarState.updateIndex(3);
+                }
+              },
+              icon: const Icon(Icons.arrow_back_ios),
+              color: Colors.black,
+              iconSize: 24.0,
             ),
-            onPressed: () {
-              Navigator.pop(context);
-              // Update BottomNavBar index after navigating back
-              final bottomNavBarState = BottomNavBar.of(context);
-              if (bottomNavBarState != null) {
-                bottomNavBarState.updateIndex(3);
-              }
-            },
-            icon: const Icon(Icons.arrow_back_ios),
-            color: Colors.black,
-            iconSize: 24.0,
+            tablet: IconButton(
+              style: IconButton.styleFrom(
+                backgroundColor: Colors.white,
+                padding: const EdgeInsets.all(15),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+                // Update BottomNavBar index after navigating back
+                final bottomNavBarState = BottomNavBar.of(context);
+                if (bottomNavBarState != null) {
+                  bottomNavBarState.updateIndex(3);
+                }
+              },
+              icon: const Icon(Icons.arrow_back_ios),
+              color: Colors.black,
+              iconSize: 28.0,
+            ),
+            desktop: IconButton(
+              style: IconButton.styleFrom(
+                backgroundColor: Colors.white,
+                padding: const EdgeInsets.all(15),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+                // Update BottomNavBar index after navigating back
+                final bottomNavBarState = BottomNavBar.of(context);
+                if (bottomNavBarState != null) {
+                  bottomNavBarState.updateIndex(3);
+                }
+              },
+              icon: const Icon(Icons.arrow_back_ios),
+              color: Colors.black,
+              iconSize: 30.0,
+            ),
           ),
           const Spacer(),
           // Stack(
