@@ -63,8 +63,7 @@ class _ItemsDetailsState extends State<ItemsDetails> {
                             .collection('reviews')
                             .snapshots(),
                         builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                                  ConnectionState.waiting ||
+                          if (snapshot.connectionState == ConnectionState.waiting ||
                               !snapshot.hasData) {
                             return Row(
                               children: [
@@ -77,8 +76,7 @@ class _ItemsDetailsState extends State<ItemsDetails> {
                                     color: kprimaryColor,
                                   ),
                                   alignment: Alignment.center,
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 5),
+                                  padding: const EdgeInsets.symmetric(horizontal: 5),
                                   child: const Row(
                                     children: [
                                       Icon(
@@ -131,8 +129,7 @@ class _ItemsDetailsState extends State<ItemsDetails> {
                                   color: kprimaryColor,
                                 ),
                                 alignment: Alignment.center,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 5),
+                                padding: const EdgeInsets.symmetric(horizontal: 5),
                                 child: Row(
                                   children: [
                                     const Icon(
