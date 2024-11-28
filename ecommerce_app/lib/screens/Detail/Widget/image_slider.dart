@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/responsive.dart';
 import 'package:flutter/material.dart';
 
 class MyImageSlider extends StatelessWidget {
@@ -31,12 +32,30 @@ class MyImageSlider extends StatelessWidget {
           //   ),
           // );
 
-          return Hero(
-            tag: image,
-            // tag: 'image_${widget.product.id}',
-            child: Image.asset(
-              image,
-              fit: BoxFit.contain,
+          return Responsive(
+            mobile: Hero(
+              tag: image,
+              // tag: 'image_${widget.product.id}',
+              child: Image.asset(
+                image,
+                fit: BoxFit.contain,
+              ),
+            ),
+            tablet: Hero(
+              tag: image,
+              // tag: 'image_${widget.product.id}',
+              child: Image.asset(
+                image,
+                fit: BoxFit.contain,
+              ),
+            ),
+            desktop: Hero(
+              tag: image,
+              // tag: 'image_${widget.product.id}',
+              child: Image.asset(
+                image,
+                fit: BoxFit.contain,
+              ),
             ),
           );
         },
