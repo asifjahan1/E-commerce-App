@@ -1,4 +1,4 @@
-// ignore_for_file: unused_element
+// ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
 import 'package:ecommerce_app/Provider/add_to_cart_provider.dart';
@@ -11,6 +11,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:ecommerce_app/Responsive.dart'; // Import the responsive widget
 
 class CurrencyConverter {
   final String apiKey = 'c5873e1ed7251f265b15f0b0';
@@ -194,7 +195,7 @@ class _CheckOutBoxState extends State<CheckOutBox> {
                 bottomLeft: Radius.circular(30),
               ),
             ),
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(Responsive.isTablet(context) ? 30 : 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -220,11 +221,11 @@ class _CheckOutBoxState extends State<CheckOutBox> {
                     ),
                     suffixIcon: TextButton(
                       onPressed: _applyDiscount,
-                      child: const Text(
+                      child: Text(
                         "Apply",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                          fontSize: Responsive.isTablet(context) ? 18 : 20,
                           color: kprimaryColor,
                         ),
                       ),
@@ -236,19 +237,19 @@ class _CheckOutBoxState extends State<CheckOutBox> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       "SubTotal",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.grey,
-                        fontSize: 16,
+                        fontSize: Responsive.isTablet(context) ? 18 : 16,
                       ),
                     ),
                     Text(
                       "BDT ${CartProvider.of(context).totalPrice()}",
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                        fontSize: Responsive.isTablet(context) ? 18 : 16,
                       ),
                     )
                   ],
@@ -285,20 +286,20 @@ class _CheckOutBoxState extends State<CheckOutBox> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       "Total",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                        fontSize: Responsive.isTablet(context) ? 20 : 18,
                       ),
                     ),
                     Text(
                       _appliedCode.isNotEmpty
-                          ? "BDT ${_getTotalAmount().toStringAsFixed(2)}" // Show discounted price
-                          : "BDT ${CartProvider.of(context).totalPrice().toStringAsFixed(2)}", // Show total price
-                      style: const TextStyle(
+                          ? "BDT ${_getTotalAmount().toStringAsFixed(2)}" // discounted price
+                          : "BDT ${CartProvider.of(context).totalPrice().toStringAsFixed(2)}", // total price
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                        fontSize: Responsive.isTablet(context) ? 20 : 18,
                       ),
                     ),
                   ],
@@ -309,18 +310,18 @@ class _CheckOutBoxState extends State<CheckOutBox> {
                   onPressed: _handleCheckout,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: kprimaryColor,
-                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    padding: EdgeInsets.symmetric(vertical: Responsive.isTablet(context) ? 20 : 15),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
-                  child: const Center(
+                  child: Center(
                     child: Text(
                       "Checkout",
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                        fontSize: Responsive.isTablet(context) ? 22 : 20,
                       ),
                     ),
                   ),
