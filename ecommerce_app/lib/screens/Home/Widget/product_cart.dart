@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:ecommerce_app/Provider/favorite_provider.dart';
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/models/product_model.dart';
+import 'package:ecommerce_app/responsive.dart';
 import 'package:ecommerce_app/screens/Detail/details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -18,8 +19,9 @@ class ProductCard extends StatefulWidget {
 }
 
 class _ProductCardState extends State<ProductCard> {
-  String currencySymbol = '';
+  String currencySymbol = '৳'; // Default to BDT
   double? convertedPrice;
+  bool isCurrencyLoading = true;
 
   @override
   void initState() {
@@ -42,17 +44,19 @@ class _ProductCardState extends State<ProductCard> {
       }
 
       currencySymbol = currencyCode == 'BDT' ? '৳' : 'د.إ';
-      setState(() {});
     } catch (e) {
       print("Error fetching currency: $e");
+      convertedPrice = widget.product.priceBDT; // Fallback to default price
+    } finally {
+      setState(() {
+        isCurrencyLoading = false;
+      });
     }
   }
 
   String getCurrencyCode(double latitude, double longitude) {
-    if (latitude >= 20.0 && latitude <= 30.0) {
-      return "BDT";
-    } else if (latitude >= 23.4241 && latitude <= 26.4241) {
-      return "AED";
+    if (latitude >= 23.4 && latitude <= 26.4 && longitude >= 51.4 && longitude <= 56.4) {
+      return "AED"; // Rough UAE coordinates
     } else {
       return "BDT";
     }
@@ -60,22 +64,35 @@ class _ProductCardState extends State<ProductCard> {
 
   Future<double> getConversionRate(
       String fromCurrency, String toCurrency) async {
-    final response = await http.get(
-      Uri.parse(
-          'https://v6.exchangerate-api.com/v6/c5873e1ed7251f265b15f0b0/latest/$fromCurrency'),
-    );
+    try {
+      final response = await http.get(
+        Uri.parse(
+            'https://v6.exchangerate-api.com/v6/YOUR_API_KEY/latest/$fromCurrency'),
+      );
 
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      return data['conversion_rates'][toCurrency];
-    } else {
-      throw Exception('Failed to load conversion rates');
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        return data['conversion_rates'][toCurrency] ?? 1.0;
+      } else {
+        throw Exception('Failed to load conversion rates');
+      }
+    } catch (e) {
+      print("Conversion rate error: $e");
+      return 1.0;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final provider = FavoriteProvider.of(context);
+
+    double imageHeight = Responsive.isMobile(context)
+        ? 150
+        : Responsive.isTablet(context)
+            ? 200
+            : 250;
+
+    double fontSize = Responsive.isMobile(context) ? 14 : 18;
 
     return GestureDetector(
       onTap: () {
@@ -103,8 +120,8 @@ class _ProductCardState extends State<ProductCard> {
                     tag: widget.product.image,
                     child: Image.asset(
                       widget.product.image,
-                      width: 150,
-                      height: 150,
+                      width: imageHeight,
+                      height: imageHeight,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -114,45 +131,47 @@ class _ProductCardState extends State<ProductCard> {
                   padding: const EdgeInsets.only(left: 10),
                   child: Text(
                     widget.product.title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                      fontSize: fontSize,
                     ),
                   ),
                 ),
                 const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Text(
-                          convertedPrice != null
-                              ? "$currencySymbol${convertedPrice!.toStringAsFixed(2)}"
-                              : "Price not available",
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 17,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        child: isCurrencyLoading
+                            ? const CircularProgressIndicator(
+                                color: Colors.grey,
+                              )
+                            : Text(
+                                "$currencySymbol${convertedPrice?.toStringAsFixed(2) ?? "N/A"}",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: fontSize,
+                                ),
+                              ),
+                      ),
+                      Row(
+                        children: List.generate(
+                          widget.product.colors.length,
+                          (index) => Container(
+                            width: 18,
+                            height: 18,
+                            margin: const EdgeInsets.only(right: 4),
+                            decoration: BoxDecoration(
+                              color: widget.product.colors[index],
+                              shape: BoxShape.circle,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Row(
-                      children: List.generate(
-                        widget.product.colors.length,
-                        (index) => Container(
-                          width: 18,
-                          height: 18,
-                          margin: const EdgeInsets.only(right: 4),
-                          decoration: BoxDecoration(
-                            color: widget.product.colors[index],
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),
