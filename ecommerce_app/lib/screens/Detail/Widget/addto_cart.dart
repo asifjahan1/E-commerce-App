@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/models/product_model.dart';
 import 'package:ecommerce_app/Provider/add_to_cart_provider.dart';
+import 'package:ecommerce_app/responsive.dart'; // Added import for responsive
 
 class AddToCart extends StatefulWidget {
   final Product product;
@@ -62,108 +63,316 @@ class _AddToCartState extends State<AddToCart> {
   }
 
   Widget _buildAddToCartButton() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Flexible(
-          child: MaterialButton(
-            onPressed: () {
-              if (currentIndex > 1) {
-                setState(() {
-                  currentIndex--;
-                });
-              }
-            },
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-              side: const BorderSide(color: Colors.white, width: 2),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Icon(
-                  Icons.remove,
-                  color: Colors.white,
-                  size: 18,
-                ),
-                const SizedBox(width: 5),
-                Text(
-                  currentIndex.toString(),
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(width: 5),
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      currentIndex++;
-                    });
-                  },
-                  iconSize: 18,
-                  icon: const Icon(
-                    Icons.add,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        Flexible(
-          child: Container(
-            height: 55,
-            constraints: const BoxConstraints(
-              minWidth: 100,
-            ),
+    return Responsive(
+      mobile: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
             child: MaterialButton(
               onPressed: () {
-                final provider = CartProvider.of(context, listen: false);
-                widget.product.quantity = currentIndex;
-                provider.toggleFavorite(widget.product);
-
-                setState(() {
-                  isAnimating = false;
-                });
-
-                Future.delayed(const Duration(milliseconds: 50), () {
+                if (currentIndex > 1) {
                   setState(() {
-                    gifKey = UniqueKey();
-                    isAnimating = true;
-                    isAddedToCart = true;
+                    currentIndex--;
                   });
-                });
+                }
+              },
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+                side: const BorderSide(color: Colors.white, width: 2),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Icon(
+                    Icons.remove,
+                    color: Colors.white,
+                    size: 18,
+                  ),
+                  const SizedBox(width: 5),
+                  Text(
+                    currentIndex.toString(),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(width: 5),
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        currentIndex++;
+                      });
+                    },
+                    iconSize: 18,
+                    icon: const Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Flexible(
+            child: Container(
+              height: 55,
+              constraints: const BoxConstraints(
+                minWidth: 100,
+              ),
+              child: MaterialButton(
+                onPressed: () {
+                  final provider = CartProvider.of(context, listen: false);
+                  widget.product.quantity = currentIndex;
+                  provider.toggleFavorite(widget.product);
 
-                Timer(const Duration(seconds: 8), () {
                   setState(() {
                     isAnimating = false;
                   });
-                });
 
-                if (widget.onAddToCart != null) {
-                  widget.onAddToCart!();
-                }
-                widget.updateCartCount(provider.cart.length);
-              },
-              color: kprimaryColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(50),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: const Text(
-                "Add to Cart",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
+                  Future.delayed(const Duration(milliseconds: 50), () {
+                    setState(() {
+                      gifKey = UniqueKey();
+                      isAnimating = true;
+                      isAddedToCart = true;
+                    });
+                  });
+
+                  Timer(const Duration(seconds: 8), () {
+                    setState(() {
+                      isAnimating = false;
+                    });
+                  });
+
+                  if (widget.onAddToCart != null) {
+                    widget.onAddToCart!();
+                  }
+                  widget.updateCartCount(provider.cart.length);
+                },
+                color: kprimaryColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: const Text(
+                  "Add to Cart",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
+      tablet: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            child: MaterialButton(
+              onPressed: () {
+                if (currentIndex > 1) {
+                  setState(() {
+                    currentIndex--;
+                  });
+                }
+              },
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+                side: const BorderSide(color: Colors.white, width: 2),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Icon(
+                    Icons.remove,
+                    color: Colors.white,
+                    size: 18,
+                  ),
+                  const SizedBox(width: 5),
+                  Text(
+                    currentIndex.toString(),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(width: 5),
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        currentIndex++;
+                      });
+                    },
+                    iconSize: 18,
+                    icon: const Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Flexible(
+            child: Container(
+              height: 55,
+              constraints: const BoxConstraints(
+                minWidth: 100,
+              ),
+              child: MaterialButton(
+                onPressed: () {
+                  final provider = CartProvider.of(context, listen: false);
+                  widget.product.quantity = currentIndex;
+                  provider.toggleFavorite(widget.product);
+
+                  setState(() {
+                    isAnimating = false;
+                  });
+
+                  Future.delayed(const Duration(milliseconds: 50), () {
+                    setState(() {
+                      gifKey = UniqueKey();
+                      isAnimating = true;
+                      isAddedToCart = true;
+                    });
+                  });
+
+                  Timer(const Duration(seconds: 8), () {
+                    setState(() {
+                      isAnimating = false;
+                    });
+                  });
+
+                  if (widget.onAddToCart != null) {
+                    widget.onAddToCart!();
+                  }
+                  widget.updateCartCount(provider.cart.length);
+                },
+                color: kprimaryColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: const Text(
+                  "Add to Cart",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+      desktop: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            child: MaterialButton(
+              onPressed: () {
+                if (currentIndex > 1) {
+                  setState(() {
+                    currentIndex--;
+                  });
+                }
+              },
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+                side: const BorderSide(color: Colors.white, width: 2),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Icon(
+                    Icons.remove,
+                    color: Colors.white,
+                    size: 18,
+                  ),
+                  const SizedBox(width: 5),
+                  Text(
+                    currentIndex.toString(),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(width: 5),
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        currentIndex++;
+                      });
+                    },
+                    iconSize: 18,
+                    icon: const Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Flexible(
+            child: Container(
+              height: 55,
+              constraints: const BoxConstraints(
+                minWidth: 100,
+              ),
+              child: MaterialButton(
+                onPressed: () {
+                  final provider = CartProvider.of(context, listen: false);
+                  widget.product.quantity = currentIndex;
+                  provider.toggleFavorite(widget.product);
+
+                  setState(() {
+                    isAnimating = false;
+                  });
+
+                  Future.delayed(const Duration(milliseconds: 50), () {
+                    setState(() {
+                      gifKey = UniqueKey();
+                      isAnimating = true;
+                      isAddedToCart = true;
+                    });
+                  });
+
+                  Timer(const Duration(seconds: 8), () {
+                    setState(() {
+                      isAnimating = false;
+                    });
+                  });
+
+                  if (widget.onAddToCart != null) {
+                    widget.onAddToCart!();
+                  }
+                  widget.updateCartCount(provider.cart.length);
+                },
+                color: kprimaryColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: const Text(
+                  "Add to Cart",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
