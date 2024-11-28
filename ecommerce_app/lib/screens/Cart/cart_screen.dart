@@ -1,11 +1,10 @@
-// ignore_for_file: unused_field
-
 import 'package:ecommerce_app/Provider/add_to_cart_provider.dart';
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/screens/Cart/check_out.dart';
 import 'package:ecommerce_app/screens/Detail/details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:ecommerce_app/Responsive.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -16,8 +15,6 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   String _currency = 'BDT';
-  double _conversionRate = 0.0;
-  final CurrencyConverter _currencyConverter = CurrencyConverter();
 
   @override
   void initState() {
@@ -43,7 +40,6 @@ class _CartScreenState extends State<CartScreen> {
         longitude <= 93.0) {
       setState(() {
         _currency = 'BDT';
-        _conversionRate = 1.0;
       });
     } else if (latitude >= 22.0 &&
         latitude <= 26.0 &&
@@ -52,11 +48,9 @@ class _CartScreenState extends State<CartScreen> {
       setState(() {
         _currency = 'AED';
       });
-      _conversionRate = await _currencyConverter.getRate('BDT');
     } else {
       setState(() {
         _currency = 'USD';
-        _conversionRate = 1.0;
       });
     }
   }
@@ -107,14 +101,14 @@ class _CartScreenState extends State<CartScreen> {
         child: Stack(
           children: [
             Padding(
-              padding: const EdgeInsets.all(15),
+              padding: EdgeInsets.all(Responsive.isTablet(context) ? 20 : 15),
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   color: Colors.white,
                 ),
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.all(Responsive.isTablet(context) ? 30 : 20),
                 child: Row(
                   children: [
                     Hero(
@@ -136,9 +130,9 @@ class _CartScreenState extends State<CartScreen> {
                         children: [
                           Text(
                             cartItem.title,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                              fontSize: Responsive.isTablet(context) ? 18 : 16,
                             ),
                           ),
                           const SizedBox(height: 5),
@@ -146,16 +140,16 @@ class _CartScreenState extends State<CartScreen> {
                             cartItem.category,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 14,
+                              fontSize: Responsive.isTablet(context) ? 16 : 14,
                               color: Colors.grey.shade400,
                             ),
                           ),
                           const SizedBox(height: 10),
                           Text(
                             priceText,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 14,
+                              fontSize: Responsive.isTablet(context) ? 16 : 14,
                             ),
                           ),
                         ],
@@ -222,20 +216,20 @@ class _CartScreenState extends State<CartScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.all(8),
+            Padding(
+              padding: EdgeInsets.all(Responsive.isTablet(context) ? 20 : 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(width: 25),
+                  SizedBox(width: Responsive.isTablet(context) ? 30 : 25),
                   Text(
                     "Cart",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 25,
+                      fontSize: Responsive.isTablet(context) ? 30 : 25,
                     ),
                   ),
-                  SizedBox(),
+                  const SizedBox(),
                 ],
               ),
             ),
@@ -245,7 +239,10 @@ class _CartScreenState extends State<CartScreen> {
                 itemBuilder: (context, index) => buildCartItem(context, index),
               ),
             ),
-            const CheckOutBox(),
+            Padding(
+              padding: EdgeInsets.all(Responsive.isTablet(context) ? 30 : 20),
+              child: const CheckOutBox(),
+            ),
           ],
         ),
       ),
