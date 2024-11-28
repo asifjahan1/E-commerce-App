@@ -3,6 +3,7 @@
 import 'package:ecommerce_app/constants.dart';
 // import 'package:ecommerce_app/screens/Detail/Widget/review_rating.dart';
 import 'package:flutter/material.dart';
+import 'package:ecommerce_app/responsive.dart'; // Added import for responsive
 
 class Description extends StatefulWidget {
   final String description;
@@ -68,23 +69,71 @@ class _DescriptionState extends State<Description> {
       {required String title,
       required bool isSelected,
       required VoidCallback onPressed}) {
-    return Flexible(
-      child: Container(
-        height: 40,
-        decoration: BoxDecoration(
-          color: isSelected ? kprimaryColor : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
+    return Responsive(
+      mobile: Flexible(
+        child: Container(
+          height: 40,
+          decoration: BoxDecoration(
+            color: isSelected ? kprimaryColor : Colors.transparent,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: TextButton(
+            onPressed: onPressed,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: isSelected ? Colors.white : Colors.black,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ),
         ),
-        child: TextButton(
-          onPressed: onPressed,
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(
-              title,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: isSelected ? Colors.white : Colors.black,
-                fontSize: 16,
+      ),
+      tablet: Flexible(
+        child: Container(
+          height: 40,
+          decoration: BoxDecoration(
+            color: isSelected ? kprimaryColor : Colors.transparent,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: TextButton(
+            onPressed: onPressed,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: isSelected ? Colors.white : Colors.black,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+      desktop: Flexible(
+        child: Container(
+          height: 50,
+          decoration: BoxDecoration(
+            color: isSelected ? kprimaryColor : Colors.transparent,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: TextButton(
+            onPressed: onPressed,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: isSelected ? Colors.white : Colors.black,
+                  fontSize: 20,
+                ),
               ),
             ),
           ),
