@@ -1,4 +1,7 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'dart:async';
+import 'package:ecommerce_app/responsive.dart';
 import 'package:flutter/material.dart';
 
 class ImageSlider extends StatefulWidget {
@@ -52,13 +55,22 @@ class _ImageSliderState extends State<ImageSlider> {
 
   @override
   Widget build(BuildContext context) {
+    double imageHeight = Responsive.isMobile(context)
+        ? 220
+        : Responsive.isTablet(context)
+            ? 300
+            : 400;
+    double indicatorWidth = Responsive.isMobile(context) ? 15 : 20;
+    double indicatorHeight = Responsive.isMobile(context) ? 8 : 10;
+    double indicatorMargin = Responsive.isMobile(context) ? 3 : 5;
+
     return Stack(
       children: [
         SizedBox(
-          height: 220,
+          height: imageHeight,
           width: double.infinity,
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(Responsive.isMobile(context) ? 15 : 25),
             child: PageView(
               controller: _pageController,
               scrollDirection: Axis.horizontal,
@@ -87,7 +99,7 @@ class _ImageSliderState extends State<ImageSlider> {
           ),
         ),
         Positioned.fill(
-          bottom: 10,
+          bottom: Responsive.isMobile(context) ? 10 : 15,
           child: Align(
             alignment: Alignment.bottomCenter,
             child: Row(
@@ -96,9 +108,9 @@ class _ImageSliderState extends State<ImageSlider> {
                 3, // Assuming 3 images
                 (index) => AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  width: _currentSlide == index ? 15 : 8,
-                  height: 8,
-                  margin: const EdgeInsets.only(right: 3),
+                  width: _currentSlide == index ? indicatorWidth : indicatorWidth / 2,
+                  height: indicatorHeight,
+                  margin: EdgeInsets.only(right: indicatorMargin),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: _currentSlide == index
