@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/responsive.dart';
 import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -73,69 +74,71 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            IconButton(
-              style: IconButton.styleFrom(
-                backgroundColor: kcontentColor,
-                padding: const EdgeInsets.all(15),
-              ),
-              onPressed: () {
-                BottomNavBar.of(context)?.updateIndex(0);
-                // Navigator.of(context).popUntil((route) => route.isFirst);
-              },
-              icon: Image.asset(
-                "images/icon.png",
-                color: Colors.black54,
-                height: 20,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Icon(
-                  Icons.location_on_outlined,
+    double iconSize = Responsive.isMobile(context) ? 20 : Responsive.isTablet(context) ? 24 : 28;
+    double fontSize = Responsive.isMobile(context) ? 16 : Responsive.isTablet(context) ? 18 : 20;
+    double avatarRadius = Responsive.isMobile(context) ? 25 : Responsive.isTablet(context) ? 30 : 35;
+    double paddingSize = Responsive.isMobile(context) ? 10 : 20;
+
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: paddingSize),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              IconButton(
+                style: IconButton.styleFrom(
+                  backgroundColor: kcontentColor,
+                  padding: EdgeInsets.all(Responsive.isMobile(context) ? 12 : 15),
+                ),
+                onPressed: () {
+                  BottomNavBar.of(context)?.updateIndex(0);
+                },
+                icon: Image.asset(
+                  "images/icon.png",
                   color: Colors.black54,
+                  height: iconSize,
                 ),
-                const SizedBox(width: 2.5),
-                GestureDetector(
-                  onTap: _getLocation,
-                  child: loading
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(color: Colors.grey),
-                        )
-                      : Text(
-                          _location,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.black54,
-                          ),
-                        ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            const SizedBox(width: 5),
-            InkWell(
-              onTap: widget.onAvatarTap,
-              child: const CircleAvatar(
-                backgroundColor: Color(0xffF5F5F5),
-                radius: 25,
-                backgroundImage: AssetImage("images/profile2.jpg"),
               ),
+              const SizedBox(width: 10),
+              Row(
+                children: [
+                  Icon(
+                    Icons.location_on_outlined,
+                    color: Colors.black54,
+                    size: iconSize,
+                  ),
+                  const SizedBox(width: 2.5),
+                  GestureDetector(
+                    onTap: _getLocation,
+                    child: loading
+                        ? SizedBox(
+                            width: iconSize,
+                            height: iconSize,
+                            child: const CircularProgressIndicator(color: Colors.grey),
+                          )
+                        : Text(
+                            _location,
+                            style: TextStyle(
+                              fontSize: fontSize,
+                              color: Colors.black54,
+                            ),
+                          ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          InkWell(
+            onTap: widget.onAvatarTap,
+            child: CircleAvatar(
+              backgroundColor: const Color(0xffF5F5F5),
+              radius: avatarRadius,
+              backgroundImage: const AssetImage("images/profile2.jpg"),
             ),
-          ],
-        ),
-      ],
+          ),
+        ],
+      ),
     );
   }
 }
