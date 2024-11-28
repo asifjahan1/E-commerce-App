@@ -1,10 +1,10 @@
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/models/product_model.dart';
+import 'package:ecommerce_app/responsive.dart';
 import 'package:ecommerce_app/screens/Home/Widget/product_cart.dart';
 import 'package:ecommerce_app/screens/Home/Widget/search_bar.dart';
 import 'package:ecommerce_app/screens/nav_bar_screen.dart';
 import 'package:flutter/material.dart';
-
 import '../../models/category.dart';
 import 'Widget/home_app_bar.dart';
 import 'Widget/home_image_slider.dart';
@@ -39,37 +39,36 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Method to handle search
   void _filterProducts(String query) {
-  setState(() {
-    if (query.isEmpty) {
-      _filteredProducts = selectcategories[selectedIndex];
-    } else {
-      bool matchFound = false;
-      for (int i = 0; i < selectcategories.length; i++) {
-        final matchingProducts = selectcategories[i]
-            .where((product) =>
-                product.title.toLowerCase().contains(query.toLowerCase()))
-            .toList();
+    setState(() {
+      if (query.isEmpty) {
+        _filteredProducts = selectcategories[selectedIndex];
+      } else {
+        bool matchFound = false;
+        for (int i = 0; i < selectcategories.length; i++) {
+          final matchingProducts = selectcategories[i]
+              .where((product) =>
+                  product.title.toLowerCase().contains(query.toLowerCase()))
+              .toList();
 
-        if (matchingProducts.isNotEmpty) {
-          selectedIndex = i;
-          _filteredProducts = matchingProducts;
-          matchFound = true;
-          break;
+          if (matchingProducts.isNotEmpty) {
+            selectedIndex = i;
+            _filteredProducts = matchingProducts;
+            matchFound = true;
+            break;
+          }
+        }
+
+        if (!matchFound) {
+          _filteredProducts = [];
         }
       }
-
-      if (!matchFound) {
-        _filteredProducts = [];
-      }
-    }
-  });
-}
+    });
+  }
 
   // Refresh action
   Future<void> _refreshProducts() async {
     await Future.delayed(const Duration(seconds: 2));
     setState(() {
-      // performing refresh actions here (e.g., reloading data)
       _filteredProducts = selectcategories[selectedIndex];
     });
   }
@@ -108,21 +107,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
                 const SizedBox(height: 20),
-                // For category selection
+                // Category selection
                 categoryItems(),
                 const SizedBox(height: 20),
                 if (selectedIndex == 0)
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         "Special For You",
                         style: TextStyle(
-                          fontSize: 25,
+                          fontSize: Responsive.isDesktop(context) ? 30 : 25,
                           fontWeight: FontWeight.w800,
                         ),
                       ),
-                      Text(
+                      const Text(
                         "See all",
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
@@ -148,17 +147,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   )
                 else
-                  Wrap(
-                    spacing: 20,
-                    runSpacing: 20,
-                    children: _filteredProducts.map((product) {
-                      return SizedBox(
-                        width: (MediaQuery.of(context).size.width - 60) / 2,
-                        child: ProductCard(
-                          product: product,
-                        ),
-                      );
-                    }).toList(),
+                  Responsive(
+                    mobile: productGrid(context, 2),
+                    tablet: productGrid(context, 3),
+                    desktop: productGrid(context, 4),
                   ),
               ],
             ),
@@ -168,9 +160,23 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Widget productGrid(BuildContext context, int columns) {
+    double itemWidth = (MediaQuery.of(context).size.width - 60) / columns;
+    return Wrap(
+      spacing: 20,
+      runSpacing: 20,
+      children: _filteredProducts.map((product) {
+        return SizedBox(
+          width: itemWidth,
+          child: ProductCard(product: product),
+        );
+      }).toList(),
+    );
+  }
+
   SizedBox categoryItems() {
     return SizedBox(
-      height: 130,
+      height: Responsive.isDesktop(context) ? 160 : 130,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: categoriesList.length,
@@ -210,8 +216,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 5),
                   Text(
                     categoriesList[index].title,
-                    style: const TextStyle(
-                      fontSize: 16,
+                    style: TextStyle(
+                      fontSize: Responsive.isMobile(context) ? 14 : 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

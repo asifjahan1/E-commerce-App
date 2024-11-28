@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -20,7 +21,6 @@ class _LocationState extends State<Location> {
 
   Future<void> _getLocation() async {
     try {
-      // Check if location services are enabled
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
         setState(() {
@@ -29,7 +29,6 @@ class _LocationState extends State<Location> {
         return;
       }
 
-      // Check location permissions
       LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
@@ -42,24 +41,20 @@ class _LocationState extends State<Location> {
         }
       }
 
-      // Get current position
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.best);
 
-      // Reverse geocoding
       List<Placemark> placemarks =
           await placemarkFromCoordinates(position.latitude, position.longitude);
 
       Placemark placemark =
           placemarks.isNotEmpty ? placemarks[0] : const Placemark();
 
-      // Update location state with formatted address
       setState(() {
         _location =
             '${placemark.locality ?? 'Unknown location'}, ${placemark.country ?? 'Unknown country'}';
       });
     } catch (e) {
-      // Handle errors
       setState(() {
         _location = 'Failed to get location: $e';
       });
@@ -68,19 +63,27 @@ class _LocationState extends State<Location> {
 
   @override
   Widget build(BuildContext context) {
+    double fontSize = Responsive.isDesktop(context) ? 18.0 : 14.0;
+    double iconSize = Responsive.isDesktop(context) ? 28.0 : 24.0;
+    Color textColor = Responsive.isTablet(context) ? Colors.blueGrey : Colors.black54;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Icon(
+        Icon(
           Icons.location_on_outlined,
-          color: Colors.black54,
+          color: textColor,
+          size: iconSize,
         ),
         const SizedBox(width: 5),
-        Text(
-          _location,
-          style: const TextStyle(
-            fontSize: 16,
-            color: Colors.black54,
+        Expanded(
+          child: Text(
+            _location,
+            style: TextStyle(
+              fontSize: fontSize,
+              color: textColor,
+            ),
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ],
