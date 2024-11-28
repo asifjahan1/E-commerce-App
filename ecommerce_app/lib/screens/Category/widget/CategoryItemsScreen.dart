@@ -1,9 +1,9 @@
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/screens/Detail/details_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import '../../../models/product_model.dart';
 import '../../../models/category.dart';
+import 'package:ecommerce_app/Responsive.dart';
 
 class CategoryItemsScreen extends StatefulWidget {
   final Category category;
@@ -71,7 +71,6 @@ class _CategoryItemsScreenState extends State<CategoryItemsScreen> {
         backgroundColor: kcontentColor,
         leading: IconButton(
           style: IconButton.styleFrom(
-            // backgroundColor: Colors.white,
             padding: const EdgeInsets.all(15),
           ),
           onPressed: () {
@@ -85,14 +84,14 @@ class _CategoryItemsScreenState extends State<CategoryItemsScreen> {
         centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: EdgeInsets.all(Responsive.isTablet(context) ? 20.0 : 10.0),
         child: GridView.builder(
           itemCount: filteredProducts.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: Responsive.isTablet(context) ? 3 : 2,
             mainAxisSpacing: 8,
             crossAxisSpacing: 8,
-            childAspectRatio: 0.75,
+            childAspectRatio: Responsive.isTablet(context) ? 0.8 : 0.75,
           ),
           itemBuilder: (context, index) {
             final product = filteredProducts[index];
@@ -107,7 +106,6 @@ class _CategoryItemsScreenState extends State<CategoryItemsScreen> {
               },
               child: Card(
                 color: Colors.white,
-                // color: kcontentColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -123,14 +121,14 @@ class _CategoryItemsScreenState extends State<CategoryItemsScreen> {
                       fit: BoxFit.contain,
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(Responsive.isTablet(context) ? 16.0 : 8.0),
                       child: Text(
                         product.title,
                         style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      padding: EdgeInsets.symmetric(horizontal: Responsive.isTablet(context) ? 16.0 : 8.0),
                       child: Text(
                         'Price: ${product.priceBDT} BDT',
                         style: const TextStyle(color: Colors.black),
