@@ -1,8 +1,8 @@
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/models/category.dart';
 import 'package:flutter/material.dart';
-
 import 'widget/CategoryItemsScreen.dart';
+import 'package:ecommerce_app/Responsive.dart';
 
 class Category extends StatefulWidget {
   const Category({super.key});
@@ -26,16 +26,16 @@ class _CategoryState extends State<Category> {
         automaticallyImplyLeading: false,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(Responsive.isTablet(context) ? 20.0 : 8.0),
         child: GridView.builder(
           shrinkWrap: true,
           physics: const AlwaysScrollableScrollPhysics(),
           itemCount: categoriesList.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: Responsive.isTablet(context) ? 3 : 2,
             mainAxisSpacing: 8,
             crossAxisSpacing: 8,
-            childAspectRatio: 1.0,
+            childAspectRatio: Responsive.isTablet(context) ? 1.2 : 1.0,
           ),
           itemBuilder: (context, index) {
             final category = categoriesList[index];
@@ -60,8 +60,8 @@ class _CategoryState extends State<Category> {
                   children: [
                     Image.asset(
                       category.image,
-                      width: 60,
-                      height: 60,
+                      width: Responsive.isTablet(context) ? 80 : 60,
+                      height: Responsive.isTablet(context) ? 80 : 60,
                       fit: BoxFit.cover,
                     ),
                     const SizedBox(height: 8),
