@@ -3,6 +3,8 @@ import 'package:ecommerce_app/Provider/add_to_cart_provider.dart';
 import 'package:ecommerce_app/Provider/favorite_provider.dart';
 import 'package:ecommerce_app/constants.dart';
 import 'package:flutter/foundation.dart';
+// import 'package:ecommerce_app/screens/Home/Web%20Home/WebHomeScreen.dart';
+// import 'package:flutter/foundation.dart' show kDebugMode, kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -47,6 +49,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             textTheme: GoogleFonts.mulishTextTheme(),
           ),
+          // home: kIsWeb ? const SplashScreen(): const WebHomeScreen(),
           home: const SplashScreen(),
         ),
       );
