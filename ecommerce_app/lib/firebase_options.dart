@@ -47,6 +47,7 @@ class DefaultFirebaseOptions {
     projectId: 'ecommerce-app-efdf4',
     authDomain: 'ecommerce-app-efdf4.firebaseapp.com',
     storageBucket: 'ecommerce-app-efdf4.appspot.com',
+    // storageBucket: "ecommerce-app-efdf4.firebasestorage.app",
     measurementId: 'G-WZXKVGW946',
   );
 
