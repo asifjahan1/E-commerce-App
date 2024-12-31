@@ -28,7 +28,19 @@ if (flutterVersionName == null) {
 android {
     namespace "com.example.ecommerce_app"
     compileSdk flutter.compileSdkVersion
+<<<<<<< HEAD:ecommerce_app/android/app/build.gradle
     ndkVersion "26.1.10909125"
+=======
+
+    // Flutter's CI installs the NDK at a non-standard path.
+    // This non-standard structure is initially created by
+    // https://github.com/flutter/engine/blob/3.27.0/tools/android_sdk/create_cipd_packages.sh.
+    String systemNdkPath = System.getenv("ANDROID_NDK_PATH")
+    if (systemNdkPath != null) {
+        ndkVersion = flutter.ndkVersion
+        ndkPath = systemNdkPath
+    }
+>>>>>>> d9b7e5664604a55a3e900b0c619ee319065abb0e:dev/integration_tests/android_verified_input/android/app/build.gradle
 
     compileOptions {
         coreLibraryDesugaringEnabled true
