@@ -1,8 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async'; // For Timer
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ecommerce_app/constants.dart';
 import 'package:ecommerce_app/screens/Profile/Widgets/register_mobile.dart';
@@ -131,6 +133,12 @@ class _ProfileState extends State<Profile> {
                     _registeredPhoneNumber == null &&
                     _user == null)
                   _buildLoginButton(context),
+                const SizedBox(height: 20),
+                if (_user != null || _registeredEmail != null)
+                  _buildOrdersSection(),
+                const SizedBox(height: 20),
+                if (_user != null || _registeredEmail != null)
+                  _buildAdditionalInfoSection(),
               ],
             ),
           ),
@@ -252,5 +260,109 @@ class _ProfileState extends State<Profile> {
     await Future.delayed(const Duration(seconds: 2));
     await _loadUser();
     await _loadRegisteredInfo();
+  }
+
+  // Orders Section
+  Widget _buildOrdersSection() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        color: Colors.grey.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "My Orders",
+                style: TextStyle(
+                  fontSize: Responsive.isDesktop(context) ? 18 : 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Spacer(),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () {
+                    // Navigate to Orders screen
+                  },
+                  child: const Text(
+                    "View All Orders",
+                    style: TextStyle(color: kprimaryColor),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          // Use Wrap instead of Row to handle overflow
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: [
+              _buildOrderStatusButton("To Pay"),
+              _buildOrderStatusButton("To Ship"),
+              _buildOrderStatusButton("To Receive"),
+              _buildOrderStatusButton("To Review"),
+              _buildOrderStatusButton("Return & Cancellations"),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Order Status Button
+  Widget _buildOrderStatusButton(String label) {
+    return ElevatedButton(
+      onPressed: () {
+        // Handle navigation or functionality
+      },
+      style: ElevatedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        backgroundColor: kprimaryColor.withOpacity(0.1),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+      child: Text(label),
+    );
+  }
+
+  // Additional Info Section (Reviews, Payment, Contact)
+  Widget _buildAdditionalInfoSection() {
+    return Column(
+      children: [
+        _buildInfoBox("My Reviews"),
+        const SizedBox(height: 10),
+        _buildInfoBox("Payment Options"),
+        const SizedBox(height: 10),
+        _buildInfoBox("Contact Customer Care"),
+      ],
+    );
+  }
+
+  // Info Box Widget
+  Widget _buildInfoBox(String title) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        color: Colors.grey.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: Responsive.isDesktop(context) ? 16 : 14,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
   }
 }
