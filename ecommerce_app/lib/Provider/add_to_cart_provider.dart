@@ -7,7 +7,7 @@ class CartProvider extends ChangeNotifier {
   final List<Product> _cart = [];
   List<Product> get cart => _cart;
 
-  String userLocationCurrency = 'BDT'; // Default currency
+  String userLocationCurrency = 'BDT';
 
   void toggleFavorite(Product product) {
     if (_cart.contains(product)) {
